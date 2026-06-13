@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ระบบเช็กชื่อวันสำคัญ | โรงเรียนธนาคารออมสิน</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700;800;900&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<!-- โหลดรูป hero ล่วงหน้าทันทีที่เปิดหน้า (เร็วกว่ารอ CSS/HTML parse) -->
+<link rel="preload" as="image" href="https://i.postimg.cc/5N4mjFKp/E1E9A2F0-3D15-45F7-9911-A26D9DBB34CB.png" fetchpriority="high"/>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — Soft Gradient / Modern Glass
+═══════════════════════════════════════════ */
+:root{
+  --ink:      #1E1B4B;
+  --ink-soft: #6B7280;
+  --grad-red:    linear-gradient(135deg,#F87171,#B91C1C);
+  --grad-purple: linear-gradient(135deg,#A78BFA,#6D28D9);
+  --grad-orange: linear-gradient(135deg,#FBBF24,#F97316);
+  --grad-pink:   linear-gradient(135deg,#F472B6,#DB2777);
+  --grad-blue:   linear-gradient(135deg,#60A5FA,#2563EB);
+  --grad-green:  linear-gradient(135deg,#6EE7B7,#059669);
+  --grad-text:   linear-gradient(90deg,#7C3AED,#DB2777);
+  --card-shadow: 0 10px 30px rgba(109,40,217,.10), 0 2px 8px rgba(0,0,0,.04);
+  --card-shadow-lg: 0 20px 50px rgba(109,40,217,.15);
+  --radius: 24px;
+  --hero-mobile: url("https://i.postimg.cc/7LFK9ppb/Chat-GPT-Image-Jun-12-2026-at-08-09-41-PM.png");
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;}
+body{
+  font-family:'Noto Sans Thai',sans-serif;
+  color:var(--ink);
+  background:linear-gradient(135deg,#FDF2F8 0%,#F5F3FF 45%,#EFF6FF 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+}
+h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
+
+/* ═══ HEADER ═══ */
+#app-header{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 28px;
+  background:rgba(255,255,255,.65);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 2px 16px rgba(109,40,217,.06);
+}
+#app-header .logo-img{
+  width:52px;height:52px;object-fit:contain;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  padding:3px;
+}
+#app-header h1{font-size:1.15rem;font-weight:800;letter-spacing:.2px;}
+#app-header .subtitle{font-size:.72rem;font-weight:600;letter-spacing:2px;color:var(--ink-soft);text-transform:uppercase;}
+
+/* clock pill — gradient time + blinking colon + Thai date */
+.clock-pill{
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.92);
+  border-radius:18px;
+  padding:8px 20px;
+  line-height:1.25;
+  box-shadow:0 4px 14px rgba(109,40,217,.14), inset 0 0 0 1.5px rgba(167,139,250,.35);
+}
+.clock-time{
+  font-family:'Prompt',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:1px;
+  background:var(--grad-text);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.clock-time .colon{animation:blink 1s steps(1) infinite;}
+@keyframes blink{50%{opacity:.2;}}
+.clock-date{font-size:.66rem;font-weight:600;color:var(--ink-soft);letter-spacing:.5px;}
+
+/* pill button (เช่น ปุ่มออก / login) */
+.pill-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  border:none;cursor:pointer;
+  border-radius:999px;
+  padding:12px 24px;
+  font-family:'Prompt',sans-serif;font-weight:700;font-size:.92rem;
+  color:#fff;
+  background:var(--grad-pink);
+  box-shadow:0 8px 20px rgba(219,39,119,.35);
+  transition:transform .15s, box-shadow .15s;
+}
+.pill-btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(219,39,119,.45);}
+.pill-btn:active{transform:translateY(0);}
+.pill-btn.blue {background:var(--grad-blue);  box-shadow:0 8px 20px rgba(37,99,235,.30);}
+.pill-btn.green{background:var(--grad-green); box-shadow:0 8px 20px rgba(5,150,105,.30);}
+.pill-btn.purple{background:var(--grad-purple);box-shadow:0 8px 20px rgba(109,40,217,.30);}
+.pill-btn.orange{background:var(--grad-orange);box-shadow:0 8px 20px rgba(249,115,22,.30);}
+.pill-btn.red  {background:var(--grad-red);   box-shadow:0 8px 20px rgba(185,28,28,.30);}
+.pill-btn.ghost{
+  background:rgba(255,255,255,.9);color:var(--ink);
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+
+/* ═══ CARD ═══ */
+.card{
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--card-shadow);
+  padding:24px;
+}
+
+/* ═══ STAT CARDS ═══ */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:24px;}
+.stat-card{
+  background:#fff;border-radius:20px;
+  box-shadow:var(--card-shadow);
+  padding:20px 22px;
+  transition:transform .15s;
+}
+.stat-card:hover{transform:translateY(-3px);}
+.stat-card .stat-eyebrow{font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:4px;}
+.stat-card .stat-num{font-family:'Prompt',sans-serif;font-size:2.4rem;font-weight:900;line-height:1.1;}
+.stat-card .stat-badge{
+  display:inline-block;margin-top:6px;
+  font-size:.72rem;font-weight:700;
+  padding:3px 12px;border-radius:999px;
+}
+.b-blue  {background:#DBEAFE;color:#2563EB;}
+.b-orange{background:#FFEDD5;color:#EA580C;}
+.b-green {background:#D1FAE5;color:#059669;}
+.b-pink  {background:#FCE7F3;color:#DB2777;}
+.b-purple{background:#EDE9FE;color:#7C3AED;}
+.b-gray  {background:#F3F4F6;color:#6B7280;}
+
+/* ═══ WELCOME HERO (login) — รูปเต็มจอ ═══ */
+.welcome-card{
+  position:relative;
+  border-radius:32px;
+  box-shadow:var(--card-shadow-lg);
+  overflow:hidden;
+  min-height:600px;
+  /* พื้นหลังไล่สีโชว์ระหว่างรอรูปโหลด — หน้าไม่ดูว่างเปล่า */
+  background:linear-gradient(135deg,#FBCFE8,#DDD6FE);
+}
+.welcome-bg{
+  position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;object-position:center right;
+}
+/* mobile hero + ป้าย Activity Logs — ซ่อนบน desktop, เปิดเฉพาะ mobile */
+.welcome-hero-mobile{display:none;}
+.hero-label{
+  display:none;
+  position:absolute;left:16px;top:26px;z-index:2;
+  align-items:center;
+  font-family:'Prompt',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:.5px;
+  background:rgba(255,255,255,.78);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  padding:9px 18px;border-radius:999px;
+  box-shadow:0 8px 20px rgba(109,40,217,.25);
+}
+.hero-label span{
+  background:var(--grad-text);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+@keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+/* ไล่เฉดสีขาวจากซ้าย เพื่อให้อ่านข้อความได้ชัด */
+.welcome-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,.94) 0%,
+    rgba(255,255,255,.88) 34%,
+    rgba(255,255,255,.45) 58%,
+    rgba(255,255,255,0) 80%);
+}
+.welcome-left{
+  position:relative;z-index:2;
+  padding:48px 44px;
+  display:flex;flex-direction:column;
+  max-width:560px;
+}
+.welcome-eyebrow{
+  font-size:.82rem;font-weight:700;letter-spacing:3px;
+  color:#7C3AED;text-transform:uppercase;margin-bottom:10px;
+}
+.welcome-title{
+  font-family:'Prompt',sans-serif;
+  font-size:clamp(2.2rem,4vw,3.2rem);
+  font-weight:900;line-height:1.15;
+  color:var(--ink);
+}
+.welcome-title .grad{
+  background:var(--grad-text);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.welcome-sub{margin:14px 0 28px;color:#374151;font-size:.95rem;}
+.welcome-tagline{
+  position:absolute;right:24px;bottom:24px;z-index:2;
+  background:rgba(30,27,75,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  color:#fff;border-radius:18px;
+  padding:14px 18px;
+  font-family:'Prompt',sans-serif;font-weight:700;font-size:.9rem;line-height:1.6;
+}
+
+/* role gradient tiles */
+.role-tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.role-tile{
+  border:none;cursor:pointer;
+  border-radius:22px;
+  padding:24px 16px;text-align:center;
+  color:#fff;font-family:'Prompt',sans-serif;
+  transition:transform .15s, box-shadow .15s;
+}
+.role-tile:hover{transform:translateY(-3px);}
+.role-tile .r-icon{
+  width:56px;height:56px;border-radius:50%;
+  background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;margin:0 auto 10px;
+}
+.role-tile h3{font-size:1.15rem;font-weight:800;}
+.role-tile p{font-size:.8rem;opacity:.85;margin-top:2px;font-family:'Noto Sans Thai',sans-serif;}
+.tile-red   {background:var(--grad-red);   box-shadow:0 12px 26px rgba(185,28,28,.30);}
+.tile-purple{background:var(--grad-purple);box-shadow:0 12px 26px rgba(109,40,217,.30);}
+
+/* link bars */
+.link-bar{
+  display:flex;align-items:center;gap:14px;
+  border:none;cursor:pointer;width:100%;
+  border-radius:20px;
+  padding:16px 20px;
+  color:#fff;text-align:left;
+  font-family:'Prompt',sans-serif;
+  margin-bottom:12px;
+  transition:transform .15s;
+}
+.link-bar:hover{transform:translateY(-2px);}
+.link-bar .lb-icon{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+}
+.link-bar .lb-text{flex:1;}
+.link-bar .lb-title{font-weight:800;font-size:1rem;letter-spacing:.5px;}
+.link-bar .lb-sub{font-size:.78rem;opacity:.85;font-family:'Noto Sans Thai',sans-serif;}
+.link-bar .lb-arrow{font-size:1.2rem;opacity:.8;}
+.bar-orange{background:var(--grad-orange);box-shadow:0 10px 22px rgba(249,115,22,.30);}
+.bar-pink  {background:var(--grad-pink);  box-shadow:0 10px 22px rgba(219,39,119,.30);}
+.bar-blue  {background:var(--grad-blue);  box-shadow:0 10px 22px rgba(37,99,235,.30);}
+
+/* ═══ MODAL ═══ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(30,27,75,.45);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;z-index:100;
+}
+.modal-box{
+  background:#fff;border-radius:28px;
+  box-shadow:var(--card-shadow-lg);
+  padding:32px;width:90%;max-width:380px;
+  animation:popIn .22s ease-out;
+}
+.modal-box h3{font-size:1.15rem;font-weight:800;margin-bottom:16px;}
+@keyframes popIn{from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
+
+/* ═══ FORMS ═══ */
+input,select,textarea{
+  width:100%;padding:13px 18px;
+  border:2px solid #E5E7EB;border-radius:16px;
+  font-family:'Noto Sans Thai',sans-serif;font-size:.95rem;
+  background:#fff;outline:none;
+  transition:border .15s, box-shadow .15s;
+}
+input:focus,select:focus{border-color:#A78BFA;box-shadow:0 0 0 4px rgba(167,139,250,.18);}
+label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--ink);}
+.form-group{margin-bottom:14px;}
+
+/* ═══ NAV / SUB TABS ═══ */
+.subtab-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+.subtab{
+  border:none;cursor:pointer;
+  border-radius:999px;
+  padding:11px 22px;
+  font-family:'Prompt',sans-serif;font-weight:700;font-size:.88rem;
+  background:rgba(255,255,255,.85);color:var(--ink-soft);
+  box-shadow:0 3px 10px rgba(0,0,0,.05);
+  transition:.15s;
+}
+.subtab:hover{color:var(--ink);}
+.subtab.active{
+  background:var(--grad-purple);color:#fff;
+  box-shadow:0 8px 20px rgba(109,40,217,.30);
+}
+
+/* ═══ EVENT CARD ═══ */
+.event-card{
+  display:flex;align-items:center;gap:16px;
+  background:#fff;border-radius:20px;
+  box-shadow:var(--card-shadow);
+  padding:18px 20px;margin-bottom:12px;
+  transition:transform .15s;
+}
+.event-card:hover{transform:translateY(-2px);}
+.event-card .ev-emoji{
+  width:54px;height:54px;border-radius:18px;flex-shrink:0;
+  background:linear-gradient(135deg,#FCE7F3,#EDE9FE);
+  display:flex;align-items:center;justify-content:center;font-size:1.7rem;
+}
+.event-card .ev-info{flex:1;}
+.event-card .ev-name{font-family:'Prompt',sans-serif;font-weight:800;font-size:1.02rem;}
+.event-card .ev-date{font-size:.82rem;color:var(--ink-soft);}
+.event-card .ev-note{font-size:.8rem;color:#9CA3AF;}
+
+/* ═══ STUDENT ROWS ═══ */
+.student-row{
+  display:flex;align-items:center;gap:12px;
+  background:#fff;border-radius:18px;
+  box-shadow:0 3px 12px rgba(0,0,0,.05);
+  padding:12px 18px;margin-bottom:8px;
+}
+.student-row .s-name{flex:1;font-weight:600;font-size:.95rem;}
+.student-row .s-class{font-size:.78rem;color:var(--ink-soft);margin-right:6px;}
+.att-btn-group{display:flex;gap:6px;}
+.att-btn{
+  border:2px solid #E5E7EB;background:#fff;cursor:pointer;
+  padding:7px 14px;border-radius:999px;
+  font-size:.8rem;font-weight:700;font-family:'Noto Sans Thai',sans-serif;
+  color:var(--ink-soft);
+  transition:.12s;
+}
+.att-btn:hover{border-color:#C4B5FD;}
+.att-btn.sel-present{background:var(--grad-green); border-color:transparent;color:#fff;box-shadow:0 5px 14px rgba(5,150,105,.30);}
+.att-btn.sel-absent {background:var(--grad-red);   border-color:transparent;color:#fff;box-shadow:0 5px 14px rgba(185,28,28,.30);}
+.att-btn.sel-leave  {background:var(--grad-orange);border-color:transparent;color:#fff;box-shadow:0 5px 14px rgba(249,115,22,.30);}
+
+/* class section divider */
+.class-divider{
+  font-family:'Prompt',sans-serif;font-weight:800;font-size:.85rem;
+  color:#7C3AED;
+  margin:18px 0 10px;padding-left:4px;
+  display:flex;align-items:center;gap:8px;
+}
+.class-divider::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,#EDE9FE,transparent);border-radius:2px;}
+
+/* ═══ BADGES ═══ */
+.badge{
+  display:inline-block;padding:4px 14px;
+  border-radius:999px;
+  font-size:.76rem;font-weight:700;
+}
+.badge-present{background:#D1FAE5;color:#059669;}
+.badge-absent {background:#FEE2E2;color:#B91C1C;}
+.badge-leave  {background:#FFEDD5;color:#EA580C;}
+.badge-none   {background:#F3F4F6;color:#9CA3AF;}
+
+/* ═══ PROGRESS ═══ */
+.progress-bar{
+  height:12px;background:#F3F4F6;border-radius:999px;
+  overflow:hidden;margin-top:6px;
+}
+.progress-fill{
+  height:100%;border-radius:999px;
+  background:var(--grad-purple);
+  transition:width .5s ease;
+}
+
+/* ═══ TABLE ═══ */
+.table-wrap{background:#fff;border-radius:20px;box-shadow:var(--card-shadow);overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:linear-gradient(90deg,#EDE9FE,#FCE7F3);}
+th,td{padding:12px 16px;text-align:left;font-size:.88rem;}
+th{font-family:'Prompt',sans-serif;font-weight:700;color:#6D28D9;}
+tbody tr{border-top:1px solid #F3F4F6;}
+tbody tr:hover td{background:#FAFAFF;}
+
+/* ═══ EMPTY / SPINNER / TOAST ═══ */
+.empty-state{
+  text-align:center;padding:48px 20px;
+  background:rgba(255,255,255,.7);
+  border-radius:24px;
+  color:#9CA3AF;
+}
+.empty-state .e-emoji{font-size:3rem;}
+.empty-state p{margin-top:10px;font-size:.92rem;}
+.spinner{
+  display:inline-block;width:30px;height:30px;
+  border:4px solid #EDE9FE;border-top-color:#7C3AED;
+  border-radius:50%;animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+#toast{
+  position:fixed;bottom:30px;left:50%;
+  transform:translateX(-50%) translateY(90px);
+  background:var(--ink);color:#fff;
+  padding:14px 28px;border-radius:999px;
+  font-family:'Prompt',sans-serif;font-size:.9rem;font-weight:600;
+  box-shadow:0 12px 30px rgba(30,27,75,.35);
+  transition:transform .3s;z-index:999;
+}
+#toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ═══ SECTION TITLE ═══ */
+.section-title{
+  font-family:'Prompt',sans-serif;font-size:1.3rem;font-weight:800;
+  margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+
+/* ═══ LAYOUT ═══ */
+#main{padding:28px;max-width:1080px;margin:0 auto;}
+#login-screen{padding:28px;max-width:1180px;margin:0 auto;}
+.panel{display:none;}
+.panel.active{display:block;animation:fadeUp .25s ease-out;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* login header */
+.login-topbar{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:24px;flex-wrap:wrap;
+  position:sticky;top:12px;z-index:60;
+  background:rgba(255,255,255,.72);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-radius:22px;
+  padding:12px 20px;
+  box-shadow:0 6px 20px rgba(109,40,217,.10);
+}
+.nav-links{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.nav-link{
+  border:none;cursor:pointer;
+  border-radius:999px;
+  padding:10px 18px;
+  font-family:'Prompt',sans-serif;font-weight:700;font-size:.88rem;
+  background:transparent;color:var(--ink);
+  transition:background .15s, color .15s, box-shadow .15s;
+}
+.nav-link:hover{background:#EDE9FE;color:#6D28D9;}
+.nav-link.accent{
+  background:var(--grad-purple);color:#fff;
+  box-shadow:0 6px 16px rgba(109,40,217,.30);
+}
+.nav-link.accent:hover{color:#fff;}
+.login-topbar .logo-img{
+  width:60px;height:60px;object-fit:contain;border-radius:50%;
+  background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.08);padding:4px;
+}
+.login-topbar h1{font-size:1.35rem;font-weight:900;}
+.login-topbar .subtitle{font-size:.72rem;font-weight:700;letter-spacing:2.5px;color:var(--ink-soft);text-transform:uppercase;}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:860px){
+  .clock-pill{display:none;}
+  .welcome-card{min-height:auto;display:flex;flex-direction:column;background:#fff;}
+  .welcome-bg{display:none;}
+  .welcome-hero-mobile{
+    display:block;
+    position:relative;
+    height:280px;
+    background-image:var(--hero-mobile);
+    background-size:cover;
+    background-position:center top;
+  }
+  .hero-label{display:inline-flex;animation:floatY 3s ease-in-out infinite;}
+  .welcome-hero-mobile::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(180deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,.5) 55%,
+      rgba(255,255,255,.95) 100%);
+  }
+  .welcome-overlay{display:none;}
+  .welcome-left{
+    position:relative;
+    padding:8px 24px 32px;max-width:100%;
+    margin-top:-60px;
+  }
+  .welcome-tagline{display:none;}
+}
+/* ─── Failsafe: บางครั้ง GAS iframe (ALLOWALL) ไม่ส่ง viewport width ที่ถูกต้อง
+   ให้ @media ทำงาน — ใช้ JS เช็ค window.innerWidth แล้ว toggle class นี้แทน ─── */
+body.is-mobile .clock-pill{display:none;}
+body.is-mobile .welcome-card{min-height:auto;display:flex;flex-direction:column;background:#fff;}
+body.is-mobile .welcome-bg{display:none;}
+body.is-mobile .hero-label{display:inline-flex;animation:floatY 3s ease-in-out infinite;}
+body.is-mobile .welcome-hero-mobile{
+  display:block;
+  position:relative;height:280px;
+  background-image:var(--hero-mobile);
+  background-size:cover;background-position:center top;
+}
+body.is-mobile .welcome-hero-mobile::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.5) 55%,
+    rgba(255,255,255,.95) 100%);
+}
+body.is-mobile .welcome-overlay{display:none;}
+body.is-mobile .welcome-left{
+  position:relative;padding:8px 24px 32px;max-width:100%;margin-top:-60px;
+}
+body.is-mobile .welcome-tagline{display:none;}
+@media(max-width:560px){
+  .role-tiles{grid-template-columns:1fr;}
+  .att-btn-group{flex-wrap:wrap;justify-content:flex-end;}
+  .login-topbar{padding:10px 14px;gap:10px;}
+  .login-topbar .logo-img{width:44px;height:44px;}
+  .login-topbar h1{font-size:1.05rem;}
+  .nav-links{margin-left:0;width:100%;justify-content:center;}
+  .nav-link{padding:8px 14px;font-size:.82rem;}
+  #main,#login-screen{padding:16px;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ LOGIN SCREEN ═══════════════════ -->
+<div id="login-screen">
+  <!-- Navigation bar -->
+  <div class="login-topbar">
+    <img class="logo-img" src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียนธนาคารออมสิน"/>
+    <div>
+      <h1>ระบบเช็กชื่อวันสำคัญ</h1>
+      <div class="subtitle">Thanakhan Oomsin School</div>
+    </div>
+    <nav class="nav-links">
+      <button class="nav-link" onclick="enterStudent()">👩‍🎓 นักเรียน</button>
+      <button class="nav-link" onclick="openLoginModal('teacher')">🛡️ คุณครู</button>
+      <button class="nav-link accent" onclick="openLoginModal('admin')">📊 แอดมิน</button>
+    </nav>
+    <div class="clock-pill">
+      <div class="clock-time"><span id="ch-login">--</span><span class="colon">:</span><span id="cm-login">--</span><span class="colon">:</span><span id="cs-login">--</span></div>
+      <div class="clock-date" id="cd-login">—</div>
+    </div>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="stat-grid" id="login-stats">
+    <div class="stat-card">
+      <div class="stat-eyebrow">นักเรียนทั้งหมด</div>
+      <div class="stat-num" id="stat-total">—</div>
+      <span class="stat-badge b-purple">คน</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-eyebrow">มัธยมศึกษาปีที่ 4</div>
+      <div class="stat-num" id="stat-m4">—</div>
+      <span class="stat-badge b-blue">M.4</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-eyebrow">มัธยมศึกษาปีที่ 5</div>
+      <div class="stat-num" id="stat-m5">—</div>
+      <span class="stat-badge b-orange">M.5</span>
+    </div>
+    <div class="stat-card">
+      <div class="stat-eyebrow">มัธยมศึกษาปีที่ 6</div>
+      <div class="stat-num" id="stat-m6">—</div>
+      <span class="stat-badge b-green">M.6</span>
+    </div>
+  </div>
+
+  <!-- Welcome hero card — รูปพื้นหลังเต็มจอ -->
+  <div class="welcome-card">
+    <div class="welcome-hero-mobile"><div class="hero-label"><span>Activity Logs</span></div></div>
+    <img class="welcome-bg" src="https://i.postimg.cc/5N4mjFKp/E1E9A2F0-3D15-45F7-9911-A26D9DBB34CB.png" alt="นักเรียนโรงเรียนธนาคารออมสิน" fetchpriority="high" loading="eager" decoding="async"/>
+    <div class="welcome-overlay"></div>
+
+    <div class="welcome-left">
+      <div class="welcome-eyebrow">🏫 Welcome</div>
+      <div class="welcome-title">ยินดีต้อนรับ<br><span class="grad">เข้าสู่ระบบ</span></div>
+      <div class="welcome-sub">ระบบเช็กชื่อ การเข้าร่วมวันสำคัญ ระดับมัธยมศึกษาตอนปลาย — กรุณาเลือกเมนูที่ต้องการด้านล่าง</div>
+
+      <!-- Role tiles -->
+      <div class="role-tiles">
+        <button class="role-tile tile-red" onclick="enterStudent()">
+          <div class="r-icon">👩‍🎓</div>
+          <h3>นักเรียน</h3>
+          <p>ดูสถิติการเข้าร่วม</p>
+        </button>
+        <button class="role-tile tile-purple" onclick="openLoginModal('teacher')">
+          <div class="r-icon">🛡️</div>
+          <h3>คุณครู</h3>
+          <p>เช็คชื่อนักเรียน</p>
+        </button>
+      </div>
+
+      <!-- Link bars -->
+      <button class="link-bar bar-pink" onclick="openLoginModal('admin')">
+        <div class="lb-icon">📊</div>
+        <div class="lb-text">
+          <div class="lb-title">ADMIN</div>
+          <div class="lb-sub">ภาพรวม &amp; จัดการระบบ</div>
+        </div>
+        <div class="lb-arrow">›</div>
+      </button>
+      <button class="link-bar bar-blue" onclick="enterStudent()">
+        <div class="lb-icon">🎉</div>
+        <div class="lb-text">
+          <div class="lb-title">กิจกรรม</div>
+          <div class="lb-sub">การเข้าร่วมกิจกรรมวันสำคัญ</div>
+        </div>
+        <div class="lb-arrow">›</div>
+      </button>
+    </div>
+
+    <div class="welcome-tagline">เปิดโลกกว้าง ✨<br>สร้างโอกาส<br>มุ่งสู่สากล</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PASSWORD MODAL ═══════════════════ -->
+<div class="modal-overlay" id="pw-modal" style="display:none;">
+  <div class="modal-box">
+    <h3 id="pw-modal-title">🔑 กรอกรหัสผ่าน</h3>
+    <div class="form-group">
+      <label>รหัสผ่าน</label>
+      <input type="password" id="pw-input" placeholder="กรอกรหัสผ่าน..." onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div id="pw-error" style="color:#B91C1C;font-size:.85rem;margin-bottom:12px;display:none;">❌ รหัสผ่านไม่ถูกต้อง</div>
+    <div style="display:flex;gap:10px;">
+      <button class="pill-btn purple" style="flex:1;justify-content:center;" onclick="doLogin()">เข้าสู่ระบบ</button>
+      <button class="pill-btn ghost" onclick="closeLoginModal()">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ APP SHELL ═══════════════════ -->
+<div id="app" style="display:none;">
+  <!-- Header -->
+  <div id="app-header">
+    <img class="logo-img" src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียน"/>
+    <div>
+      <h1>ระบบเช็กชื่อวันสำคัญ</h1>
+      <div class="subtitle">Thanakhan Oomsin School · <span id="current-role-label">ม.ปลาย</span></div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:12px;align-items:center;">
+      <div class="clock-pill" style="padding:6px 16px;">
+        <div class="clock-time" style="font-size:.95rem;"><span id="ch-app">--</span><span class="colon">:</span><span id="cm-app">--</span><span class="colon">:</span><span id="cs-app">--</span></div>
+        <div class="clock-date" id="cd-app">—</div>
+      </div>
+      <button class="pill-btn" style="padding:9px 18px;font-size:.85rem;" onclick="logout()">🚪 ออก</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div id="main">
+    <!-- STUDENT VIEW -->
+    <div class="panel" id="panel-student">
+      <div class="section-title">🎒 ค้นหาสถิติการเข้าร่วมของฉัน</div>
+      <div class="card" style="margin-bottom:18px;">
+        <div style="display:flex;gap:12px;">
+          <input type="text" id="student-search-input" placeholder="พิมพ์ชื่อนักเรียน..." style="flex:1;" onkeydown="if(event.key==='Enter')searchStudentAttendance()"/>
+          <button class="pill-btn blue" onclick="searchStudentAttendance()">🔍 ค้นหา</button>
+        </div>
+      </div>
+      <div id="student-results"></div>
+    </div>
+
+    <!-- TEACHER VIEW -->
+    <div class="panel" id="panel-teacher">
+      <!-- โหมดของครู: เช็คชื่อ / รายงานห้องเรียน -->
+      <div class="subtab-row">
+        <button class="subtab active" id="ttab-check" onclick="teacherMode('check')">✅ เช็คชื่อ</button>
+        <button class="subtab" id="ttab-report" onclick="teacherMode('report')">📊 รายงานห้องเรียน</button>
+      </div>
+
+      <div id="teacher-mode-check">
+      <div class="section-title">🛡️ เช็คชื่อนักเรียน</div>
+      <!-- Step 1: Choose event -->
+      <div id="teacher-step1">
+        <p style="margin-bottom:14px;font-size:.9rem;color:var(--ink-soft);">เลือกวันสำคัญที่ต้องการเช็คชื่อ</p>
+        <div id="teacher-event-list"><div style="text-align:center;padding:24px;"><div class="spinner"></div></div></div>
+      </div>
+      <!-- Step 2: Take attendance -->
+      <div id="teacher-step2" style="display:none;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+          <button class="pill-btn ghost" onclick="teacherBackToEvents()">← กลับ</button>
+          <div>
+            <div style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.15rem;" id="teacher-event-title"></div>
+            <div style="font-size:.82rem;color:var(--ink-soft);" id="teacher-event-date"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <label style="margin:0;white-space:nowrap;">🏫 ห้อง:</label>
+            <select id="teacher-class-filter" onchange="filterTeacherStudents()" style="max-width:200px;"></select>
+            <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="pill-btn green" style="padding:8px 16px;font-size:.82rem;" onclick="markAll('present')">✅ มาทั้งหมด</button>
+              <button class="pill-btn red" style="padding:8px 16px;font-size:.82rem;" onclick="markAll('absent')">❌ ขาดทั้งหมด</button>
+            </div>
+          </div>
+        </div>
+        <div id="teacher-student-list"></div>
+        <div style="margin-top:20px;text-align:right;">
+          <button class="pill-btn purple" style="font-size:1rem;padding:14px 32px;" onclick="saveAttendanceTeacher()">💾 บันทึกการเช็คชื่อ</button>
+        </div>
+      </div>
+      </div><!-- /teacher-mode-check -->
+
+      <!-- โหมดรายงานห้องเรียน -->
+      <div id="teacher-mode-report" style="display:none;">
+        <div class="section-title">📊 รายงานการเข้าร่วมรายห้อง</div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <label style="margin:0;white-space:nowrap;">🏫 เลือกห้อง:</label>
+            <select id="teacher-report-class" onchange="loadTeacherReport()" style="max-width:220px;"></select>
+            <span style="font-size:.8rem;color:var(--ink-soft);">💡 แตะชื่อนักเรียนเพื่อดูรายละเอียดแต่ละกิจกรรม</span>
+          </div>
+        </div>
+        <div id="teacher-report-content"></div>
+      </div>
+    </div>
+
+    <!-- ADMIN VIEW -->
+    <div class="panel" id="panel-admin">
+      <!-- Sub-tabs -->
+      <div class="subtab-row">
+        <button class="subtab active" onclick="adminTab('overview')" id="atab-overview">📊 ภาพรวม</button>
+        <button class="subtab" onclick="adminTab('events')"   id="atab-events">🗓️ จัดการกิจกรรม</button>
+        <button class="subtab" onclick="adminTab('students')" id="atab-students">👥 จัดการนักเรียน</button>
+        <button class="subtab" onclick="adminTab('report')"   id="atab-report">👤 รายงานรายบุคคล</button>
+        <button class="subtab" onclick="adminTab('setup')"    id="atab-setup">⚙️ ตั้งค่าเริ่มต้น</button>
+      </div>
+
+      <!-- Overview -->
+      <div id="admin-panel-overview">
+        <div class="section-title">📊 ภาพรวมการเข้าร่วมกิจกรรม</div>
+        <div id="admin-overview-content"><div style="text-align:center;padding:32px;"><div class="spinner"></div></div></div>
+      </div>
+
+      <!-- Events -->
+      <div id="admin-panel-events" style="display:none;">
+        <div class="section-title">🗓️ จัดการวันสำคัญ</div>
+        <div class="card" style="margin-bottom:18px;background:linear-gradient(135deg,#FFF7ED,#FFF);">
+          <div style="font-family:'Prompt',sans-serif;font-weight:800;margin-bottom:14px;">➕ เพิ่มวันสำคัญใหม่</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="form-group">
+              <label>ชื่อกิจกรรม</label>
+              <input type="text" id="new-evt-name" placeholder="เช่น วันไหว้ครู"/>
+            </div>
+            <div class="form-group">
+              <label>วันที่</label>
+              <input type="date" id="new-evt-date"/>
+            </div>
+            <div class="form-group">
+              <label>อิโมจิ (ไม่บังคับ)</label>
+              <input type="text" id="new-evt-emoji" placeholder="🎉" maxlength="4"/>
+            </div>
+            <div class="form-group">
+              <label>หมายเหตุ</label>
+              <input type="text" id="new-evt-note" placeholder="รายละเอียดเพิ่มเติม"/>
+            </div>
+          </div>
+          <button class="pill-btn orange" onclick="addEvent()">➕ เพิ่มกิจกรรม</button>
+        </div>
+        <div id="admin-event-list"></div>
+      </div>
+
+      <!-- Students -->
+      <div id="admin-panel-students" style="display:none;">
+        <div class="section-title">👥 จัดการนักเรียน</div>
+        <div class="card" style="margin-bottom:18px;background:linear-gradient(135deg,#EFF6FF,#FFF);">
+          <div style="font-family:'Prompt',sans-serif;font-weight:800;margin-bottom:14px;">➕ เพิ่มนักเรียน</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:end;">
+            <div class="form-group" style="margin:0;">
+              <label>ชื่อ-นามสกุล</label>
+              <input type="text" id="new-stu-name" placeholder="เช่น สมชาย ใจดี"/>
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label>ห้องเรียน</label>
+              <input type="text" id="new-stu-class" placeholder="เช่น ม.4/1"/>
+            </div>
+          </div>
+          <button class="pill-btn blue" style="margin-top:14px;" onclick="addStudent()">➕ เพิ่มนักเรียน</button>
+        </div>
+        <!-- Filter -->
+        <div style="display:flex;gap:12px;margin-bottom:14px;align-items:center;">
+          <label style="margin:0;white-space:nowrap;">กรองห้อง:</label>
+          <select id="admin-class-filter" onchange="loadAdminStudents()" style="max-width:220px;"></select>
+        </div>
+        <div id="admin-student-list"></div>
+      </div>
+
+      <!-- Individual Report -->
+      <div id="admin-panel-report" style="display:none;">
+        <div class="section-title">👤 รายงานการเข้าร่วมรายบุคคล</div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <label style="margin:0;white-space:nowrap;">🏫 กรองห้อง:</label>
+            <select id="admin-report-class" onchange="loadAdminReport()" style="max-width:220px;"></select>
+            <span style="font-size:.8rem;color:var(--ink-soft);">💡 แตะชื่อนักเรียนเพื่อดูรายละเอียดแต่ละกิจกรรม</span>
+          </div>
+        </div>
+        <div id="admin-report-content"></div>
+      </div>
+
+      <!-- Setup -->
+      <div id="admin-panel-setup" style="display:none;">
+        <div class="section-title">⚙️ ตั้งค่าเริ่มต้น</div>
+        <div class="card" style="max-width:520px;">
+          <p style="margin-bottom:16px;font-size:.9rem;line-height:1.8;color:var(--ink-soft);">
+            ก่อนใช้งานครั้งแรก ให้กด <strong style="color:var(--ink);">"สร้าง Sheets"</strong> เพื่อสร้าง Sheet ทั้ง 3 แผ่น (<em>Events, Students, Attendance</em>) ใน Spreadsheet ที่กำหนด
+          </p>
+          <button class="pill-btn purple" onclick="runSetup()">🛠️ สร้าง Sheets อัตโนมัติ</button>
+          <div id="setup-result" style="margin-top:14px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast">✅ บันทึกสำเร็จ</div>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script>
+// ════════════════════════════════════════
+// API CONFIG — GitHub Pages -> GAS Web App
+// ════════════════════════════════════════
+const API_URL = 'https://script.google.com/macros/s/AKfycbw9v31szQPdBI5gBYf_2AHOE2kx66iO8axL3iZYb5F3I_4U6x4u9Irx53jNZbF7ySNeTQ/exec';
+
+async function callAPI(action, payload = {}) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action, ...payload })
+  });
+  if (!res.ok) {
+    throw new Error('เครือข่ายผิดพลาด (HTTP ' + res.status + ')');
+  }
+  return res.json();
+}
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let currentRole   = null;
+let pendingRole   = null;
+let currentAttMap = {};
+let dirtyAttMap   = {};   // เฉพาะรายการที่ครู "เปลี่ยน" ในรอบนี้ — ส่งไปบันทึกเท่านั้น
+let currentEventId= null;
+let allStudents   = [];
+let allEvents     = [];
+let currentClasses= [];
+
+// ═══════════════════════════════════════════
+//  LIVE CLOCK (แสดงเฉพาะ desktop — mobile ซ่อนด้วย CSS)
+//  อัปเดตเฉพาะ span ตัวเลข ไม่แตะ span ":" เพื่อให้ animation กะพริบเดินต่อเนื่อง
+// ═══════════════════════════════════════════
+function tickClock(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const h = pad(now.getHours()), m = pad(now.getMinutes()), s = pad(now.getSeconds());
+  const dateTxt = now.toLocaleDateString('th-TH', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+  [['login'], ['app']].forEach(([k]) => {
+    const eh = document.getElementById('ch-'+k);
+    if(!eh) return;
+    eh.textContent = h;
+    document.getElementById('cm-'+k).textContent = m;
+    document.getElementById('cs-'+k).textContent = s;
+    document.getElementById('cd-'+k).textContent = dateTxt;
+  });
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+// ═══════════════════════════════════════════
+//  MOBILE FAILSAFE — บางครั้ง GAS iframe (ALLOWALL) ไม่ส่ง viewport width
+//  ที่ถูกต้องให้ @media ทำงาน เลยใช้ window.innerWidth เช็คเองแทน
+// ═══════════════════════════════════════════
+function applyMobileClass(){
+  if(window.innerWidth <= 860){
+    document.body.classList.add('is-mobile');
+  } else {
+    document.body.classList.remove('is-mobile');
+  }
+}
+applyMobileClass();
+window.addEventListener('resize', applyMobileClass);
+
+// ═══════════════════════════════════════════
+//  LOGIN STATS (จำนวนนักเรียนแต่ละชั้น)
+// ═══════════════════════════════════════════
+function loadLoginStats(){
+  callAPI('getAllStudents').then(students => {
+    const total = students.length;
+    const m4 = students.filter(s=>(s.class||'').includes('4')).length;
+    const m5 = students.filter(s=>(s.class||'').includes('5')).length;
+    const m6 = students.filter(s=>(s.class||'').includes('6')).length;
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-m4').textContent = m4;
+    document.getElementById('stat-m5').textContent = m5;
+    document.getElementById('stat-m6').textContent = m6;
+  }).catch(()=>showToast('❌ โหลดสถิติไม่สำเร็จ'));
+}
+loadLoginStats();
+
+// ═══════════════════════════════════════════
+//  LOGIN / LOGOUT
+// ═══════════════════════════════════════════
+function enterStudent(){
+  currentRole = 'student';
+  showApp();
+}
+function openLoginModal(role){
+  pendingRole = role;
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-error').style.display = 'none';
+  const titles = { teacher:'🛡️ รหัสผ่านคุณครู', admin:'📊 รหัสผ่านแอดมิน' };
+  document.getElementById('pw-modal-title').textContent = titles[role];
+  document.getElementById('pw-modal').style.display = 'flex';
+  setTimeout(()=>document.getElementById('pw-input').focus(), 100);
+}
+function closeLoginModal(){
+  document.getElementById('pw-modal').style.display = 'none';
+}
+function doLogin(){
+  const pw = document.getElementById('pw-input').value;
+  const action = pendingRole === 'admin' ? 'verifyAdmin' : 'verifyTeacher';
+  callAPI(action, { password: pw }).then(r => {
+    if(r.ok){
+      currentRole = pendingRole;
+      closeLoginModal();
+      showApp();
+    } else {
+      document.getElementById('pw-error').style.display = 'block';
+    }
+  }).catch(()=>showToast('❌ เกิดข้อผิดพลาด'));
+}
+function logout(){
+  currentRole = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'block';
+  loadLoginStats();
+}
+
+// ═══════════════════════════════════════════
+//  APP SHELL
+// ═══════════════════════════════════════════
+function showApp(){
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  const labels = { student:'นักเรียน 👩‍🎓', teacher:'คุณครู 🛡️', admin:'แอดมิน 📊' };
+  document.getElementById('current-role-label').textContent = labels[currentRole];
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + currentRole).classList.add('active');
+  if(currentRole === 'teacher') loadTeacherEvents();
+  if(currentRole === 'admin')   { adminTab('overview'); }
+}
+
+// ═══════════════════════════════════════════
+//  STUDENT PANEL
+// ═══════════════════════════════════════════
+function searchStudentAttendance(){
+  const name = document.getElementById('student-search-input').value.trim();
+  if(!name){ showToast('⚠️ กรุณากรอกชื่อนักเรียน'); return; }
+  const el = document.getElementById('student-results');
+  el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
+  callAPI('getStudentAttendance', { studentName: name })
+    .then(renderStudentResults)
+    .catch(()=>showToast('❌ เกิดข้อผิดพลาด'));
+}
+
+function renderStudentResults(data){
+  const el = document.getElementById('student-results');
+  if(!data || data.length === 0){
+    el.innerHTML = '<div class="empty-state"><div class="e-emoji">🔍</div><p>ไม่พบข้อมูล กรุณาตรวจสอบชื่ออีกครั้ง</p></div>';
+    return;
+  }
+  const byStudent = {};
+  data.forEach(r => {
+    const k = r.studentName + '|' + r.studentClass;
+    if(!byStudent[k]) byStudent[k] = { name:r.studentName, cls:r.studentClass, records:[] };
+    byStudent[k].records.push(r);
+  });
+
+  let html = '';
+  Object.values(byStudent).forEach(stu => {
+    const total   = stu.records.length;
+    const present = stu.records.filter(r=>r.status==='present').length;
+    const absent  = stu.records.filter(r=>r.status==='absent').length;
+    const leave   = stu.records.filter(r=>r.status==='leave').length;
+    const pct     = total>0 ? Math.round(present/total*100) : 0;
+
+    html += `<div class="card" style="margin-bottom:18px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#FCE7F3,#EDE9FE);display:flex;align-items:center;justify-content:center;font-size:1.7rem;">👩‍🎓</div>
+        <div>
+          <div style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.15rem;">${stu.name}</div>
+          <span class="badge b-purple stat-badge">${stu.cls}</span>
+        </div>
+      </div>
+      <div class="stat-grid" style="margin-bottom:14px;">
+        <div class="stat-card"><div class="stat-eyebrow">เข้าร่วม</div><div class="stat-num" style="color:#059669;">${present}</div><span class="stat-badge b-green">✅</span></div>
+        <div class="stat-card"><div class="stat-eyebrow">ขาด</div><div class="stat-num" style="color:#B91C1C;">${absent}</div><span class="stat-badge b-pink">❌</span></div>
+        <div class="stat-card"><div class="stat-eyebrow">ลา</div><div class="stat-num" style="color:#EA580C;">${leave}</div><span class="stat-badge b-orange">📋</span></div>
+      </div>
+      <div style="font-size:.85rem;font-weight:700;">อัตราเข้าร่วม ${pct}%</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+        ${stu.records.map(r=>{
+          const badgeClass = {present:'badge-present',absent:'badge-absent',leave:'badge-leave'}[r.status]||'badge-none';
+          const statusLabel = {present:'✅ เข้าร่วม',absent:'❌ ขาด',leave:'📋 ลา','ยังไม่บันทึก':'⏳ ยังไม่บันทึก'}[r.status]||r.status;
+          return `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:16px;background:#FAFAFF;">
+            <span style="font-size:1.3rem;">${r.eventEmoji||'🎉'}</span>
+            <span style="flex:1;font-size:.9rem;font-weight:600;">${r.eventName}</span>
+            <span style="font-size:.78rem;color:#9CA3AF;">${r.eventDate}</span>
+            <span class="badge ${badgeClass}">${statusLabel}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+//  TEACHER PANEL
+// ═══════════════════════════════════════════
+function loadTeacherEvents(){
+  const el = document.getElementById('teacher-event-list');
+  el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
+  callAPI('getEvents').then(events => {
+    allEvents = events;
+    if(!events.length){
+      el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีวันสำคัญ กรุณาให้แอดมินเพิ่มกิจกรรม</p></div>';
+      return;
+    }
+    el.innerHTML = events.map(e => `
+      <div class="event-card" style="cursor:pointer;" onclick="selectTeacherEvent('${e.id}')">
+        <div class="ev-emoji">${e.emoji||'🎉'}</div>
+        <div class="ev-info">
+          <div class="ev-name">${e.name}</div>
+          <div class="ev-date">📅 ${e.date||'-'}</div>
+          ${e.note?`<div class="ev-note">📝 ${e.note}</div>`:''}
+        </div>
+        <button class="pill-btn purple" style="padding:9px 18px;font-size:.85rem;">เช็คชื่อ ›</button>
+      </div>`).join('');
+  }).catch(()=>showToast('❌ โหลดกิจกรรมไม่สำเร็จ'));
+}
+
+function selectTeacherEvent(eventId){
+  currentEventId = eventId;
+  dirtyAttMap = {};
+  const evt = allEvents.find(e=>e.id===eventId);
+  document.getElementById('teacher-event-title').textContent = (evt?evt.emoji:'')+'  '+(evt?evt.name:'');
+  document.getElementById('teacher-event-date').textContent  = evt?evt.date:'';
+  document.getElementById('teacher-step1').style.display = 'none';
+  document.getElementById('teacher-step2').style.display = 'block';
+
+  callAPI('getClasses').then(classes => {
+    currentClasses = classes;
+    const sel = document.getElementById('teacher-class-filter');
+    sel.innerHTML = '<option value="">— ทุกห้อง —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
+  });
+
+  callAPI('getAllStudents').then(students => {
+    allStudents = students;
+    callAPI('getAttendanceForEvent', { eventId }).then(attMap => {
+      currentAttMap = attMap;
+      renderTeacherStudents();
+    });
+  });
+}
+
+function teacherBackToEvents(){
+  document.getElementById('teacher-step2').style.display = 'none';
+  document.getElementById('teacher-step1').style.display = 'block';
+  currentAttMap = {};
+  dirtyAttMap = {};
+  currentEventId = null;
+}
+
+function filterTeacherStudents(){ renderTeacherStudents(); }
+
+function renderTeacherStudents(){
+  const filterClass = document.getElementById('teacher-class-filter').value;
+  const students = filterClass ? allStudents.filter(s=>s.class===filterClass) : allStudents;
+  const el = document.getElementById('teacher-student-list');
+
+  if(!students.length){
+    el.innerHTML = '<div class="empty-state"><div class="e-emoji">👥</div><p>ไม่มีนักเรียนในห้องนี้</p></div>';
+    return;
+  }
+
+  const byClass = {};
+  students.forEach(s => {
+    if(!byClass[s.class]) byClass[s.class] = [];
+    byClass[s.class].push(s);
+  });
+
+  let html = '';
+  Object.entries(byClass).forEach(([cls, stuList])=>{
+    html += `<div class="class-divider">🏫 ${cls}</div>`;
+    stuList.forEach(s => {
+      const status = currentAttMap[s.id] || '';
+      html += `<div class="student-row" id="srow-${s.id}">
+        <div class="s-name">${s.name}</div>
+        <div class="s-class">${s.class}</div>
+        <div class="att-btn-group">
+          <button class="att-btn ${status==='present'?'sel-present':''}" id="btn-p-${s.id}" onclick="setStatus('${s.id}','present')">✅ มา</button>
+          <button class="att-btn ${status==='absent'?'sel-absent':''}"  id="btn-a-${s.id}" onclick="setStatus('${s.id}','absent')">❌ ขาด</button>
+          <button class="att-btn ${status==='leave'?'sel-leave':''}"    id="btn-l-${s.id}" onclick="setStatus('${s.id}','leave')">📋 ลา</button>
+        </div>
+      </div>`;
+    });
+  });
+  el.innerHTML = html;
+}
+
+function setStatus(studentId, status){
+  currentAttMap[studentId] = status;
+  dirtyAttMap[studentId]   = status;
+  ['present','absent','leave'].forEach(s=>{
+    const btn = document.getElementById(`btn-${s[0]}-${studentId}`);
+    if(btn){
+      btn.classList.remove('sel-present','sel-absent','sel-leave');
+      if(s===status) btn.classList.add('sel-'+status);
+    }
+  });
+}
+
+function markAll(status){
+  const filterClass = document.getElementById('teacher-class-filter').value;
+  const students = filterClass ? allStudents.filter(s=>s.class===filterClass) : allStudents;
+  students.forEach(s => setStatus(s.id, status));
+}
+
+function saveAttendanceTeacher(){
+  if(!currentEventId){ showToast('⚠️ ไม่ได้เลือกกิจกรรม'); return; }
+  const changeCount = Object.keys(dirtyAttMap).length;
+  if(changeCount === 0){ showToast('⚠️ ยังไม่มีการเปลี่ยนแปลงให้บันทึก'); return; }
+  showToast('⏳ กำลังบันทึก ' + changeCount + ' รายการ...');
+  callAPI('saveAttendance', { eventId: currentEventId, attendanceMap: dirtyAttMap }).then(r => {
+    if(r && r.ok){
+      dirtyAttMap = {};   // บันทึกแล้ว เคลียร์รายการค้าง
+      showToast('💾 บันทึกสำเร็จ ' + changeCount + ' รายการ ✅');
+    } else {
+      // เช่น ครูท่านอื่นกำลังบันทึกพร้อมกัน — ข้อมูลที่ติ๊กไว้ยังอยู่ กดบันทึกซ้ำได้เลย
+      showToast('⏳ ' + ((r && r.msg) || 'บันทึกไม่สำเร็จ กรุณากดบันทึกอีกครั้ง'));
+    }
+  }).catch(()=>showToast('❌ บันทึกไม่สำเร็จ กรุณากดบันทึกอีกครั้ง'));
+}
+
+// ═══════════════════════════════════════════
+//  TEACHER REPORT MODE (รายงานห้องเรียน)
+// ═══════════════════════════════════════════
+function teacherMode(mode){
+  document.getElementById('teacher-mode-check').style.display  = mode==='check' ?'block':'none';
+  document.getElementById('teacher-mode-report').style.display = mode==='report'?'block':'none';
+  document.getElementById('ttab-check').className  = mode==='check' ?'subtab active':'subtab';
+  document.getElementById('ttab-report').className = mode==='report'?'subtab active':'subtab';
+  if(mode==='report') loadTeacherReportFilter();
+}
+
+function loadTeacherReportFilter(){
+  callAPI('getClasses').then(classes => {
+    const sel  = document.getElementById('teacher-report-class');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">— ทุกห้อง —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
+    if(prev) sel.value = prev;
+    loadTeacherReport();
+  });
+}
+
+function loadTeacherReport(){
+  const cls = document.getElementById('teacher-report-class').value;
+  fetchClassReport(cls, 'teacher-report-content');
+}
+
+// ═══════════════════════════════════════════
+//  SHARED CLASS REPORT (ใช้ทั้งครู + แอดมิน)
+// ═══════════════════════════════════════════
+function fetchClassReport(cls, containerId){
+  const el = document.getElementById(containerId);
+  el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
+  callAPI('getClassReport', { className: cls })
+    .then(data => renderClassReport(containerId, data))
+    .catch(()=>showToast('❌ โหลดรายงานไม่สำเร็จ'));
+}
+
+function renderClassReport(containerId, data){
+  const el = document.getElementById(containerId);
+  if(!data || !data.students || !data.students.length){
+    el.innerHTML = '<div class="empty-state"><div class="e-emoji">👥</div><p>ไม่พบนักเรียน</p></div>';
+    return;
+  }
+  if(!data.events.length){
+    el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีกิจกรรมในระบบ</p></div>';
+    return;
+  }
+  const totalEvents = data.events.length;
+
+  // จัดกลุ่มตามห้อง
+  const byClass = {};
+  data.students.forEach(s => { if(!byClass[s.class]) byClass[s.class]=[]; byClass[s.class].push(s); });
+
+  let html = '';
+  Object.keys(byClass).sort().forEach(cls => {
+    const stuList     = byClass[cls];
+    const clsPresent  = stuList.reduce((a,s)=>a+s.present,0);
+    const clsPossible = stuList.length * totalEvents;
+    const clsPct      = clsPossible>0 ? Math.round(clsPresent/clsPossible*100) : 0;
+
+    html += `<div class="card" style="margin-bottom:18px;padding:0;overflow:hidden;">
+      <div style="padding:16px 20px;background:linear-gradient(90deg,#EDE9FE,#FCE7F3);display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.02rem;">🏫 ${cls}</span>
+        <span class="badge" style="background:#fff;color:#7C3AED;">${stuList.length} คน</span>
+        <span style="margin-left:auto;font-size:.82rem;font-weight:700;color:#6D28D9;">อัตราเข้าร่วมรวม ${clsPct}%</span>
+      </div>
+      <div style="overflow-x:auto;"><table>
+        <thead><tr>
+          <th>#</th><th>ชื่อ-นามสกุล</th>
+          <th style="text-align:center;">✅ เข้าร่วม</th>
+          <th style="text-align:center;">❌ ขาด</th>
+          <th style="text-align:center;">📋 ลา</th>
+          <th style="text-align:center;">⏳ ยังไม่บันทึก</th>
+          <th style="text-align:center;">%</th>
+        </tr></thead>
+        <tbody>`;
+
+    stuList.forEach((s,i) => {
+      const pct   = totalEvents>0 ? Math.round(s.present/totalEvents*100) : 0;
+      const detId = containerId + '-det-' + s.id;
+      const detail = data.events.map(evt => {
+        const st = s.statuses[evt.id] || 'none';
+        const badgeClass = {present:'badge-present',absent:'badge-absent',leave:'badge-leave'}[st]||'badge-none';
+        const lbl = {present:'✅ เข้าร่วม',absent:'❌ ขาด',leave:'📋 ลา'}[st]||'⏳ ยังไม่บันทึก';
+        return `<div style="display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:14px;background:#fff;">
+          <span style="font-size:1.1rem;">${evt.emoji||'🎉'}</span>
+          <span style="flex:1;font-size:.86rem;font-weight:600;">${evt.name}</span>
+          <span style="font-size:.75rem;color:#9CA3AF;">${evt.date||''}</span>
+          <span class="badge ${badgeClass}">${lbl}</span>
+        </div>`;
+      }).join('');
+
+      html += `<tr style="cursor:pointer;" onclick="toggleReportDetail('${detId}')">
+        <td>${i+1}</td>
+        <td style="font-weight:600;">${s.name} <span style="font-size:.75rem;color:#A78BFA;">▾</span></td>
+        <td style="text-align:center;color:#059669;font-weight:800;">${s.present}</td>
+        <td style="text-align:center;color:#B91C1C;font-weight:800;">${s.absent}</td>
+        <td style="text-align:center;color:#EA580C;font-weight:800;">${s.leave}</td>
+        <td style="text-align:center;color:#9CA3AF;font-weight:700;">${s.unrecorded}</td>
+        <td style="text-align:center;font-weight:800;color:#6D28D9;">${pct}%</td>
+      </tr>
+      <tr id="${detId}" style="display:none;"><td colspan="7" style="background:#FAFAFF;">
+        <div style="display:flex;flex-direction:column;gap:6px;padding:6px 4px;">${detail}</div>
+      </td></tr>`;
+    });
+
+    html += `</tbody></table></div></div>`;
+  });
+  el.innerHTML = html;
+}
+
+function toggleReportDetail(id){
+  const row = document.getElementById(id);
+  if(row) row.style.display = row.style.display==='none' ? 'table-row' : 'none';
+}
+
+// ═══════════════════════════════════════════
+//  ADMIN PANEL
+// ═══════════════════════════════════════════
+function adminTab(tab){
+  ['overview','events','students','report','setup'].forEach(t => {
+    document.getElementById('admin-panel-'+t).style.display = t===tab?'block':'none';
+    const btn = document.getElementById('atab-'+t);
+    if(btn){ btn.className = t===tab?'subtab active':'subtab'; }
+  });
+  if(tab==='overview') loadAdminOverview();
+  if(tab==='events')   loadAdminEvents();
+  if(tab==='students') loadAdminStudentsFilter();
+  if(tab==='report')   loadAdminReportFilter();
+}
+
+function loadAdminOverview(){
+  const el = document.getElementById('admin-overview-content');
+  el.innerHTML = '<div style="text-align:center;padding:32px;"><div class="spinner"></div></div>';
+  callAPI('getAdminOverview').then(data => {
+    if(!data.length){
+      el.innerHTML = '<div class="empty-state"><div class="e-emoji">📋</div><p>ยังไม่มีข้อมูลกิจกรรม</p></div>';
+      return;
+    }
+    let html = '';
+    data.forEach(evt => {
+      const pct = evt.total>0?Math.round(evt.present/evt.total*100):0;
+      html += `<div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+          <div class="ev-emoji" style="width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,#FCE7F3,#EDE9FE);display:flex;align-items:center;justify-content:center;font-size:1.7rem;">${evt.emoji||'🎉'}</div>
+          <div style="flex:1;">
+            <div style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.05rem;">${evt.name}</div>
+            <div style="font-size:.8rem;color:var(--ink-soft);">📅 ${evt.date||'-'}</div>
+          </div>
+        </div>
+        <div class="stat-grid" style="margin-bottom:8px;">
+          <div class="stat-card"><div class="stat-eyebrow">เข้าร่วม</div><div class="stat-num" style="color:#059669;">${evt.present}</div><span class="stat-badge b-green">✅</span></div>
+          <div class="stat-card"><div class="stat-eyebrow">ขาด</div><div class="stat-num" style="color:#B91C1C;">${evt.absent}</div><span class="stat-badge b-pink">❌</span></div>
+          <div class="stat-card"><div class="stat-eyebrow">ลา</div><div class="stat-num" style="color:#EA580C;">${evt.leave}</div><span class="stat-badge b-orange">📋</span></div>
+          <div class="stat-card"><div class="stat-eyebrow">ยังไม่บันทึก</div><div class="stat-num" style="color:#9CA3AF;">${evt.unrecorded}</div><span class="stat-badge b-gray">⏳</span></div>
+        </div>
+        <div style="font-size:.85rem;font-weight:700;">อัตราเข้าร่วม ${pct}% (${evt.present}/${evt.total} คน)</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
+      </div>`;
+    });
+    el.innerHTML = html;
+  }).catch(()=>showToast('❌ โหลดข้อมูลไม่สำเร็จ'));
+}
+
+function loadAdminEvents(){
+  const el = document.getElementById('admin-event-list');
+  el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
+  callAPI('getEvents').then(events => {
+    if(!events.length){
+      el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีกิจกรรม</p></div>';
+      return;
+    }
+    el.innerHTML = events.map(e => `
+      <div class="event-card">
+        <div class="ev-emoji">${e.emoji||'🎉'}</div>
+        <div class="ev-info">
+          <div class="ev-name">${e.name}</div>
+          <div class="ev-date">📅 ${e.date||'-'}</div>
+          ${e.note?`<div class="ev-note">📝 ${e.note}</div>`:''}
+        </div>
+        <button class="pill-btn red" style="padding:8px 16px;font-size:.82rem;" onclick="deleteEvent('${e.id}','${e.name}')">🗑️ ลบ</button>
+      </div>`).join('');
+  });
+}
+
+function addEvent(){
+  const name  = document.getElementById('new-evt-name').value.trim();
+  const date  = document.getElementById('new-evt-date').value;
+  const emoji = document.getElementById('new-evt-emoji').value.trim()||'🎉';
+  const note  = document.getElementById('new-evt-note').value.trim();
+  if(!name){ showToast('⚠️ กรุณากรอกชื่อกิจกรรม'); return; }
+  callAPI('addEvent', { data: {name,date,emoji,note} }).then(()=>{
+    showToast('✅ เพิ่มกิจกรรมสำเร็จ');
+    ['new-evt-name','new-evt-date','new-evt-emoji','new-evt-note'].forEach(id=>document.getElementById(id).value='');
+    loadAdminEvents();
+  }).catch(()=>showToast('❌ เพิ่มไม่สำเร็จ'));
+}
+
+function deleteEvent(id, name){
+  if(!confirm(`ลบกิจกรรม "${name}" ใช่หรือไม่?`)) return;
+  callAPI('deleteEvent', { id }).then(r=>{ if(r.ok){ showToast('🗑️ ลบสำเร็จ'); loadAdminEvents(); } });
+}
+
+function loadAdminStudentsFilter(){
+  callAPI('getClasses').then(classes => {
+    const sel = document.getElementById('admin-class-filter');
+    sel.innerHTML = '<option value="">— ทุกห้อง —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
+    loadAdminStudents();
+  });
+}
+
+function loadAdminStudents(){
+  const cls = document.getElementById('admin-class-filter').value;
+  const el  = document.getElementById('admin-student-list');
+  el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
+  callAPI('getStudentsByClass', { className: cls }).then(students => {
+    if(!students.length){
+      el.innerHTML = '<div class="empty-state"><div class="e-emoji">👥</div><p>ยังไม่มีนักเรียน</p></div>';
+      return;
+    }
+    el.innerHTML = `<div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ห้อง</th><th>ลบ</th></tr></thead>
+      <tbody>
+        ${students.map((s,i)=>`<tr>
+          <td>${i+1}</td>
+          <td style="font-weight:600;">${s.name}</td>
+          <td><span class="badge" style="background:#EDE9FE;color:#7C3AED;">${s.class}</span></td>
+          <td><button class="pill-btn red" style="padding:5px 12px;font-size:.78rem;" onclick="deleteStudent('${s.id}','${s.name}')">🗑️</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+  });
+}
+
+function addStudent(){
+  const name = document.getElementById('new-stu-name').value.trim();
+  const cls  = document.getElementById('new-stu-class').value.trim();
+  if(!name||!cls){ showToast('⚠️ กรุณากรอกข้อมูลให้ครบ'); return; }
+  callAPI('addStudent', { data: {name, class: cls} }).then(()=>{
+    showToast('✅ เพิ่มนักเรียนสำเร็จ');
+    document.getElementById('new-stu-name').value='';
+    document.getElementById('new-stu-class').value='';
+    loadAdminStudentsFilter();
+  }).catch(()=>showToast('❌ เพิ่มไม่สำเร็จ'));
+}
+
+function deleteStudent(id, name){
+  if(!confirm(`ลบนักเรียน "${name}" ใช่หรือไม่?`)) return;
+  callAPI('deleteStudent', { id }).then(r=>{ if(r.ok){ showToast('🗑️ ลบสำเร็จ'); loadAdminStudentsFilter(); } });
+}
+
+function loadAdminReportFilter(){
+  callAPI('getClasses').then(classes => {
+    const sel  = document.getElementById('admin-report-class');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">— ทุกห้อง —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
+    if(prev) sel.value = prev;
+    loadAdminReport();
+  });
+}
+
+function loadAdminReport(){
+  const cls = document.getElementById('admin-report-class').value;
+  fetchClassReport(cls, 'admin-report-content');
+}
+
+function runSetup(){
+  const el = document.getElementById('setup-result');
+  el.innerHTML = '<div class="spinner"></div>';
+  callAPI('setupSheets').then(msg=>{
+    el.innerHTML = `<div style="color:#059669;font-weight:700;">✅ ${msg}</div>`;
+  }).catch(e=>{
+    el.innerHTML = `<div style="color:#B91C1C;">❌ ${e.message}</div>`;
+  });
+}
+
+// ═══════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════
+let toastTimer;
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
