@@ -412,6 +412,17 @@ body.is-mobile .welcome-tagline{display:none;}
             <button class="pill-btn ghost" onclick="teacherBackToEvents()">← กลับ</button>
             <div><div style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.15rem;" id="teacher-event-title"></div><div style="font-size:.82rem;color:var(--ink-soft);" id="teacher-event-date"></div></div>
           </div>
+          <div class="card" style="margin-bottom:14px;padding:14px 20px;">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <span style="font-family:'Prompt',sans-serif;font-weight:800;font-size:.82rem;color:var(--ink-soft);white-space:nowrap;">📊 สรุปการเช็คชื่อ:</span>
+              <span class="badge b-purple" id="tc-total">ทั้งหมด 0</span>
+              <span class="badge b-green" id="tc-present">✅ 0</span>
+              <span class="badge b-pink" id="tc-absent">❌ 0</span>
+              <span class="badge b-orange" id="tc-leave">📋 0</span>
+              <span class="badge" id="tc-football" style="background:#CFFAFE;color:#0E7490;display:none;">⚽ 0</span>
+              <span class="badge b-gray" id="tc-unchecked" style="margin-left:auto;">⏳ ยังไม่เช็ค 0</span>
+            </div>
+          </div>
           <div class="card" style="margin-bottom:16px;">
             <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
               <label style="margin:0;white-space:nowrap;">🏫 ห้อง:</label>
@@ -454,6 +465,7 @@ body.is-mobile .welcome-tagline{display:none;}
           <div class="section-title" style="margin:0;">📊 ภาพรวมการเข้าร่วมกิจกรรม</div>
           <button class="pill-btn green" style="margin-left:auto;" onclick="downloadOverviewDoc()">📄 ดาวน์โหลดรายงาน (Doc)</button>
         </div>
+        <div id="admin-class-compare-content"></div>
         <div id="admin-overview-content"><div style="text-align:center;padding:32px;"><div class="spinner"></div></div></div>
       </div>
       <div id="admin-panel-events" style="display:none;">
@@ -756,10 +768,35 @@ function teacherBackToEvents(){
 }
 function filterTeacherStudents(){ renderTeacherStudents(); }
 
+// ── PATCH 10: real-time เช็คแล้ว/ยังไม่เช็ค counter ─────────────────────
+function updateTeacherCheckStat(){
+  const filterClass = document.getElementById('teacher-class-filter').value;
+  const students = filterClass ? allStudents.filter(s=>s.class===filterClass) : allStudents;
+  let present=0, absent=0, leave=0, football=0, unchecked=0;
+  students.forEach(s=>{
+    const st = currentAttMap[s.id];
+    if(st==='present') present++;
+    else if(st==='absent') absent++;
+    else if(st==='leave') leave++;
+    else if(st==='football') football++;
+    else unchecked++;
+  });
+  document.getElementById('tc-total').textContent      = 'ทั้งหมด ' + students.length + ' คน';
+  document.getElementById('tc-present').textContent    = '✅ ' + present;
+  document.getElementById('tc-absent').textContent     = '❌ ' + absent;
+  document.getElementById('tc-leave').textContent      = '📋 ' + leave;
+  const fbEl = document.getElementById('tc-football');
+  const hasFootball = students.some(s=>isFootballClass(s.class));
+  if(hasFootball){ fbEl.style.display='inline-block'; fbEl.textContent = '⚽ ' + football; }
+  else{ fbEl.style.display='none'; }
+  document.getElementById('tc-unchecked').textContent  = '⏳ ยังไม่เช็ค ' + unchecked;
+}
+
 function renderTeacherStudents(){
   const filterClass = document.getElementById('teacher-class-filter').value;
   const students = filterClass ? allStudents.filter(s=>s.class===filterClass) : allStudents;
   const el = document.getElementById('teacher-student-list');
+  updateTeacherCheckStat();
   if(!students.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">👥</div><p>ไม่มีนักเรียนในห้องนี้</p></div>'; return; }
   const byClass = {};
   students.forEach(s => { if(!byClass[s.class]) byClass[s.class] = []; byClass[s.class].push(s); });
@@ -785,7 +822,7 @@ function renderTeacherStudents(){
   el.innerHTML = html;
 }
 
-// ── PATCH 5: setStatus รองรับ 'football' ──
+// ── PATCH 5: setStatus รองรับ 'football' + อัปเดตตัวนับ real-time ──
 function setStatus(studentId, status){
   currentAttMap[studentId] = status;
   dirtyAttMap[studentId]   = status;
@@ -796,6 +833,7 @@ function setStatus(studentId, status){
       if(s===status) btn.classList.add('sel-'+status);
     }
   });
+  updateTeacherCheckStat();
 }
 
 function markAll(status){
@@ -922,7 +960,7 @@ function adminTab(tab){
     const btn = document.getElementById('atab-'+t);
     if(btn) btn.className = t===tab?'subtab active':'subtab';
   });
-  if(tab==='overview') loadAdminOverview();
+  if(tab==='overview'){ loadAdminOverview(); loadAdminClassCompare(); }
   if(tab==='events')   loadAdminEvents();
   if(tab==='students') loadAdminStudentsFilter();
   if(tab==='report')   loadAdminReportFilter();
@@ -953,6 +991,47 @@ function loadAdminOverview(){
     });
     el.innerHTML = html;
   }).catch(()=>showToast('❌ โหลดข้อมูลไม่สำเร็จ'));
+}
+
+// ── PATCH 11: กราฟเปรียบเทียบอัตราเข้าร่วมแต่ละห้อง (Admin > ภาพรวม) ──
+function loadAdminClassCompare(){
+  const el = document.getElementById('admin-class-compare-content');
+  el.innerHTML = '<div class="card" style="margin-bottom:20px;text-align:center;padding:28px;"><div class="spinner"></div></div>';
+  callAPI('getClassReport', { className: '' }).then(data => {
+    if(!data || !data.students || !data.students.length || !data.events || !data.events.length){
+      el.innerHTML = '';
+      return;
+    }
+    const totalEvents = data.events.length;
+    const byClass = {};
+    data.students.forEach(s => { if(!byClass[s.class]) byClass[s.class] = []; byClass[s.class].push(s); });
+    const rows = Object.keys(byClass).map(cls => {
+      const stuList     = byClass[cls];
+      const clsPresent  = stuList.reduce((a,s)=>a+s.present,0);
+      const clsPossible = stuList.length * totalEvents;
+      const pct = clsPossible>0 ? Math.round(clsPresent/clsPossible*100) : 0;
+      return { cls, pct, count: stuList.length };
+    }).sort((a,b)=>b.pct-a.pct);
+
+    const barColor = pct => pct>=80 ? 'linear-gradient(90deg,#34D399,#059669)'
+                          : pct>=60 ? 'linear-gradient(90deg,#FBBF24,#F97316)'
+                          : 'linear-gradient(90deg,#FB7185,#E11D48)';
+    const medal = i => i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
+
+    let html = `<div class="card" style="margin-bottom:20px;">
+      <div class="section-title" style="margin-bottom:18px;">📊 เปรียบเทียบอัตราเข้าร่วมรายห้อง</div>`;
+    rows.forEach((r,i) => {
+      html += `<div style="margin-bottom:${i===rows.length-1?0:16}px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap;">
+          <span style="font-family:'Prompt',sans-serif;font-weight:700;font-size:.9rem;">${medal(i)}🏫 ${r.cls} <span style="font-weight:500;color:var(--ink-soft);font-size:.78rem;">(${r.count} คน)</span></span>
+          <span style="font-family:'Prompt',sans-serif;font-weight:800;font-size:.92rem;color:#6D28D9;">${r.pct}%</span>
+        </div>
+        <div class="progress-bar" style="height:14px;"><div class="progress-fill" style="width:${r.pct}%;background:${barColor(r.pct)};"></div></div>
+      </div>`;
+    });
+    html += `</div>`;
+    el.innerHTML = html;
+  }).catch(()=>{ document.getElementById('admin-class-compare-content').innerHTML = ''; });
 }
 
 function downloadOverviewDoc(){
