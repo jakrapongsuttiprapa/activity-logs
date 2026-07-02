@@ -185,6 +185,19 @@ input:focus,select:focus,textarea:focus{border-color:#A78BFA;box-shadow:0 0 0 4p
 label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--ink);}
 .form-group{margin-bottom:14px;}
 
+.otp-group{display:flex;gap:9px;justify-content:center;}
+.otp-box{
+  width:44px;height:56px;padding:0;text-align:center;
+  font-family:'Prompt',sans-serif;font-size:1.6rem;font-weight:800;color:var(--ink);
+  border:2px solid #ECE9F6;border-radius:16px;background:#fff;
+  transition:border .15s,box-shadow .15s,transform .15s;
+}
+.otp-box:focus{border-color:#A78BFA;box-shadow:0 0 0 4px rgba(167,139,250,.22);transform:translateY(-2px);}
+.otp-box.otp-filled{border-color:#C4B5FD;background:#FAF8FF;}
+.otp-box.otp-error{border-color:#FB7185;box-shadow:0 0 0 4px rgba(251,113,133,.18);animation:otpShake .38s;}
+@keyframes otpShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(7px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
+@media(max-width:400px){.otp-box{width:38px;height:50px;font-size:1.4rem;}.otp-group{gap:6px;}}
+
 .subtab-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
 .subtab{border:none;cursor:pointer;border-radius:999px;padding:11px 22px;font-family:'Prompt',sans-serif;font-weight:700;font-size:.88rem;background:rgba(255,255,255,.8);color:var(--ink-soft);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(23,18,58,.06);transition:.16s;}
 .subtab:hover{color:var(--ink);transform:translateY(-1px);}
@@ -303,9 +316,16 @@ body.is-mobile .welcome-tagline{display:none;}
     <img src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียนธนาคารออมสิน" style="width:64px;height:64px;object-fit:contain;border-radius:18px;background:#fff;box-shadow:0 6px 16px rgba(109,40,217,.16);padding:4px;margin:0 auto 14px;display:block;"/>
     <h3 style="margin-bottom:4px;">🔒 ระบบเช็กชื่อวันสำคัญ</h3>
     <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:18px;">กรุณากรอกรหัสผ่านเพื่อเข้าใช้งาน</p>
-    <div class="form-group" style="text-align:left;">
-      <label>รหัสผ่าน</label>
-      <input type="password" id="gate-pw-input" placeholder="กรอกรหัสผ่าน..." autocomplete="off" autofocus oninput="autoCheckGate()" onkeydown="if(event.key==='Enter')gateLogin()"/>
+    <div class="form-group" style="text-align:center;">
+      <label style="text-align:center;">รหัสผ่าน</label>
+      <div class="otp-group" id="gate-otp-group">
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box" autofocus/>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
+      </div>
     </div>
     <div id="gate-pw-error" style="color:#B91C1C;font-size:.85rem;margin-bottom:12px;display:none;">❌ รหัสผ่านไม่ถูกต้อง</div>
     <button class="pill-btn purple" style="width:100%;justify-content:center;" onclick="gateLogin()">🔑 เข้าสู่ระบบ</button>
@@ -317,7 +337,7 @@ body.is-mobile .welcome-tagline{display:none;}
     <img class="logo-img" src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียนธนาคารออมสิน" onclick="location.reload()" style="cursor:pointer;" title="กลับหน้าหลัก"/>
     <div><h1>ระบบเช็กชื่อวันสำคัญ</h1><div class="subtitle">Thanakhan Oomsin School</div></div>
     <nav class="nav-links">
-      <button class="nav-link" onclick="enterStudent()">👩‍🎓 นักเรียน</button>
+      <button class="nav-link" onclick="openLoginModal('student')">👩‍🎓 นักเรียน</button>
       <button class="nav-link" onclick="openLoginModal('teacher')">🛡️ คุณครู</button>
       <button class="nav-link accent" onclick="openLoginModal('admin')">📊 แอดมิน</button>
     </nav>
@@ -343,11 +363,11 @@ body.is-mobile .welcome-tagline{display:none;}
       <div class="welcome-title">ยินดีต้อนรับ<br><span class="grad">นักเรียนม.ปลาย</span></div>
       <div class="welcome-sub">การเข้าร่วมวันสำคัญ ระดับมัธยมศึกษาตอนปลาย</div>
       <div class="role-tiles">
-        <button class="role-tile tile-red" onclick="enterStudent()"><span class="tile-go">›</span><div class="r-icon">👩‍🎓</div><h3>นักเรียน</h3><p>ดูสถิติการเข้าร่วม</p><span class="tile-wm">🎓</span></button>
+        <button class="role-tile tile-red" onclick="openLoginModal('student')"><span class="tile-go">›</span><div class="r-icon">👩‍🎓</div><h3>นักเรียน</h3><p>ดูสถิติการเข้าร่วม</p><span class="tile-wm">🎓</span></button>
         <button class="role-tile tile-purple" onclick="openLoginModal('teacher')"><span class="tile-go">›</span><div class="r-icon">🛡️</div><h3>คุณครู</h3><p>เช็คชื่อนักเรียน</p><span class="tile-wm">🛡️</span></button>
       </div>
       <button class="link-bar bar-pink" onclick="openLoginModal('admin')"><div class="lb-icon">📊</div><div class="lb-text"><div class="lb-title">ADMIN</div><div class="lb-sub">ภาพรวม &amp; จัดการระบบ</div></div><div class="lb-arrow">›</div></button>
-      <button class="link-bar bar-blue" onclick="enterStudent()"><div class="lb-icon">🎉</div><div class="lb-text"><div class="lb-title">กิจกรรม</div><div class="lb-sub">การเข้าร่วมกิจกรรมวันสำคัญ</div></div><div class="lb-arrow">›</div></button>
+      <button class="link-bar bar-blue" onclick="openLoginModal('student')"><div class="lb-icon">🎉</div><div class="lb-text"><div class="lb-title">กิจกรรม</div><div class="lb-sub">การเข้าร่วมกิจกรรมวันสำคัญ</div></div><div class="lb-arrow">›</div></button>
     </div>
     <div class="welcome-tagline">เปิดโลกกว้าง ✨<br>สร้างโอกาส<br>มุ่งสู่สากล</div>
   </div>
@@ -560,30 +580,50 @@ async function callAPI(action, payload = {}) {
   return res.json();
 }
 
-// ── SITE GATE: ต้องกรอกรหัสก่อนเข้าเว็บทั้งเว็บ (รหัส 212224) ──
+// ── SITE GATE: ต้องกรอกรหัสก่อนเข้าเว็บทั้งเว็บ (รหัส 212224) — ให้กรอกทุกครั้งที่เข้า ไม่จำรหัสข้ามเซสชัน ──
 const GATE_PASSWORD = '212224';
-function autoCheckGate(){
-  const pw = document.getElementById('gate-pw-input').value;
-  if(pw === GATE_PASSWORD){ gateLogin(); }
+const gateOtpBoxes = Array.from(document.querySelectorAll('#gate-otp-group .otp-box'));
+
+function getGateOtpValue(){
+  return gateOtpBoxes.map(b => b.value).join('');
 }
+
+function initGateOtp(){
+  gateOtpBoxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+      box.value = box.value.replace(/[^0-9]/g, '').slice(-1);
+      box.classList.toggle('otp-filled', !!box.value);
+      if(box.value && i < gateOtpBoxes.length - 1){ gateOtpBoxes[i + 1].focus(); }
+      if(getGateOtpValue().length === 6){ gateLogin(); }
+    });
+    box.addEventListener('keydown', (e) => {
+      if(e.key === 'Backspace' && !box.value && i > 0){ gateOtpBoxes[i - 1].focus(); }
+      if(e.key === 'Enter'){ gateLogin(); }
+    });
+    box.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const digits = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').split('');
+      gateOtpBoxes.forEach((b, idx) => { b.value = digits[idx] || ''; b.classList.toggle('otp-filled', !!b.value); });
+      const nextEmpty = gateOtpBoxes.findIndex(b => !b.value);
+      (nextEmpty === -1 ? gateOtpBoxes[gateOtpBoxes.length - 1] : gateOtpBoxes[nextEmpty]).focus();
+      if(getGateOtpValue().length === 6){ gateLogin(); }
+    });
+  });
+}
+initGateOtp();
+
 function gateLogin(){
-  const pw = document.getElementById('gate-pw-input').value;
+  const pw = getGateOtpValue();
+  if(pw.length < 6) return;
   if(pw === GATE_PASSWORD){
-    try{ sessionStorage.setItem('gateUnlocked','1'); }catch(e){}
     document.getElementById('site-gate').style.display = 'none';
   } else {
     document.getElementById('gate-pw-error').style.display = 'block';
-    document.getElementById('gate-pw-input').value = '';
-    document.getElementById('gate-pw-input').focus();
+    gateOtpBoxes.forEach(b => { b.value = ''; b.classList.remove('otp-filled'); b.classList.add('otp-error'); });
+    setTimeout(() => gateOtpBoxes.forEach(b => b.classList.remove('otp-error')), 400);
+    gateOtpBoxes[0].focus();
   }
 }
-(function checkGate(){
-  try{
-    if(sessionStorage.getItem('gateUnlocked') === '1'){
-      document.getElementById('site-gate').style.display = 'none';
-    }
-  }catch(e){}
-})();
 
 let currentRole = null, pendingRole = null;
 let currentAttMap = {}, dirtyAttMap = {};
@@ -656,7 +696,7 @@ function openLoginModal(role){
   pendingRole = role;
   document.getElementById('pw-input').value = '';
   document.getElementById('pw-error').style.display = 'none';
-  const titles = { teacher:'🛡️ รหัสผ่านคุณครู', admin:'📊 รหัสผ่านแอดมิน' };
+  const titles = { student:'👩‍🎓 รหัสผ่านนักเรียน', teacher:'🛡️ รหัสผ่านคุณครู', admin:'📊 รหัสผ่านแอดมิน' };
   document.getElementById('pw-modal-title').textContent = titles[role];
   document.getElementById('pw-modal').style.display = 'flex';
   setTimeout(()=>document.getElementById('pw-input').focus(), 100);
@@ -664,6 +704,16 @@ function openLoginModal(role){
 function closeLoginModal(){ document.getElementById('pw-modal').style.display = 'none'; }
 function doLogin(){
   const pw = document.getElementById('pw-input').value;
+  if (pendingRole === 'student') {
+    if (pw === '212224') {
+      currentRole = 'student';
+      closeLoginModal();
+      showApp();
+    } else {
+      document.getElementById('pw-error').style.display = 'block';
+    }
+    return;
+  }
   const action = pendingRole === 'admin' ? 'verifyAdmin' : 'verifyTeacher';
   callAPI(action, { password: pw }).then(r => {
     if(r.ok){ currentRole = pendingRole; closeLoginModal(); showApp(); }
