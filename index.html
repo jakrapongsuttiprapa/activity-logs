@@ -313,7 +313,7 @@ body.is-mobile .welcome-tagline{display:none;}
 <!-- ═══════════════════ SITE GATE (ต้องกรอกรหัสก่อนเข้าเว็บ) ═══════════════════ -->
 <div class="modal-overlay" id="site-gate" style="z-index:200;">
   <div class="modal-box" style="text-align:center;">
-    <img src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียนธนาคารออมสิน" style="width:64px;height:64px;object-fit:contain;border-radius:18px;background:#fff;box-shadow:0 6px 16px rgba(109,40,217,.16);padding:4px;margin:0 auto 14px;display:block;"/>
+    <div style="width:64px;height:64px;border-radius:18px;background:var(--grad-purple);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 14px;box-shadow:0 10px 24px -6px rgba(109,40,217,.45),inset 0 1px 0 rgba(255,255,255,.35);">🔐</div>
     <h3 style="margin-bottom:4px;">🔒 ระบบเช็กชื่อวันสำคัญ</h3>
     <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:18px;">กรุณากรอกรหัสผ่านเพื่อเข้าใช้งาน</p>
     <div class="form-group" style="text-align:center;">
@@ -689,6 +689,7 @@ function loadLoginStats(){
     document.getElementById('stat-m6').textContent = m6;
   }).catch(()=>showToast('❌ โหลดสถิติไม่สำเร็จ'));
 }
+
 loadLoginStats();
 
 function enterStudent(){ currentRole = 'student'; showApp(); }
