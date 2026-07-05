@@ -23,7 +23,7 @@
   --hero-mobile:url("https://i.postimg.cc/PJQPqYPW/D4382813-406C-43D7-B000-C7D42D512148.png");
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{min-height:100%;}
+html,body{min-height:100%;overflow-x:hidden;}
 body{
   font-family:'Noto Sans Thai',sans-serif;color:var(--ink);
   background:
@@ -31,7 +31,7 @@ body{
     radial-gradient(1100px 720px at 102% -4%,#E4DEFF 0%,transparent 54%),
     radial-gradient(1050px 820px at 102% 104%,#D7EEFF 0%,transparent 54%),
     radial-gradient(950px 760px at -4% 104%,#DFFAEE 0%,transparent 54%),#F5F3FC;
-  background-attachment:fixed;min-height:100vh;-webkit-font-smoothing:antialiased;
+  min-height:100vh;-webkit-font-smoothing:antialiased;
 }
 body::before{
   content:'';position:fixed;inset:-15%;z-index:-1;pointer-events:none;
@@ -40,13 +40,13 @@ body::before{
     radial-gradient(closest-side,rgba(37,99,235,.18),transparent) 86% 18%/44% 44% no-repeat,
     radial-gradient(closest-side,rgba(124,58,237,.20),transparent) 80% 86%/46% 46% no-repeat,
     radial-gradient(closest-side,rgba(5,150,105,.15),transparent) 14% 88%/40% 40% no-repeat;
-  filter:blur(46px);animation:auroraFloat 26s ease-in-out infinite alternate;
+  filter:blur(46px);
+  /* ตัด animation ออก: blur ต่อเนื่องทั้งจอคือตัวกินพลังเครื่อง/ทำเครื่องกระตุกตัวหลัก ยิ่งรวมกับ list นักเรียนยาวๆ ยิ่งหนัก */
 }
-@keyframes auroraFloat{0%{transform:translate(0,0) scale(1) rotate(0deg);}100%{transform:translate(-3%,3%) scale(1.14) rotate(4deg);}}
 h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
 
 #app-header{
-  display:flex;align-items:center;gap:14px;padding:15px 28px;
+  display:flex;align-items:center;gap:14px;padding:15px 28px;flex-wrap:wrap;
   background:rgba(255,255,255,.62);
   -webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);
   position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(255,255,255,.7);
@@ -56,6 +56,17 @@ h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
 #app-header .logo-img:hover{transform:rotate(-6deg) scale(1.05);}
 #app-header h1{font-size:1.18rem;font-weight:800;letter-spacing:.2px;}
 #app-header .subtitle{font-size:.72rem;font-weight:600;letter-spacing:2px;color:var(--ink-soft);text-transform:uppercase;}
+.app-header-title{min-width:0;flex:1 1 auto;}
+.app-header-title h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.app-header-actions{margin-left:auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+@media(max-width:640px){
+  #app-header{padding:10px 14px;gap:8px;}
+  #app-header .logo-img{width:38px;height:38px;border-radius:12px;}
+  .app-header-title h1{font-size:.92rem;}
+  .app-header-title .subtitle{font-size:.6rem;letter-spacing:1px;}
+  .app-header-actions{gap:6px;width:100%;justify-content:flex-end;}
+  .app-header-actions .pill-btn{padding:7px 10px!important;font-size:.72rem!important;}
+}
 
 .clock-pill{
   display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
@@ -96,23 +107,13 @@ h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
 .stat-card .stat-eyebrow{font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:4px;}
 .stat-card .stat-num{font-family:'Prompt',sans-serif;font-size:2.5rem;font-weight:900;line-height:1.1;letter-spacing:-.5px;}
 .stat-card .stat-badge{display:inline-block;margin-top:6px;font-size:.72rem;font-weight:700;padding:3px 12px;border-radius:999px;}
-#login-stats .stat-card{color:#fff;border:1px solid rgba(255,255,255,.22);}
-#login-stats .stat-card::before{inset:0;height:auto;background:linear-gradient(180deg,rgba(255,255,255,.30),transparent 44%);opacity:1;}
-#login-stats .stat-card::after{content:'';position:absolute;right:-36px;bottom:-46px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.32),transparent 70%);opacity:1;pointer-events:none;}
-#login-stats .stat-eyebrow{color:rgba(255,255,255,.92);font-weight:700;position:relative;z-index:2;}
-#login-stats .stat-num{background:none;-webkit-text-fill-color:#fff;color:#fff;font-size:2.9rem;text-shadow:0 3px 14px rgba(0,0,0,.20);position:relative;z-index:2;}
-#login-stats .stat-badge{background:rgba(255,255,255,.24);color:#fff;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);position:relative;z-index:2;border:1px solid rgba(255,255,255,.3);}
-#login-stats .stat-wm{position:absolute;right:12px;bottom:-22px;z-index:1;pointer-events:none;font-family:'Prompt',sans-serif;font-weight:900;font-size:7rem;line-height:1;color:rgba(255,255,255,.20);}
-#login-stats .stat-card:nth-child(1){background:linear-gradient(145deg,#A78BFA 0%,#7C3AED 55%,#6D28D9 100%);box-shadow:0 24px 46px -16px rgba(109,40,217,.60);}
-#login-stats .stat-card:nth-child(2){background:linear-gradient(145deg,#7DD3FC 0%,#3B82F6 55%,#2563EB 100%);box-shadow:0 24px 46px -16px rgba(37,99,235,.55);}
-#login-stats .stat-card:nth-child(3){background:linear-gradient(145deg,#FCD34D 0%,#FB923C 55%,#F97316 100%);box-shadow:0 24px 46px -16px rgba(249,115,22,.55);}
-#login-stats .stat-card:nth-child(4){background:linear-gradient(145deg,#6EE7B7 0%,#10B981 55%,#059669 100%);box-shadow:0 24px 46px -16px rgba(5,150,105,.55);}
 .b-blue{background:#DBEAFE;color:#2563EB;}.b-orange{background:#FFEDD5;color:#EA580C;}
 .b-green{background:#D1FAE5;color:#059669;}.b-pink{background:#FCE7F3;color:#DB2777;}
 .b-purple{background:#EDE9FE;color:#7C3AED;}.b-gray{background:#F3F4F6;color:#6B7280;}
 
 .stu-pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:560px){.stu-pick-grid{grid-template-columns:1fr;}}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:560px){.stu-pick-grid{grid-template-columns:1fr;}.form-grid-2{grid-template-columns:1fr;}}
 
 .result-hero{
   display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
@@ -130,50 +131,20 @@ h1,h2,h3,.display{font-family:'Prompt',sans-serif;}
 .rh-big{font-size:3rem;}.rh-slash{font-size:1.6rem;opacity:.82;}
 .rh-gauge-label{font-size:.74rem;opacity:.92;margin-top:6px;letter-spacing:1px;text-transform:uppercase;font-weight:700;}
 
-.welcome-card{position:relative;border-radius:34px;box-shadow:var(--card-shadow-lg);overflow:hidden;min-height:600px;background:linear-gradient(135deg,#FBCFE8,#DDD6FE);}
-.welcome-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center right;}
-.welcome-hero-mobile{display:none;}
-.hero-label{display:none;position:absolute;left:16px;top:26px;z-index:2;align-items:center;font-family:'Prompt',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:.5px;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:9px 18px;border-radius:999px;box-shadow:0 10px 24px rgba(109,40,217,.28);}
-.hero-label span{background:var(--grad-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
-@keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-.welcome-overlay{position:absolute;inset:0;background:linear-gradient(96deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.9) 34%,rgba(255,255,255,.5) 58%,rgba(255,255,255,0) 82%);}
-.welcome-left{position:relative;z-index:2;padding:52px 46px;display:flex;flex-direction:column;max-width:580px;}
-.welcome-eyebrow{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:.74rem;font-weight:800;letter-spacing:2.5px;color:#7C3AED;text-transform:uppercase;margin-bottom:14px;background:rgba(124,58,237,.10);padding:6px 14px;border-radius:999px;}
-.welcome-title{font-family:'Prompt',sans-serif;font-size:clamp(2.4rem,4.4vw,3.5rem);font-weight:900;line-height:1.12;letter-spacing:-.02em;color:var(--ink);}
-.welcome-title .grad{background:linear-gradient(90deg,#7C3AED,#DB2777,#2563EB,#7C3AED);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;display:inline-block;animation:gradFlow 7s ease infinite;}
-@keyframes gradFlow{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-.welcome-sub{margin:16px 0 30px;color:#46445E;font-size:1rem;line-height:1.7;}
-.welcome-tagline{position:absolute;right:24px;bottom:24px;z-index:2;background:rgba(23,18,58,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;border-radius:20px;padding:16px 20px;font-family:'Prompt',sans-serif;font-weight:700;font-size:.92rem;line-height:1.6;box-shadow:0 16px 36px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.12);}
-
-.role-tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;}
-.role-tile{border:none;cursor:pointer;position:relative;overflow:hidden;border-radius:28px;padding:30px 20px 26px;text-align:center;color:#fff;font-family:'Prompt',sans-serif;border:1px solid rgba(255,255,255,.18);transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s;}
-.role-tile::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;background:linear-gradient(160deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.06) 30%,transparent 55%);}
-.role-tile::after{content:'';position:absolute;top:0;bottom:0;left:-85%;width:55%;z-index:1;background:linear-gradient(115deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);pointer-events:none;transition:left .7s cubic-bezier(.4,0,.2,1);}
-.role-tile:hover::after{left:160%;}
-.role-tile:hover{transform:translateY(-6px) scale(1.015);}
-.role-tile:active{transform:translateY(-2px) scale(.99);}
-.role-tile .tile-wm{position:absolute;right:-6px;bottom:-16px;z-index:0;font-size:6rem;line-height:1;opacity:.16;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));transition:transform .3s;}
-.role-tile:hover .tile-wm{transform:rotate(-8deg) scale(1.08);}
-.role-tile .tile-go{position:absolute;top:16px;right:16px;z-index:2;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:1.3rem;font-weight:700;line-height:1;box-shadow:0 4px 12px rgba(0,0,0,.12);transition:transform .2s,background .2s;}
-.role-tile:hover .tile-go{transform:translateX(3px);background:rgba(255,255,255,.32);}
-.role-tile .r-icon{position:relative;z-index:1;width:74px;height:74px;border-radius:24px;background:rgba(255,255,255,.20);border:1.5px solid rgba(255,255,255,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;font-size:2.1rem;margin:0 auto 14px;box-shadow:inset 0 2px 8px rgba(255,255,255,.35),0 12px 26px -6px rgba(0,0,0,.28);}
-.role-tile h3{font-size:1.4rem;font-weight:800;position:relative;z-index:1;letter-spacing:-.01em;text-shadow:0 2px 10px rgba(0,0,0,.16);}
-.role-tile p{font-size:.84rem;opacity:.9;margin-top:4px;font-family:'Noto Sans Thai',sans-serif;position:relative;z-index:1;}
-.tile-red{background:radial-gradient(circle at 82% 12%,rgba(255,255,255,.30),transparent 46%),linear-gradient(150deg,#FB7185 0%,#F43F5E 52%,#BE123C 100%);box-shadow:0 22px 40px -14px rgba(225,29,72,.55);}
-.tile-purple{background:radial-gradient(circle at 82% 12%,rgba(255,255,255,.30),transparent 46%),linear-gradient(150deg,#A78BFA 0%,#8B5CF6 52%,#6D28D9 100%);box-shadow:0 22px 40px -14px rgba(109,40,217,.55);}
-
-.link-bar{display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;border:none;cursor:pointer;width:100%;border-radius:22px;padding:16px 20px;color:#fff;text-align:left;font-family:'Prompt',sans-serif;margin-bottom:12px;transition:transform .16s;}
-.link-bar::after{content:'';position:absolute;top:0;bottom:0;left:-85%;width:42%;background:linear-gradient(115deg,transparent,rgba(255,255,255,.38),transparent);transform:skewX(-18deg);pointer-events:none;transition:left .65s;}
-.link-bar:hover::after{left:150%;}
-.link-bar:hover{transform:translateY(-2px) translateX(2px);}
-.link-bar .lb-icon{width:46px;height:46px;border-radius:14px;flex-shrink:0;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:1.25rem;box-shadow:inset 0 2px 6px rgba(255,255,255,.25);}
-.link-bar .lb-text{flex:1;}
-.link-bar .lb-title{font-weight:800;font-size:1.02rem;letter-spacing:.5px;}
-.link-bar .lb-sub{font-size:.78rem;opacity:.88;font-family:'Noto Sans Thai',sans-serif;}
-.link-bar .lb-arrow{font-size:1.3rem;opacity:.85;}
-.bar-orange{background:var(--grad-orange);box-shadow:0 14px 28px -10px rgba(249,115,22,.45);}
-.bar-pink{background:var(--grad-pink);box-shadow:0 14px 28px -10px rgba(219,39,119,.45);}
-.bar-blue{background:var(--grad-blue);box-shadow:0 14px 28px -10px rgba(37,99,235,.45);}
+.student-hero{position:relative;overflow:hidden;height:190px;margin-bottom:20px;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);}
+.student-hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%;transform:scale(1.3);transform-origin:76% 38%;}
+.student-hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(23,18,58,.82) 0,rgba(23,18,58,.82) min(360px,52%),rgba(23,18,58,.30) min(580px,72%),rgba(23,18,58,0) min(740px,90%));}
+.student-hero-text{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(20px,6vw,80px);color:#fff;max-width:460px;}
+.student-hero-eyebrow{font-size:.72rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;opacity:.92;margin-bottom:8px;}
+.student-hero-title{font-family:'Prompt',sans-serif;font-size:1.7rem;font-weight:900;line-height:1.2;margin-bottom:6px;text-shadow:0 2px 10px rgba(0,0,0,.2);}
+.student-hero-sub{font-size:.86rem;opacity:.94;line-height:1.5;}
+@media(max-width:560px){
+  .student-hero{height:150px;}
+  .student-hero-text{padding:0 20px;max-width:100%;}
+  .student-hero-title{font-size:1.3rem;}
+  .student-hero-sub{font-size:.78rem;}
+  .student-hero-overlay{background:linear-gradient(90deg,rgba(23,18,58,.82) 0,rgba(23,18,58,.78) 65%,rgba(23,18,58,.45) 88%,rgba(23,18,58,.22) 100%);}
+}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(23,18,58,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:100;}
 .modal-box{background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.9);border-radius:28px;box-shadow:var(--card-shadow-lg);padding:32px;width:90%;max-width:380px;animation:popIn .24s cubic-bezier(.34,1.56,.64,1);}
@@ -197,6 +168,7 @@ label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var
 .otp-box.otp-error{border-color:#FB7185;box-shadow:0 0 0 4px rgba(251,113,133,.18);animation:otpShake .38s;}
 @keyframes otpShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(7px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
 @media(max-width:400px){.otp-box{width:38px;height:50px;font-size:1.4rem;}.otp-group{gap:6px;}}
+@media(max-width:340px){.otp-box{width:32px;height:46px;font-size:1.2rem;}.otp-group{gap:4px;}.modal-box{padding:22px;}}
 
 .subtab-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
 .subtab{border:none;cursor:pointer;border-radius:999px;padding:11px 22px;font-family:'Prompt',sans-serif;font-weight:700;font-size:.88rem;background:rgba(255,255,255,.8);color:var(--ink-soft);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(23,18,58,.06);transition:.16s;}
@@ -239,7 +211,7 @@ label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var
 .progress-bar{height:13px;background:#EFEAFB;border-radius:999px;overflow:hidden;margin-top:6px;box-shadow:inset 0 1px 3px rgba(23,18,58,.08);}
 .progress-fill{height:100%;border-radius:999px;background:var(--grad-brand);box-shadow:0 0 12px rgba(124,58,237,.4);transition:width .6s cubic-bezier(.4,0,.2,1);}
 
-.table-wrap{background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:var(--card-shadow);overflow:hidden;}
+.table-wrap{background:rgba(255,255,255,.92);border:1px solid rgba(255,255,255,.9);border-radius:20px;box-shadow:var(--card-shadow);overflow-x:auto;}
 table{width:100%;border-collapse:collapse;}
 thead tr{background:linear-gradient(90deg,#EDE9FE,#FCE7F3);}
 th,td{padding:13px 16px;text-align:left;font-size:.88rem;}
@@ -258,52 +230,22 @@ tbody tr:hover td{background:#FAF8FF;}
 .section-title{font-family:'Prompt',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.01em;margin-bottom:18px;display:flex;align-items:center;gap:10px;}
 
 #main{padding:28px;max-width:1080px;margin:0 auto;}
-#login-screen{padding:28px;max-width:1180px;margin:0 auto;}
 .panel{display:none;}
 .panel.active{display:block;animation:fadeUp .3s ease-out;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-.login-topbar{display:flex;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap;position:sticky;top:12px;z-index:60;background:rgba(255,255,255,.62);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);border:1px solid rgba(255,255,255,.7);border-radius:24px;padding:12px 20px;box-shadow:0 12px 32px -14px rgba(109,40,217,.26);}
-.nav-links{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
-.nav-link{border:none;cursor:pointer;border-radius:999px;padding:10px 18px;font-family:'Prompt',sans-serif;font-weight:700;font-size:.88rem;background:transparent;color:var(--ink);transition:background .15s,color .15s,box-shadow .15s,transform .15s;}
-.nav-link:hover{background:#EDE9FE;color:#6D28D9;transform:translateY(-1px);}
-.nav-link.accent{background:var(--grad-purple);color:#fff;box-shadow:0 10px 24px -6px rgba(109,40,217,.45);}
-.nav-link.accent:hover{color:#fff;}
-.login-topbar .logo-img{width:60px;height:60px;object-fit:contain;border-radius:18px;background:#fff;box-shadow:0 6px 18px rgba(109,40,217,.18);padding:5px;transition:transform .2s;}
-.login-topbar .logo-img:hover{transform:rotate(-6deg) scale(1.05);}
-.login-topbar h1{font-size:1.4rem;font-weight:900;letter-spacing:-.01em;}
-.login-topbar .subtitle{font-size:.72rem;font-weight:700;letter-spacing:2.5px;color:var(--ink-soft);text-transform:uppercase;}
-
 @media(max-width:860px){
   .clock-pill{display:none;}
-  .welcome-card{min-height:auto;display:flex;flex-direction:column;background:#fff;}
-  .welcome-bg{display:none;}
-  .welcome-hero-mobile{display:block;position:relative;height:280px;background-image:var(--hero-mobile);background-size:cover;background-position:center top;}
-  .hero-label{display:inline-flex;animation:floatY 3s ease-in-out infinite;}
-  .welcome-hero-mobile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.5) 55%,rgba(255,255,255,.95) 100%);}
-  .welcome-overlay{display:none;}
-  .welcome-left{position:relative;padding:8px 24px 32px;max-width:100%;margin-top:-60px;}
-  .welcome-tagline{display:none;}
 }
 body.is-mobile .clock-pill{display:none;}
-body.is-mobile .welcome-card{min-height:auto;display:flex;flex-direction:column;background:#fff;}
-body.is-mobile .welcome-bg{display:none;}
-body.is-mobile .hero-label{display:inline-flex;animation:floatY 3s ease-in-out infinite;}
-body.is-mobile .welcome-hero-mobile{display:block;position:relative;height:280px;background-image:var(--hero-mobile);background-size:cover;background-position:center top;}
-body.is-mobile .welcome-hero-mobile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.5) 55%,rgba(255,255,255,.95) 100%);}
-body.is-mobile .welcome-overlay{display:none;}
-body.is-mobile .welcome-left{position:relative;padding:8px 24px 32px;max-width:100%;margin-top:-60px;}
-body.is-mobile .welcome-tagline{display:none;}
 @media(max-width:560px){
-  .role-tiles{grid-template-columns:1fr;}
-  .att-btn-group{flex-wrap:wrap;justify-content:flex-end;}
-  .login-topbar{padding:10px 14px;gap:10px;}
-  .login-topbar .logo-img{width:44px;height:44px;}
-  .login-topbar h1{font-size:1.05rem;}
-  .nav-links{margin-left:0;width:100%;justify-content:center;}
-  .nav-link{padding:8px 14px;font-size:.82rem;}
-  #main,#login-screen{padding:16px;}
+  .student-row{flex-wrap:wrap;}
+  .att-btn-group{flex-wrap:wrap;flex-basis:100%;justify-content:flex-start;}
+  #main{padding:16px;}
   .rh-big{font-size:2.5rem;}
+  .modal-box{padding:24px;}
+  .event-card{padding:14px 14px 14px 18px;gap:10px;}
+  .event-card .ev-emoji{width:44px;height:44px;font-size:1.4rem;border-radius:14px;}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
@@ -329,47 +271,6 @@ body.is-mobile .welcome-tagline{display:none;}
     </div>
     <div id="gate-pw-error" style="color:#B91C1C;font-size:.85rem;margin-bottom:12px;display:none;">❌ รหัสผ่านไม่ถูกต้อง</div>
     <button class="pill-btn purple" style="width:100%;justify-content:center;" onclick="gateLogin()">🔑 เข้าสู่ระบบ</button>
-  </div>
-</div>
-
-<div id="login-screen">
-  <div class="login-topbar">
-    <img class="logo-img" src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียนธนาคารออมสิน" onclick="location.reload()" style="cursor:pointer;" title="กลับหน้าหลัก"/>
-    <div><h1>ระบบเช็กชื่อวันสำคัญ</h1><div class="subtitle">Thanakhan Oomsin School</div></div>
-    <nav class="nav-links">
-      <button class="nav-link" onclick="openLoginModal('student')">👩‍🎓 นักเรียน</button>
-      <button class="nav-link" onclick="openLoginModal('teacher')">🛡️ คุณครู</button>
-      <button class="nav-link accent" onclick="openLoginModal('admin')">📊 แอดมิน</button>
-    </nav>
-    <div class="clock-pill">
-      <div class="clock-time"><span id="ch-login">--</span><span class="colon">:</span><span id="cm-login">--</span><span class="colon">:</span><span id="cs-login">--</span></div>
-      <div class="clock-date" id="cd-login">—</div>
-    </div>
-  </div>
-
-  <div class="stat-grid" id="login-stats">
-    <div class="stat-card"><div class="stat-eyebrow">นักเรียนทั้งหมด</div><div class="stat-num" id="stat-total">—</div><span class="stat-badge b-purple">คน</span><span class="stat-wm">∑</span></div>
-    <div class="stat-card"><div class="stat-eyebrow">มัธยมศึกษาปีที่ 4</div><div class="stat-num" id="stat-m4">—</div><span class="stat-badge b-blue">M.4</span><span class="stat-wm">4</span></div>
-    <div class="stat-card"><div class="stat-eyebrow">มัธยมศึกษาปีที่ 5</div><div class="stat-num" id="stat-m5">—</div><span class="stat-badge b-orange">M.5</span><span class="stat-wm">5</span></div>
-    <div class="stat-card"><div class="stat-eyebrow">มัธยมศึกษาปีที่ 6</div><div class="stat-num" id="stat-m6">—</div><span class="stat-badge b-green">M.6</span><span class="stat-wm">6</span></div>
-  </div>
-
-  <div class="welcome-card">
-    <div class="welcome-hero-mobile"><div class="hero-label"><span>Activity Logs</span></div></div>
-    <img class="welcome-bg" src="https://i.postimg.cc/PJQPqYPW/D4382813-406C-43D7-B000-C7D42D512148.png" alt="นักเรียนโรงเรียนธนาคารออมสิน" fetchpriority="high" loading="eager" decoding="async"/>
-    <div class="welcome-overlay"></div>
-    <div class="welcome-left">
-      <div class="welcome-eyebrow">🏫 Welcome</div>
-      <div class="welcome-title">ยินดีต้อนรับ<br><span class="grad">นักเรียนม.ปลาย</span></div>
-      <div class="welcome-sub">การเข้าร่วมวันสำคัญ ระดับมัธยมศึกษาตอนปลาย</div>
-      <div class="role-tiles">
-        <button class="role-tile tile-red" onclick="openLoginModal('student')"><span class="tile-go">›</span><div class="r-icon">👩‍🎓</div><h3>นักเรียน</h3><p>ดูสถิติการเข้าร่วม</p><span class="tile-wm">🎓</span></button>
-        <button class="role-tile tile-purple" onclick="openLoginModal('teacher')"><span class="tile-go">›</span><div class="r-icon">🛡️</div><h3>คุณครู</h3><p>เช็คชื่อนักเรียน</p><span class="tile-wm">🛡️</span></button>
-      </div>
-      <button class="link-bar bar-pink" onclick="openLoginModal('admin')"><div class="lb-icon">📊</div><div class="lb-text"><div class="lb-title">ADMIN</div><div class="lb-sub">ภาพรวม &amp; จัดการระบบ</div></div><div class="lb-arrow">›</div></button>
-      <button class="link-bar bar-blue" onclick="openLoginModal('student')"><div class="lb-icon">🎉</div><div class="lb-text"><div class="lb-title">กิจกรรม</div><div class="lb-sub">การเข้าร่วมกิจกรรมวันสำคัญ</div></div><div class="lb-arrow">›</div></button>
-    </div>
-    <div class="welcome-tagline">เปิดโลกกว้าง ✨<br>สร้างโอกาส<br>มุ่งสู่สากล</div>
   </div>
 </div>
 
@@ -407,19 +308,30 @@ body.is-mobile .welcome-tagline{display:none;}
 
 <div id="app" style="display:none;">
   <div id="app-header">
-    <img class="logo-img" src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียน" onclick="location.reload()" style="cursor:pointer;" title="กลับหน้าหลัก"/>
-    <div><h1>ระบบเช็กชื่อวันสำคัญ</h1><div class="subtitle">Thanakhan Oomsin School · <span id="current-role-label">ม.ปลาย</span></div></div>
-    <div style="margin-left:auto;display:flex;gap:12px;align-items:center;">
+    <img class="logo-img" src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียน" onclick="goHome()" style="cursor:pointer;" title="กลับหน้าหลัก"/>
+    <div class="app-header-title"><h1>ระบบเช็กชื่อวันสำคัญ</h1><div class="subtitle">Thanakhan Oomsin School · <span id="current-role-label">ม.ปลาย</span></div></div>
+    <div class="app-header-actions">
       <div class="clock-pill" style="padding:6px 16px;">
         <div class="clock-time" style="font-size:.95rem;"><span id="ch-app">--</span><span class="colon">:</span><span id="cm-app">--</span><span class="colon">:</span><span id="cs-app">--</span></div>
         <div class="clock-date" id="cd-app">—</div>
       </div>
+      <button class="pill-btn ghost" style="padding:9px 14px;font-size:.8rem;" onclick="openLoginModal('teacher')" title="เข้าสู่ระบบคุณครู">🛡️ ครู</button>
+      <button class="pill-btn ghost" style="padding:9px 14px;font-size:.8rem;" onclick="openLoginModal('admin')" title="เข้าสู่ระบบแอดมิน">📊 แอดมิน</button>
       <button class="pill-btn" style="padding:9px 18px;font-size:.85rem;" onclick="logout()">🚪 ออก</button>
     </div>
   </div>
 
   <div id="main">
     <div class="panel" id="panel-student">
+      <div class="student-hero">
+        <img class="student-hero-bg" src="https://i.postimg.cc/PJQPqYPW/D4382813-406C-43D7-B000-C7D42D512148.png" alt="นักเรียนโรงเรียนธนาคารออมสิน" fetchpriority="high" loading="eager" decoding="async"/>
+        <div class="student-hero-overlay"></div>
+        <div class="student-hero-text">
+          <div class="student-hero-eyebrow">🏫 ยินดีต้อนรับ</div>
+          <div class="student-hero-title">นักเรียนม.ปลาย</div>
+          <div class="student-hero-sub">การเข้าร่วมวันสำคัญ ระดับมัธยมศึกษาตอนปลาย</div>
+        </div>
+      </div>
       <div class="section-title">🎒 ค้นหาสถิติการเข้าร่วมของฉัน</div>
       <div class="card" style="margin-bottom:18px;">
         <div class="stu-pick-grid">
@@ -507,7 +419,7 @@ body.is-mobile .welcome-tagline{display:none;}
         <div class="section-title">🗓️ จัดการวันสำคัญ</div>
         <div class="card" style="margin-bottom:18px;background:linear-gradient(135deg,#FFF7ED,#FFF);">
           <div style="font-family:'Prompt',sans-serif;font-weight:800;margin-bottom:14px;">➕ เพิ่มวันสำคัญใหม่</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="form-grid-2">
             <div class="form-group"><label>ชื่อกิจกรรม</label><input type="text" id="new-evt-name" placeholder="เช่น วันไหว้ครู"/></div>
             <div class="form-group"><label>วันที่</label><input type="date" id="new-evt-date"/></div>
             <div class="form-group"><label>อิโมจิ (ไม่บังคับ)</label><input type="text" id="new-evt-emoji" placeholder="🎉" maxlength="4"/></div>
@@ -521,7 +433,7 @@ body.is-mobile .welcome-tagline{display:none;}
         <div class="section-title">👥 จัดการนักเรียน</div>
         <div class="card" style="margin-bottom:18px;background:linear-gradient(135deg,#EFF6FF,#FFF);">
           <div style="font-family:'Prompt',sans-serif;font-weight:800;margin-bottom:14px;">➕ เพิ่มนักเรียน</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:end;">
+          <div class="form-grid-2" style="align-items:end;">
             <div class="form-group" style="margin:0;"><label>ชื่อ-นามสกุล</label><input type="text" id="new-stu-name" placeholder="เช่น สมชาย ใจดี"/></div>
             <div class="form-group" style="margin:0;"><label>ห้องเรียน</label><input type="text" id="new-stu-class" placeholder="เช่น ม.4/1"/></div>
           </div>
@@ -617,6 +529,7 @@ function gateLogin(){
   if(pw.length < 6) return;
   if(pw === GATE_PASSWORD){
     document.getElementById('site-gate').style.display = 'none';
+    enterStudent(); // เข้ารหัสด่านแรกผ่านแล้ว → เข้าหน้านักเรียนตรงๆ เลย ไม่ต้องมีหน้า login คั่นอีกชั้น
   } else {
     document.getElementById('gate-pw-error').style.display = 'block';
     gateOtpBoxes.forEach(b => { b.value = ''; b.classList.remove('otp-filled'); b.classList.add('otp-error'); });
@@ -636,7 +549,7 @@ function tickClock(){
   const pad = n => String(n).padStart(2, '0');
   const h = pad(now.getHours()), m = pad(now.getMinutes()), s = pad(now.getSeconds());
   const dateTxt = now.toLocaleDateString('th-TH', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
-  [['login'], ['app']].forEach(([k]) => {
+  [['app']].forEach(([k]) => {
     const eh = document.getElementById('ch-'+k);
     if(!eh) return;
     eh.textContent = h;
@@ -677,27 +590,25 @@ function isFootballClass(cls){
   return cls && (cls.includes('4/4') || cls.includes('5/4') || cls.includes('6/4'));
 }
 
-function loadLoginStats(){
-  callAPI('getAllStudents').then(students => {
-    const total = students.length;
-    const m4 = students.filter(s=>(s.class||'').includes('4')).length;
-    const m5 = students.filter(s=>(s.class||'').includes('5')).length;
-    const m6 = students.filter(s=>(s.class||'').includes('6')).length;
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-m4').textContent = m4;
-    document.getElementById('stat-m5').textContent = m5;
-    document.getElementById('stat-m6').textContent = m6;
-  }).catch(()=>showToast('❌ โหลดสถิติไม่สำเร็จ'));
+function enterStudent(){ currentRole = 'student'; showApp(); }
+// ── FIX: กันเผลอกดออก/สลับหน้าโดยลืมบันทึกการเช็คชื่อที่ติ๊กไว้ ──
+function hasUnsavedAttendance(){
+  return currentRole === 'teacher' && Object.keys(dirtyAttMap).length > 0;
+}
+function confirmLeaveIfDirty(msg){
+  return !hasUnsavedAttendance() || confirm(msg || 'มีการเช็คชื่อที่ติ๊กไว้แต่ยังไม่ได้กด "บันทึกการเช็คชื่อ" ต้องการออกโดยไม่บันทึกใช่หรือไม่?');
+}
+function goHome(){
+  if(!confirmLeaveIfDirty()) return;
+  location.reload();
 }
 
-loadLoginStats();
-
-function enterStudent(){ currentRole = 'student'; showApp(); }
 function openLoginModal(role){
+  if(!confirmLeaveIfDirty('มีการเช็คชื่อที่ติ๊กไว้แต่ยังไม่ได้บันทึก ต้องการสลับหน้าโดยไม่บันทึกใช่หรือไม่?')) return;
   pendingRole = role;
   document.getElementById('pw-input').value = '';
   document.getElementById('pw-error').style.display = 'none';
-  const titles = { student:'👩‍🎓 รหัสผ่านนักเรียน', teacher:'🛡️ รหัสผ่านคุณครู', admin:'📊 รหัสผ่านแอดมิน' };
+  const titles = { teacher:'🛡️ รหัสผ่านคุณครู', admin:'📊 รหัสผ่านแอดมิน' };
   document.getElementById('pw-modal-title').textContent = titles[role];
   document.getElementById('pw-modal').style.display = 'flex';
   setTimeout(()=>document.getElementById('pw-input').focus(), 100);
@@ -705,16 +616,6 @@ function openLoginModal(role){
 function closeLoginModal(){ document.getElementById('pw-modal').style.display = 'none'; }
 function doLogin(){
   const pw = document.getElementById('pw-input').value;
-  if (pendingRole === 'student') {
-    if (pw === '212224') {
-      currentRole = 'student';
-      closeLoginModal();
-      showApp();
-    } else {
-      document.getElementById('pw-error').style.display = 'block';
-    }
-    return;
-  }
   const action = pendingRole === 'admin' ? 'verifyAdmin' : 'verifyTeacher';
   callAPI(action, { password: pw }).then(r => {
     if(r.ok){ currentRole = pendingRole; closeLoginModal(); showApp(); }
@@ -722,14 +623,11 @@ function doLogin(){
   }).catch(()=>showToast('❌ เกิดข้อผิดพลาด'));
 }
 function logout(){
-  currentRole = null;
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'block';
-  loadLoginStats();
+  if(!confirmLeaveIfDirty()) return;
+  location.reload(); // กลับไปหน้าด่านกรอกรหัสเหมือนเข้าเว็บใหม่ (ตรงกับดีไซน์เดิมที่ไม่จำรหัสข้ามเซสชัน)
 }
 
 function showApp(){
-  document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   const labels = { student:'นักเรียน 👩‍🎓', teacher:'คุณครู 🛡️', admin:'แอดมิน 📊' };
   document.getElementById('current-role-label').textContent = labels[currentRole];
@@ -841,18 +739,25 @@ function selectTeacherEvent(eventId){
   document.getElementById('teacher-event-date').textContent  = evt?evt.date:'';
   document.getElementById('teacher-step1').style.display = 'none';
   document.getElementById('teacher-step2').style.display = 'block';
-  callAPI('getClasses').then(classes => {
+  document.getElementById('teacher-student-list').innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
+  // ── FIX: โหลดข้อมูลพร้อมกัน แต่ "ไม่" auto-select ห้องไหนเลย และไม่มีตัวเลือก "ทุกห้อง" อีกต่อไป
+  //  ครูต้องเลือกห้องเองก่อน ถึงจะแสดงรายชื่อ (กันไม่ให้ดึงนักเรียนทั้งโรงเรียนมาวาดพร้อมกันจนเครื่องกระตุก/ค้าง) ──
+  Promise.all([
+    callAPI('getClasses'),
+    callAPI('getAllStudents'),
+    callAPI('getAttendanceForEvent', { eventId })
+  ]).then(([classes, students, attMap]) => {
     currentClasses = classes;
-    const sel = document.getElementById('teacher-class-filter');
-    sel.innerHTML = '<option value="">— ทุกห้อง —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
-  });
-  callAPI('getAllStudents').then(students => {
     allStudents = students;
-    callAPI('getAttendanceForEvent', { eventId }).then(attMap => { currentAttMap = attMap; renderTeacherStudents(); });
-  });
+    currentAttMap = attMap;
+    const sel = document.getElementById('teacher-class-filter');
+    sel.innerHTML = '<option value="">— เลือกห้องเรียน —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
+    renderTeacherStudents(); // ยังไม่มีห้องถูกเลือก จะไปแสดงข้อความให้เลือกห้องก่อน
+  }).catch(()=>showToast('❌ โหลดข้อมูลไม่สำเร็จ'));
 }
 
 function teacherBackToEvents(){
+  if(!confirmLeaveIfDirty('มีการเช็คชื่อที่ติ๊กไว้แต่ยังไม่ได้บันทึก ต้องการย้อนกลับโดยไม่บันทึกใช่หรือไม่?')) return;
   document.getElementById('teacher-step2').style.display = 'none';
   document.getElementById('teacher-step1').style.display = 'block';
   currentAttMap = {}; dirtyAttMap = {}; currentEventId = null;
@@ -862,7 +767,16 @@ function filterTeacherStudents(){ renderTeacherStudents(); }
 // ── PATCH 10: real-time เช็คแล้ว/ยังไม่เช็ค counter ─────────────────────
 function updateTeacherCheckStat(){
   const filterClass = document.getElementById('teacher-class-filter').value;
-  const students = filterClass ? allStudents.filter(s=>s.class===filterClass) : allStudents;
+  if(!filterClass){
+    document.getElementById('tc-total').textContent      = 'ทั้งหมด 0 คน';
+    document.getElementById('tc-present').textContent    = '✅ 0';
+    document.getElementById('tc-absent').textContent     = '❌ 0';
+    document.getElementById('tc-leave').textContent      = '📋 0';
+    document.getElementById('tc-football').style.display = 'none';
+    document.getElementById('tc-unchecked').textContent  = '⏳ ยังไม่เช็ค 0';
+    return;
+  }
+  const students = allStudents.filter(s=>s.class===filterClass);
   let present=0, absent=0, leave=0, football=0, unchecked=0;
   students.forEach(s=>{
     const st = currentAttMap[s.id];
@@ -885,9 +799,14 @@ function updateTeacherCheckStat(){
 
 function renderTeacherStudents(){
   const filterClass = document.getElementById('teacher-class-filter').value;
-  const students = filterClass ? allStudents.filter(s=>s.class===filterClass) : allStudents;
   const el = document.getElementById('teacher-student-list');
   updateTeacherCheckStat();
+  // ── FIX: ยังไม่เลือกห้อง → ยังไม่ดึง/วาดรายชื่อใดๆ ทั้งสิ้น ──
+  if(!filterClass){
+    el.innerHTML = '<div class="empty-state"><div class="e-emoji">🏫</div><p>กรุณาเลือกห้องเรียนด้านบน เพื่อแสดงรายชื่อนักเรียน</p></div>';
+    return;
+  }
+  const students = allStudents.filter(s=>s.class===filterClass);
   if(!students.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">👥</div><p>ไม่มีนักเรียนในห้องนี้</p></div>'; return; }
   const byClass = {};
   students.forEach(s => { if(!byClass[s.class]) byClass[s.class] = []; byClass[s.class].push(s); });
@@ -914,7 +833,8 @@ function renderTeacherStudents(){
 }
 
 // ── PATCH 5: setStatus รองรับ 'football' + อัปเดตตัวนับ real-time ──
-function setStatus(studentId, status){
+// ── FIX: เพิ่ม skipStatUpdate ไว้ให้ markAll() เรียกได้โดยไม่ต้องคำนวณสถิติซ้ำทุกคน (กันเครื่องกระตุกตอนกด "มา/ขาดทั้งหมด") ──
+function setStatus(studentId, status, skipStatUpdate){
   currentAttMap[studentId] = status;
   dirtyAttMap[studentId]   = status;
   ['present','absent','leave','football'].forEach(s=>{
@@ -924,13 +844,15 @@ function setStatus(studentId, status){
       if(s===status) btn.classList.add('sel-'+status);
     }
   });
-  updateTeacherCheckStat();
+  if(!skipStatUpdate) updateTeacherCheckStat();
 }
 
 function markAll(status){
   const filterClass = document.getElementById('teacher-class-filter').value;
-  const students = filterClass ? allStudents.filter(s=>s.class===filterClass) : allStudents;
-  students.forEach(s => setStatus(s.id, status));
+  if(!filterClass) return; // ยังไม่เลือกห้อง ไม่มีอะไรให้ mark
+  const students = allStudents.filter(s=>s.class===filterClass);
+  students.forEach(s => setStatus(s.id, status, true));
+  updateTeacherCheckStat(); // คำนวณสรุปครั้งเดียวหลังตั้งค่าครบทุกคน แทนที่จะคำนวณซ้ำทีละคน
 }
 
 function saveAttendanceTeacher(){
@@ -1074,6 +996,7 @@ function loadAdminOverview(){
           <div class="stat-card"><div class="stat-eyebrow">เข้าร่วม</div><div class="stat-num" style="color:#059669;">${evt.present}</div><span class="stat-badge b-green">✅</span></div>
           <div class="stat-card"><div class="stat-eyebrow">ขาด</div><div class="stat-num" style="color:#B91C1C;">${evt.absent}</div><span class="stat-badge b-pink">❌</span></div>
           <div class="stat-card"><div class="stat-eyebrow">ลา</div><div class="stat-num" style="color:#EA580C;">${evt.leave}</div><span class="stat-badge b-orange">📋</span></div>
+          ${evt.football>0?`<div class="stat-card"><div class="stat-eyebrow">ฟุตบอล</div><div class="stat-num" style="color:#0E7490;">${evt.football}</div><span class="stat-badge" style="background:#CFFAFE;color:#0E7490;">⚽</span></div>`:''}
           <div class="stat-card"><div class="stat-eyebrow">ยังไม่บันทึก</div><div class="stat-num" style="color:#9CA3AF;">${evt.unrecorded}</div><span class="stat-badge b-gray">⏳</span></div>
         </div>
         <div style="font-size:.85rem;font-weight:700;">อัตราเข้าร่วม ${pct}% (${evt.present}/${evt.total} คน)</div>
