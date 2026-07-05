@@ -382,7 +382,7 @@ body.is-mobile .clock-pill{display:none;}
           </div>
           <div id="teacher-student-list"></div>
           <div style="margin-top:20px;text-align:right;">
-            <button class="pill-btn purple" style="font-size:1rem;padding:14px 32px;" onclick="saveAttendanceTeacher()">💾 บันทึกการเช็คชื่อ</button>
+            <button class="pill-btn purple" id="save-attendance-btn" style="font-size:1rem;padding:14px 32px;" onclick="saveAttendanceTeacher()">💾 บันทึกการเช็คชื่อ</button>
           </div>
         </div>
       </div>
@@ -855,15 +855,24 @@ function markAll(status){
   updateTeacherCheckStat(); // คำนวณสรุปครั้งเดียวหลังตั้งค่าครบทุกคน แทนที่จะคำนวณซ้ำทีละคน
 }
 
+let isSavingAttendance = false;
 function saveAttendanceTeacher(){
   if(!currentEventId){ showToast('⚠️ ไม่ได้เลือกกิจกรรม'); return; }
+  if(isSavingAttendance) return; // กันกดซ้ำตอนกำลังบันทึกอยู่ (สาเหตุที่ข้อความ toast เหมือนไม่ยอมหาย)
   const changeCount = Object.keys(dirtyAttMap).length;
   if(changeCount === 0){ showToast('⚠️ ยังไม่มีการเปลี่ยนแปลงให้บันทึก'); return; }
+  isSavingAttendance = true;
+  const saveBtn = document.getElementById('save-attendance-btn');
+  if(saveBtn){ saveBtn.disabled = true; saveBtn.style.opacity = '.6'; saveBtn.style.cursor = 'not-allowed'; }
   showToast('⏳ กำลังบันทึก ' + changeCount + ' รายการ...');
   callAPI('saveAttendance', { eventId: currentEventId, attendanceMap: dirtyAttMap }).then(r => {
     if(r && r.ok){ dirtyAttMap = {}; showToast('💾 บันทึกสำเร็จ ' + changeCount + ' รายการ ✅'); }
     else { showToast('⏳ ' + ((r && r.msg) || 'บันทึกไม่สำเร็จ กรุณากดบันทึกอีกครั้ง')); }
-  }).catch(()=>showToast('❌ บันทึกไม่สำเร็จ กรุณากดบันทึกอีกครั้ง'));
+  }).catch(()=>showToast('❌ บันทึกไม่สำเร็จ กรุณากดบันทึกอีกครั้ง'))
+  .finally(()=>{
+    isSavingAttendance = false;
+    if(saveBtn){ saveBtn.disabled = false; saveBtn.style.opacity = ''; saveBtn.style.cursor = ''; }
+  });
 }
 
 function teacherMode(mode){
