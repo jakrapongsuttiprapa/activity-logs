@@ -462,6 +462,12 @@ body.is-mobile .clock-pill{display:none;}
           <button class="pill-btn purple" onclick="runSetup()">🛠️ สร้าง Sheets อัตโนมัติ</button>
           <div id="setup-result" style="margin-top:14px;"></div>
         </div>
+        <div class="card" style="max-width:520px;margin-bottom:18px;">
+          <div style="font-family:'Prompt',sans-serif;font-weight:800;margin-bottom:6px;">🧹 ล้างข้อมูลเช็คชื่อซ้ำ</div>
+          <p style="margin-bottom:16px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;">ใช้ตอนเจอตัวเลข "ยังไม่บันทึก" ติดลบ หรือยอดรวมไม่ตรง — เกิดจากนักเรียนบางคนถูกบันทึกซ้ำมากกว่า 1 แถวในกิจกรรมเดียวกัน (เช่น ครูกดบันทึกซ้ำ) ระบบจะเก็บแถวที่บันทึก<strong style="color:var(--ink);">ล่าสุด</strong>ของแต่ละคนไว้ แล้วลบแถวซ้ำที่เก่ากว่าทิ้ง ไม่กระทบสถานะล่าสุดที่บันทึกไว้</p>
+          <button class="pill-btn orange" onclick="cleanupDuplicates()">🧹 ล้างข้อมูลซ้ำ</button>
+          <div id="cleanup-result" style="margin-top:14px;"></div>
+        </div>
         <div class="card" style="max-width:520px;">
           <div style="font-family:'Prompt',sans-serif;font-weight:800;margin-bottom:6px;">🔐 เปลี่ยนรหัสผ่าน</div>
           <p style="margin-bottom:16px;font-size:.85rem;color:var(--ink-soft);">ต้องยืนยันด้วยรหัสแอดมินปัจจุบันทุกครั้ง</p>
@@ -1206,6 +1212,21 @@ function runSetup(){
   el.innerHTML = '<div class="spinner"></div>';
   callAPI('setupSheets').then(msg=>{ el.innerHTML = `<div style="color:#059669;font-weight:700;">✅ ${msg}</div>`; })
     .catch(e=>{ el.innerHTML = `<div style="color:#B91C1C;">❌ ${e.message}</div>`; });
+}
+
+function cleanupDuplicates(){
+  if(!confirm('ระบบจะสแกนหาแถวเช็คชื่อที่ซ้ำกัน (คนเดียวกัน+กิจกรรมเดียวกัน) แล้วลบแถวเก่าทิ้ง เก็บไว้แค่แถวล่าสุด ต้องการดำเนินการต่อใช่หรือไม่?')) return;
+  const el = document.getElementById('cleanup-result');
+  el.innerHTML = '<div class="spinner"></div>';
+  callAPI('cleanupDuplicateAttendance').then(r=>{
+    if(r && r.ok){
+      el.innerHTML = r.removed > 0
+        ? `<div style="color:#059669;font-weight:700;">✅ ลบแถวซ้ำไปทั้งหมด ${r.removed} แถว</div>`
+        : `<div style="color:#059669;font-weight:700;">✅ ไม่พบข้อมูลซ้ำ ระบบสะอาดอยู่แล้ว</div>`;
+    } else {
+      el.innerHTML = `<div style="color:#B91C1C;">❌ ${(r && r.msg) || 'ล้างข้อมูลไม่สำเร็จ'}</div>`;
+    }
+  }).catch(()=>{ el.innerHTML = '<div style="color:#B91C1C;">❌ เกิดข้อผิดพลาด</div>'; });
 }
 
 function changePasswords(){
