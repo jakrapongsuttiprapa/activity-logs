@@ -155,20 +155,6 @@ input:focus,select:focus,textarea:focus{border-color:#A78BFA;box-shadow:0 0 0 4p
 label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--ink);}
 .form-group{margin-bottom:14px;}
 
-.otp-group{display:flex;gap:9px;justify-content:center;}
-.otp-box{
-  width:44px;height:56px;padding:0;text-align:center;
-  font-family:'Prompt',sans-serif;font-size:1.6rem;font-weight:800;color:var(--ink);
-  border:2px solid #ECE9F6;border-radius:16px;background:#fff;
-  transition:border .15s,box-shadow .15s,transform .15s;
-}
-.otp-box:focus{border-color:#A78BFA;box-shadow:0 0 0 4px rgba(167,139,250,.22);transform:translateY(-2px);}
-.otp-box.otp-filled{border-color:#C4B5FD;background:#FAF8FF;}
-.otp-box.otp-error{border-color:#FB7185;box-shadow:0 0 0 4px rgba(251,113,133,.18);animation:otpShake .38s;}
-@keyframes otpShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(7px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);}}
-@media(max-width:400px){.otp-box{width:38px;height:50px;font-size:1.4rem;}.otp-group{gap:6px;}}
-@media(max-width:340px){.otp-box{width:32px;height:46px;font-size:1.2rem;}.otp-group{gap:4px;}.modal-box{padding:22px;}}
-
 .subtab-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
 .subtab{border:none;cursor:pointer;border-radius:999px;padding:11px 22px;font-family:'Prompt',sans-serif;font-weight:700;font-size:.88rem;background:rgba(255,255,255,.8);color:var(--ink-soft);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(23,18,58,.06);transition:.16s;}
 .subtab:hover{color:var(--ink);transform:translateY(-1px);}
@@ -193,7 +179,6 @@ label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var
 .att-btn.sel-present{background:var(--grad-green);border-color:transparent;color:#fff;box-shadow:0 6px 16px -4px rgba(5,150,105,.5);}
 .att-btn.sel-absent{background:var(--grad-red);border-color:transparent;color:#fff;box-shadow:0 6px 16px -4px rgba(225,29,72,.5);}
 .att-btn.sel-leave{background:var(--grad-orange);border-color:transparent;color:#fff;box-shadow:0 6px 16px -4px rgba(249,115,22,.5);}
-/* ── PATCH 1: football button style ── */
 .att-btn.sel-football{background:linear-gradient(135deg,#10B981,#F59E0B);border-color:transparent;color:#fff;box-shadow:0 6px 16px -4px rgba(16,185,129,.5);}
 
 .class-divider{font-family:'Prompt',sans-serif;font-weight:800;font-size:.88rem;color:#7C3AED;margin:18px 0 10px;padding-left:4px;display:flex;align-items:center;gap:8px;}
@@ -204,7 +189,6 @@ label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var
 .badge-absent{background:#FEE2E2;color:#B91C1C;}
 .badge-leave{background:#FFEDD5;color:#EA580C;}
 .badge-none{background:#F3F4F6;color:#9CA3AF;}
-/* ── PATCH 2: football badge style ── */
 .badge-football{background:#CFFAFE;color:#0E7490;}
 
 .progress-bar{height:13px;background:#EFEAFB;border-radius:999px;overflow:hidden;margin-top:6px;box-shadow:inset 0 1px 3px rgba(23,18,58,.08);}
@@ -246,32 +230,11 @@ body.is-mobile .clock-pill{display:none;}
   .event-card{padding:14px 14px 14px 18px;gap:10px;}
   .event-card .ev-emoji{width:44px;height:44px;font-size:1.4rem;border-radius:14px;}
 }
+@media(max-width:340px){.modal-box{padding:22px;}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body>
-
-<!-- ═══════════════════ SITE GATE (ต้องกรอกรหัสก่อนเข้าเว็บ) ═══════════════════ -->
-<div class="modal-overlay" id="site-gate" style="z-index:200;">
-  <div class="modal-box" style="text-align:center;">
-    <div style="width:64px;height:64px;border-radius:18px;background:var(--grad-purple);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 14px;box-shadow:0 10px 24px -6px rgba(109,40,217,.45),inset 0 1px 0 rgba(255,255,255,.35);">🔐</div>
-    <h3 style="margin-bottom:4px;">🔒 ระบบเช็กชื่อวันสำคัญ</h3>
-    <p style="font-size:.82rem;color:var(--ink-soft);margin-bottom:18px;">กรุณากรอกรหัสผ่านเพื่อเข้าใช้งาน</p>
-    <div class="form-group" style="text-align:center;">
-      <label style="text-align:center;">รหัสผ่าน</label>
-      <div class="otp-group" id="gate-otp-group">
-        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box" autofocus/>
-        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
-        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
-        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
-        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
-        <input type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"/>
-      </div>
-    </div>
-    <div id="gate-pw-error" style="color:#B91C1C;font-size:.85rem;margin-bottom:12px;display:none;">❌ รหัสผ่านไม่ถูกต้อง</div>
-    <button class="pill-btn purple" style="width:100%;justify-content:center;" onclick="gateLogin()">🔑 เข้าสู่ระบบ</button>
-  </div>
-</div>
 
 <div class="modal-overlay" id="pw-modal" style="display:none;">
   <div class="modal-box">
@@ -464,7 +427,7 @@ body.is-mobile .clock-pill{display:none;}
         </div>
         <div class="card" style="max-width:520px;margin-bottom:18px;">
           <div style="font-family:'Prompt',sans-serif;font-weight:800;margin-bottom:6px;">🧹 ล้างข้อมูลเช็คชื่อซ้ำ</div>
-          <p style="margin-bottom:16px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;">ใช้ตอนเจอตัวเลข "ยังไม่บันทึก" ติดลบ หรือยอดรวมไม่ตรง — เกิดจากนักเรียนบางคนถูกบันทึกซ้ำมากกว่า 1 แถวในกิจกรรมเดียวกัน (เช่น ครูกดบันทึกซ้ำ) ระบบจะเก็บแถวที่บันทึก<strong style="color:var(--ink);">ล่าสุด</strong>ของแต่ละคนไว้ แล้วลบแถวซ้ำที่เก่ากว่าทิ้ง ไม่กระทบสถานะล่าสุดที่บันทึกไว้</p>
+          <p style="margin-bottom:16px;font-size:.85rem;color:var(--ink-soft);line-height:1.7;">ใช้ตอนเจอตัวเลข "ยังไม่บันทึก" ติดลบ หรือยอดรวมไม่ตรง — เกิดจากนักเรียนบางคนถูกบันทึกซ้ำมากกว่า 1 แถวในกิจกรรมเดียวกัน หรือมีแถวค้างจากนักเรียน/กิจกรรมที่เคยถูกลบไปแล้ว ระบบจะเก็บแถวที่บันทึก<strong style="color:var(--ink);">ล่าสุด</strong>ของแต่ละคนไว้ แล้วลบแถวซ้ำ/แถวกำพร้าทิ้ง ไม่กระทบสถานะล่าสุดที่บันทึกไว้</p>
           <button class="pill-btn orange" onclick="cleanupDuplicates()">🧹 ล้างข้อมูลซ้ำ</button>
           <div id="cleanup-result" style="margin-top:14px;"></div>
         </div>
@@ -487,61 +450,59 @@ body.is-mobile .clock-pill{display:none;}
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbw9v31szQPdBI5gBYf_2AHOE2kx66iO8axL3iZYb5F3I_4U6x4u9Irx53jNZbF7ySNeTQ/exec';
 
-async function callAPI(action, payload = {}) {
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ action, ...payload })
-  });
-  if (!res.ok) throw new Error('เครือข่ายผิดพลาด (HTTP ' + res.status + ')');
-  return res.json();
-}
+let AUTH_TOKEN = null;
 
-// ── SITE GATE: ต้องกรอกรหัสก่อนเข้าเว็บทั้งเว็บ (รหัส 212224) — ให้กรอกทุกครั้งที่เข้า ไม่จำรหัสข้ามเซสชัน ──
-const GATE_PASSWORD = '212224';
-const gateOtpBoxes = Array.from(document.querySelectorAll('#gate-otp-group .otp-box'));
-
-function getGateOtpValue(){
-  return gateOtpBoxes.map(b => b.value).join('');
-}
-
-function initGateOtp(){
-  gateOtpBoxes.forEach((box, i) => {
-    box.addEventListener('input', () => {
-      box.value = box.value.replace(/[^0-9]/g, '').slice(-1);
-      box.classList.toggle('otp-filled', !!box.value);
-      if(box.value && i < gateOtpBoxes.length - 1){ gateOtpBoxes[i + 1].focus(); }
-      if(getGateOtpValue().length === 6){ gateLogin(); }
+async function callAPI(action, payload = {}, _attempt = 0) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 20000);
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action, token: AUTH_TOKEN, ...payload }),
+      signal: ctrl.signal
     });
-    box.addEventListener('keydown', (e) => {
-      if(e.key === 'Backspace' && !box.value && i > 0){ gateOtpBoxes[i - 1].focus(); }
-      if(e.key === 'Enter'){ gateLogin(); }
-    });
-    box.addEventListener('paste', (e) => {
-      e.preventDefault();
-      const digits = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').split('');
-      gateOtpBoxes.forEach((b, idx) => { b.value = digits[idx] || ''; b.classList.toggle('otp-filled', !!b.value); });
-      const nextEmpty = gateOtpBoxes.findIndex(b => !b.value);
-      (nextEmpty === -1 ? gateOtpBoxes[gateOtpBoxes.length - 1] : gateOtpBoxes[nextEmpty]).focus();
-      if(getGateOtpValue().length === 6){ gateLogin(); }
-    });
-  });
-}
-initGateOtp();
-
-function gateLogin(){
-  const pw = getGateOtpValue();
-  if(pw.length < 6) return;
-  if(pw === GATE_PASSWORD){
-    document.getElementById('site-gate').style.display = 'none';
-    enterStudent(); // เข้ารหัสด่านแรกผ่านแล้ว → เข้าหน้านักเรียนตรงๆ เลย ไม่ต้องมีหน้า login คั่นอีกชั้น
-  } else {
-    document.getElementById('gate-pw-error').style.display = 'block';
-    gateOtpBoxes.forEach(b => { b.value = ''; b.classList.remove('otp-filled'); b.classList.add('otp-error'); });
-    setTimeout(() => gateOtpBoxes.forEach(b => b.classList.remove('otp-error')), 400);
-    gateOtpBoxes[0].focus();
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const txt = await res.text();
+    let out;
+    try { out = JSON.parse(txt); }
+    catch (e) { throw new Error('รูปแบบข้อมูลผิดพลาด'); }
+    if (out && out.authError) {
+      AUTH_TOKEN = null;
+      showToast('⏰ หมดเวลาใช้งาน กรุณาเข้าสู่ระบบใหม่');
+      setTimeout(() => location.reload(), 1500);
+    }
+    return out;
+  } catch (err) {
+    if (_attempt < 1 && err.name !== 'AbortError') {
+      await new Promise(r => setTimeout(r, 700));
+      return callAPI(action, payload, _attempt + 1);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
   }
 }
+
+// ── BOOT CACHE: ดึง classes+students+events รอบเดียว แล้วใช้ซ้ำทั้งเว็บ ──
+let _bootPromise = null;
+function getBoot(){
+  if(!_bootPromise){
+    _bootPromise = callAPI('bootstrap').catch(err => { _bootPromise = null; throw err; });
+  }
+  return _bootPromise;
+}
+function invalidateBoot(){ _bootPromise = null; }
+
+// ป้องกัน HTML/JS injection จากชื่อกิจกรรม/นักเรียน/ห้อง ที่มาจากชีต
+function esc(s){
+  return String(s==null?'':s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+// ⚡ เริ่มโหลดข้อมูลทันทีที่เปิดหน้าเว็บ (ไม่มีด่านรหัสผ่านแล้ว จึงโหลดคู่ขนานได้เลยตั้งแต่ต้น)
+getBoot().catch(()=>{});
 
 let currentRole = null, pendingRole = null;
 let currentAttMap = {}, dirtyAttMap = {};
@@ -554,14 +515,13 @@ function tickClock(){
   const pad = n => String(n).padStart(2, '0');
   const h = pad(now.getHours()), m = pad(now.getMinutes()), s = pad(now.getSeconds());
   const dateTxt = now.toLocaleDateString('th-TH', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
-  [['app']].forEach(([k]) => {
-    const eh = document.getElementById('ch-'+k);
-    if(!eh) return;
+  const eh = document.getElementById('ch-app');
+  if(eh){
     eh.textContent = h;
-    document.getElementById('cm-'+k).textContent = m;
-    document.getElementById('cs-'+k).textContent = s;
-    document.getElementById('cd-'+k).textContent = dateTxt;
-  });
+    document.getElementById('cm-app').textContent = m;
+    document.getElementById('cs-app').textContent = s;
+    document.getElementById('cd-app').textContent = dateTxt;
+  }
 }
 setInterval(tickClock, 1000); tickClock();
 
@@ -589,20 +549,24 @@ function sortStudentsByPrefix(list){
   });
 }
 
-// ── PATCH 3: isFootballClass helper ──────────────────────────────────────
 // ห้องที่มีปุ่ม "⚽ ฟุตบอล": ม.4/4  ม.5/4  ม.6/4
 function isFootballClass(cls){
   return cls && (cls.includes('4/4') || cls.includes('5/4') || cls.includes('6/4'));
 }
 
 function enterStudent(){ currentRole = 'student'; showApp(); }
-// ── FIX: กันเผลอกดออก/สลับหน้าโดยลืมบันทึกการเช็คชื่อที่ติ๊กไว้ ──
+
 function hasUnsavedAttendance(){
   return currentRole === 'teacher' && Object.keys(dirtyAttMap).length > 0;
 }
 function confirmLeaveIfDirty(msg){
   return !hasUnsavedAttendance() || confirm(msg || 'มีการเช็คชื่อที่ติ๊กไว้แต่ยังไม่ได้กด "บันทึกการเช็คชื่อ" ต้องการออกโดยไม่บันทึกใช่หรือไม่?');
 }
+// กันปิดแท็บ/รีเฟรชทิ้งตอนยังไม่ได้บันทึกการเช็คชื่อ
+window.addEventListener('beforeunload', function(e){
+  if(hasUnsavedAttendance()){ e.preventDefault(); e.returnValue = ''; }
+});
+
 function goHome(){
   if(!confirmLeaveIfDirty()) return;
   location.reload();
@@ -623,13 +587,19 @@ function doLogin(){
   const pw = document.getElementById('pw-input').value;
   const action = pendingRole === 'admin' ? 'verifyAdmin' : 'verifyTeacher';
   callAPI(action, { password: pw }).then(r => {
-    if(r.ok){ currentRole = pendingRole; closeLoginModal(); showApp(); }
-    else { document.getElementById('pw-error').style.display = 'block'; }
+    if(r && r.ok && r.token){
+      AUTH_TOKEN  = r.token;
+      currentRole = r.role;
+      closeLoginModal();
+      showApp();
+    } else {
+      document.getElementById('pw-error').style.display = 'block';
+    }
   }).catch(()=>showToast('❌ เกิดข้อผิดพลาด'));
 }
 function logout(){
   if(!confirmLeaveIfDirty()) return;
-  location.reload(); // กลับไปหน้าด่านกรอกรหัสเหมือนเข้าเว็บใหม่ (ตรงกับดีไซน์เดิมที่ไม่จำรหัสข้ามเซสชัน)
+  location.reload();
 }
 
 function showApp(){
@@ -647,10 +617,16 @@ function initStudentPicker(){
   document.getElementById('student-results').innerHTML = '';
   const clsSel = document.getElementById('stu-class-select');
   clsSel.innerHTML = '<option value="">⏳ กำลังโหลด...</option>';
-  callAPI('getClasses').then(classes => {
-    clsSel.innerHTML = '<option value="">— เลือกห้องเรียน —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
-  }).catch(()=>{ clsSel.innerHTML = '<option value="">โหลดห้องไม่สำเร็จ</option>'; });
-  callAPI('getAllStudents').then(students => { stuPickStudents = students; }).catch(()=>{});
+  getBoot().then(b => {
+    stuPickStudents = b.students || [];
+    allEvents       = b.events || [];
+    currentClasses  = b.classes || [];
+    clsSel.innerHTML = '<option value="">— เลือกห้องเรียน —</option>' +
+      currentClasses.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  }).catch(()=>{
+    clsSel.innerHTML = '<option value="">โหลดไม่สำเร็จ — กดรีเฟรช</option>';
+    showToast('❌ โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรชหน้า');
+  });
 }
 
 function onStuClassChange(){
@@ -659,16 +635,17 @@ function onStuClassChange(){
   if(!cls){ nameSel.innerHTML = '<option value="">— เลือกห้องก่อน —</option>'; nameSel.disabled = true; return; }
   const inClass = sortStudentsByPrefix(stuPickStudents.filter(s=>s.class===cls));
   if(!inClass.length){ nameSel.innerHTML = '<option value="">— ไม่มีนักเรียนในห้องนี้ —</option>'; nameSel.disabled = true; return; }
-  nameSel.innerHTML = '<option value="">— เลือกชื่อของฉัน —</option>' + inClass.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
+  nameSel.innerHTML = '<option value="">— เลือกชื่อของฉัน —</option>' +
+    inClass.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');
   nameSel.disabled = false;
 }
 
 function viewMyStats(){
-  const name = document.getElementById('stu-name-select').value;
-  if(!name){ showToast('⚠️ กรุณาเลือกห้องและชื่อของคุณ'); return; }
+  const id = document.getElementById('stu-name-select').value;
+  if(!id){ showToast('⚠️ กรุณาเลือกห้องและชื่อของคุณ'); return; }
   const el = document.getElementById('student-results');
   el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
-  callAPI('getStudentAttendance', { studentName: name }).then(renderStudentResults).catch(()=>showToast('❌ เกิดข้อผิดพลาด'));
+  callAPI('getStudentAttendance', { studentId: id }).then(renderStudentResults).catch(()=>showToast('❌ เกิดข้อผิดพลาด'));
 }
 
 function renderStudentResults(data){
@@ -690,7 +667,7 @@ function renderStudentResults(data){
     const pct     = total>0 ? Math.round(present/total*100) : 0;
     html += `<div class="result-hero">
         <div class="rh-left"><div class="rh-avatar">👩‍🎓</div>
-          <div><div class="rh-name">${stu.name}</div><span class="badge b-purple">${stu.cls}</span></div>
+          <div><div class="rh-name">${esc(stu.name)}</div><span class="badge b-purple">${esc(stu.cls)}</span></div>
         </div>
         <div class="rh-gauge"><div class="rh-gauge-num"><span class="rh-big">${present}</span><span class="rh-slash">/${total}</span></div><div class="rh-gauge-label">เข้าร่วม (ครั้ง)</div></div>
       </div>
@@ -706,13 +683,12 @@ function renderStudentResults(data){
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
       <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
         ${stu.records.map(r=>{
-          // ── PATCH 6: badge/label รวม football ──
           const badgeClass = {present:'badge-present',absent:'badge-absent',leave:'badge-leave',football:'badge-football'}[r.status]||'badge-none';
           const statusLabel = {present:'✅ เข้าร่วม',absent:'❌ ขาด',leave:'📋 ลา',football:'⚽ ฟุตบอล'}[r.status]||'⏳ ยังไม่บันทึก';
           return `<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:16px;background:#FAFAFF;">
-            <span style="font-size:1.3rem;">${r.eventEmoji||'🎉'}</span>
-            <span style="flex:1;font-size:.9rem;font-weight:600;">${r.eventName}</span>
-            <span style="font-size:.78rem;color:#9CA3AF;">${r.eventDate}</span>
+            <span style="font-size:1.3rem;">${esc(r.eventEmoji||'🎉')}</span>
+            <span style="flex:1;font-size:.9rem;font-weight:600;">${esc(r.eventName)}</span>
+            <span style="font-size:.78rem;color:#9CA3AF;">${esc(r.eventDate)}</span>
             <span class="badge ${badgeClass}">${statusLabel}</span>
           </div>`;
         }).join('')}
@@ -725,13 +701,16 @@ function renderStudentResults(data){
 function loadTeacherEvents(){
   const el = document.getElementById('teacher-event-list');
   el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
-  callAPI('getEvents').then(events => {
-    allEvents = events;
-    if(!events.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีวันสำคัญ กรุณาให้แอดมินเพิ่มกิจกรรม</p></div>'; return; }
-    el.innerHTML = events.map(e => `
+  getBoot().then(b => {
+    allEvents = b.events || [];
+    if(!allEvents.length){
+      el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีวันสำคัญ กรุณาให้แอดมินเพิ่มกิจกรรม</p></div>';
+      return;
+    }
+    el.innerHTML = allEvents.map(e => `
       <div class="event-card" style="cursor:pointer;" onclick="selectTeacherEvent('${e.id}')">
-        <div class="ev-emoji">${e.emoji||'🎉'}</div>
-        <div class="ev-info"><div class="ev-name">${e.name}</div><div class="ev-date">📅 ${e.date||'-'}</div>${e.note?`<div class="ev-note">📝 ${e.note}</div>`:''}</div>
+        <div class="ev-emoji">${esc(e.emoji||'🎉')}</div>
+        <div class="ev-info"><div class="ev-name">${esc(e.name)}</div><div class="ev-date">📅 ${esc(e.date||'-')}</div>${e.note?`<div class="ev-note">📝 ${esc(e.note)}</div>`:''}</div>
         <button class="pill-btn purple" style="padding:9px 18px;font-size:.85rem;">เช็คชื่อ ›</button>
       </div>`).join('');
   }).catch(()=>showToast('❌ โหลดกิจกรรมไม่สำเร็จ'));
@@ -745,20 +724,21 @@ function selectTeacherEvent(eventId){
   document.getElementById('teacher-step1').style.display = 'none';
   document.getElementById('teacher-step2').style.display = 'block';
   document.getElementById('teacher-student-list').innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
-  // ── FIX: โหลดข้อมูลพร้อมกัน แต่ "ไม่" auto-select ห้องไหนเลย และไม่มีตัวเลือก "ทุกห้อง" อีกต่อไป
-  //  ครูต้องเลือกห้องเองก่อน ถึงจะแสดงรายชื่อ (กันไม่ให้ดึงนักเรียนทั้งโรงเรียนมาวาดพร้อมกันจนเครื่องกระตุก/ค้าง) ──
-  Promise.all([
-    callAPI('getClasses'),
-    callAPI('getAllStudents'),
-    callAPI('getAttendanceForEvent', { eventId })
-  ]).then(([classes, students, attMap]) => {
-    currentClasses = classes;
-    allStudents = students;
-    currentAttMap = attMap;
+
+  callAPI('bootstrapTeacher', { eventId }).then(b => {
+    if(currentEventId !== eventId) return; // เลือกกิจกรรมอื่นแทรกมาก่อนคำขอนี้จะโหลดเสร็จ ทิ้งผลลัพธ์เก่านี้
+    currentClasses = b.classes || [];
+    allStudents    = b.students || [];
+    currentAttMap  = b.attendance || {};
     const sel = document.getElementById('teacher-class-filter');
-    sel.innerHTML = '<option value="">— เลือกห้องเรียน —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
-    renderTeacherStudents(); // ยังไม่มีห้องถูกเลือก จะไปแสดงข้อความให้เลือกห้องก่อน
-  }).catch(()=>showToast('❌ โหลดข้อมูลไม่สำเร็จ'));
+    sel.innerHTML = '<option value="">— เลือกห้องเรียน —</option>' +
+      currentClasses.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    renderTeacherStudents();
+  }).catch(()=>{
+    document.getElementById('teacher-student-list').innerHTML =
+      '<div class="empty-state"><div class="e-emoji">⚠️</div><p>โหลดข้อมูลไม่สำเร็จ กรุณากดกลับแล้วเลือกใหม่</p></div>';
+    showToast('❌ โหลดข้อมูลไม่สำเร็จ');
+  });
 }
 
 function teacherBackToEvents(){
@@ -769,7 +749,6 @@ function teacherBackToEvents(){
 }
 function filterTeacherStudents(){ renderTeacherStudents(); }
 
-// ── PATCH 10: real-time เช็คแล้ว/ยังไม่เช็ค counter ─────────────────────
 function updateTeacherCheckStat(){
   const filterClass = document.getElementById('teacher-class-filter').value;
   if(!filterClass){
@@ -806,7 +785,6 @@ function renderTeacherStudents(){
   const filterClass = document.getElementById('teacher-class-filter').value;
   const el = document.getElementById('teacher-student-list');
   updateTeacherCheckStat();
-  // ── FIX: ยังไม่เลือกห้อง → ยังไม่ดึง/วาดรายชื่อใดๆ ทั้งสิ้น ──
   if(!filterClass){
     el.innerHTML = '<div class="empty-state"><div class="e-emoji">🏫</div><p>กรุณาเลือกห้องเรียนด้านบน เพื่อแสดงรายชื่อนักเรียน</p></div>';
     return;
@@ -817,14 +795,13 @@ function renderTeacherStudents(){
   students.forEach(s => { if(!byClass[s.class]) byClass[s.class] = []; byClass[s.class].push(s); });
   let html = '';
   Object.entries(byClass).forEach(([cls, stuList])=>{
-    html += `<div class="class-divider">🏫 ${cls}</div>`;
+    html += `<div class="class-divider">🏫 ${esc(cls)}</div>`;
     sortStudentsByPrefix(stuList).forEach(s => {
       const status = currentAttMap[s.id] || '';
-      // ── PATCH 4: เพิ่มปุ่ม ⚽ ฟุตบอล สำหรับห้อง 4/4 5/4 6/4 ──
       const showFball = isFootballClass(s.class);
       html += `<div class="student-row" id="srow-${s.id}">
-        <div class="s-name">${s.name}</div>
-        <div class="s-class">${s.class}</div>
+        <div class="s-name">${esc(s.name)}</div>
+        <div class="s-class">${esc(s.class)}</div>
         <div class="att-btn-group">
           <button class="att-btn ${status==='present'?'sel-present':''}" id="btn-p-${s.id}" onclick="setStatus('${s.id}','present')">✅ มา</button>
           <button class="att-btn ${status==='absent'?'sel-absent':''}"  id="btn-a-${s.id}" onclick="setStatus('${s.id}','absent')">❌ ขาด</button>
@@ -837,8 +814,6 @@ function renderTeacherStudents(){
   el.innerHTML = html;
 }
 
-// ── PATCH 5: setStatus รองรับ 'football' + อัปเดตตัวนับ real-time ──
-// ── FIX: เพิ่ม skipStatUpdate ไว้ให้ markAll() เรียกได้โดยไม่ต้องคำนวณสถิติซ้ำทุกคน (กันเครื่องกระตุกตอนกด "มา/ขาดทั้งหมด") ──
 function setStatus(studentId, status, skipStatUpdate){
   currentAttMap[studentId] = status;
   dirtyAttMap[studentId]   = status;
@@ -854,16 +829,16 @@ function setStatus(studentId, status, skipStatUpdate){
 
 function markAll(status){
   const filterClass = document.getElementById('teacher-class-filter').value;
-  if(!filterClass) return; // ยังไม่เลือกห้อง ไม่มีอะไรให้ mark
+  if(!filterClass) return;
   const students = allStudents.filter(s=>s.class===filterClass);
   students.forEach(s => setStatus(s.id, status, true));
-  updateTeacherCheckStat(); // คำนวณสรุปครั้งเดียวหลังตั้งค่าครบทุกคน แทนที่จะคำนวณซ้ำทีละคน
+  updateTeacherCheckStat();
 }
 
 let isSavingAttendance = false;
 function saveAttendanceTeacher(){
   if(!currentEventId){ showToast('⚠️ ไม่ได้เลือกกิจกรรม'); return; }
-  if(isSavingAttendance) return; // กันกดซ้ำตอนกำลังบันทึกอยู่ (สาเหตุที่ข้อความ toast เหมือนไม่ยอมหาย)
+  if(isSavingAttendance) return;
   const changeCount = Object.keys(dirtyAttMap).length;
   if(changeCount === 0){ showToast('⚠️ ยังไม่มีการเปลี่ยนแปลงให้บันทึก'); return; }
   isSavingAttendance = true;
@@ -887,15 +862,20 @@ function teacherMode(mode){
   document.getElementById('ttab-report').className = mode==='report'?'subtab active':'subtab';
   if(mode==='report') loadTeacherReportFilter();
 }
-function loadTeacherReportFilter(){
-  callAPI('getClasses').then(classes => {
-    const sel = document.getElementById('teacher-report-class');
+
+// เติมตัวเลือกห้องแบบใช้ boot cache ร่วมกัน — ใช้แทน getClasses ในทุกจุดที่แค่ต้องการรายชื่อห้อง
+function fillClassSelect(selId, includeAll, cb){
+  getBoot().then(b => {
+    const sel = document.getElementById(selId);
     const prev = sel.value;
-    sel.innerHTML = '<option value="">— ทุกห้อง —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
+    sel.innerHTML = (includeAll ? '<option value="">— ทุกห้อง —</option>' : '<option value="">— เลือกห้องเรียน —</option>') +
+      (b.classes||[]).map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
     if(prev) sel.value = prev;
-    loadTeacherReport();
-  });
+    if(cb) cb();
+  }).catch(()=>showToast('❌ โหลดรายชื่อห้องไม่สำเร็จ'));
 }
+
+function loadTeacherReportFilter(){ fillClassSelect('teacher-report-class', true, loadTeacherReport); }
 function loadTeacherReport(){
   const cls = document.getElementById('teacher-report-class').value;
   fetchClassReport(cls, 'teacher-report-content');
@@ -904,8 +884,13 @@ function loadTeacherReport(){
 function fetchClassReport(cls, containerId){
   const el = document.getElementById(containerId);
   el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
+  const selId = containerId === 'teacher-report-content' ? 'teacher-report-class' : 'admin-report-class';
   callAPI('getClassReport', { className: cls })
-    .then(data => renderClassReport(containerId, data))
+    .then(data => {
+      const sel = document.getElementById(selId);
+      if(sel && sel.value !== cls) return; // ผู้ใช้เปลี่ยนตัวกรองห้องไปแล้วก่อนโหลดเสร็จ ทิ้งผลลัพธ์เก่านี้
+      renderClassReport(containerId, data);
+    })
     .catch(()=>showToast('❌ โหลดรายงานไม่สำเร็จ'));
 }
 
@@ -922,10 +907,9 @@ function renderClassReport(containerId, data){
     const clsPresent = stuList.reduce((a,s)=>a+s.present,0);
     const clsPossible= stuList.length * totalEvents;
     const clsPct     = clsPossible>0 ? Math.round(clsPresent/clsPossible*100) : 0;
-    // ── PATCH 8: เพิ่มคอลัมน์ ⚽ ฟุตบอล ──
     html += `<div class="card" style="margin-bottom:18px;padding:0;overflow:hidden;">
       <div style="padding:16px 20px;background:linear-gradient(90deg,#EDE9FE,#FCE7F3);display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <span style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.02rem;">🏫 ${cls}</span>
+        <span style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.02rem;">🏫 ${esc(cls)}</span>
         <span class="badge" style="background:#fff;color:#7C3AED;">${stuList.length} คน</span>
         <span style="margin-left:auto;font-size:.82rem;font-weight:700;color:#6D28D9;">อัตราเข้าร่วมรวม ${clsPct}%</span>
       </div>
@@ -943,23 +927,21 @@ function renderClassReport(containerId, data){
     stuList.forEach((s,i) => {
       const pct = totalEvents>0 ? Math.round(s.present/totalEvents*100) : 0;
       const detId = containerId + '-det-' + s.id;
-      // ── PATCH 9: คำนวณ footballCount จาก statuses ──
       const footballCount = Object.values(s.statuses||{}).filter(v=>v==='football').length;
       const detail = data.events.map(evt => {
         const st = s.statuses[evt.id] || 'none';
-        // ── PATCH 7: badge/label ใน detail รวม football ──
         const badgeClass = {present:'badge-present',absent:'badge-absent',leave:'badge-leave',football:'badge-football'}[st]||'badge-none';
         const lbl = {present:'✅ เข้าร่วม',absent:'❌ ขาด',leave:'📋 ลา',football:'⚽ ฟุตบอล'}[st]||'⏳ ยังไม่บันทึก';
         return `<div style="display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:14px;background:#fff;">
-          <span style="font-size:1.1rem;">${evt.emoji||'🎉'}</span>
-          <span style="flex:1;font-size:.86rem;font-weight:600;">${evt.name}</span>
-          <span style="font-size:.75rem;color:#9CA3AF;">${evt.date||''}</span>
+          <span style="font-size:1.1rem;">${esc(evt.emoji||'🎉')}</span>
+          <span style="flex:1;font-size:.86rem;font-weight:600;">${esc(evt.name)}</span>
+          <span style="font-size:.75rem;color:#9CA3AF;">${esc(evt.date||'')}</span>
           <span class="badge ${badgeClass}">${lbl}</span>
         </div>`;
       }).join('');
       html += `<tr style="cursor:pointer;" onclick="toggleReportDetail('${detId}')">
         <td>${i+1}</td>
-        <td style="font-weight:600;">${s.name} <span style="font-size:.75rem;color:#A78BFA;">▾</span></td>
+        <td style="font-weight:600;">${esc(s.name)} <span style="font-size:.75rem;color:#A78BFA;">▾</span></td>
         <td style="text-align:center;color:#059669;font-weight:800;">${s.present}</td>
         <td style="text-align:center;color:#B91C1C;font-weight:800;">${s.absent}</td>
         <td style="text-align:center;color:#EA580C;font-weight:800;">${s.leave}</td>
@@ -987,24 +969,51 @@ function adminTab(tab){
     const btn = document.getElementById('atab-'+t);
     if(btn) btn.className = t===tab?'subtab active':'subtab';
   });
-  if(tab==='overview'){ loadAdminOverview(); loadAdminClassCompare(); }
-  if(tab==='events')   loadAdminEvents();
-  if(tab==='students') loadAdminStudentsFilter();
-  if(tab==='report')   loadAdminReportFilter();
+  if(tab==='overview')  loadAdminDashboard();
+  if(tab==='events')    loadAdminEvents();
+  if(tab==='students')  loadAdminStudentsFilter();
+  if(tab==='report')    loadAdminReportFilter();
 }
 
-function loadAdminOverview(){
-  const el = document.getElementById('admin-overview-content');
-  el.innerHTML = '<div style="text-align:center;padding:32px;"><div class="spinner"></div></div>';
-  callAPI('getAdminOverview').then(data => {
-    if(!data.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">📋</div><p>ยังไม่มีข้อมูลกิจกรรม</p></div>'; return; }
+function loadAdminDashboard(){
+  const elOv = document.getElementById('admin-overview-content');
+  const elCc = document.getElementById('admin-class-compare-content');
+  elOv.innerHTML = '<div style="text-align:center;padding:32px;"><div class="spinner"></div></div>';
+  elCc.innerHTML = '';
+
+  callAPI('getAdminDashboard').then(d => {
+    const rows = d.classCompare || [];
+    if(rows.length){
+      const barColor = pct => pct>=80 ? 'linear-gradient(90deg,#34D399,#059669)'
+                            : pct>=60 ? 'linear-gradient(90deg,#FBBF24,#F97316)'
+                            : 'linear-gradient(90deg,#FB7185,#E11D48)';
+      const medal = i => i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
+      let ccHtml = `<div class="card" style="margin-bottom:20px;">
+        <div class="section-title" style="margin-bottom:18px;">📊 เปรียบเทียบอัตราเข้าร่วมรายห้อง</div>`;
+      rows.forEach((r,i)=>{
+        ccHtml += `<div style="margin-bottom:${i===rows.length-1?0:16}px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap;">
+            <span style="font-family:'Prompt',sans-serif;font-weight:700;font-size:.9rem;">${medal(i)}🏫 ${esc(r.cls)} <span style="font-weight:500;color:var(--ink-soft);font-size:.78rem;">(${r.count} คน)</span></span>
+            <span style="font-family:'Prompt',sans-serif;font-weight:800;font-size:.92rem;color:#6D28D9;">${r.pct}%</span>
+          </div>
+          <div class="progress-bar" style="height:14px;"><div class="progress-fill" style="width:${r.pct}%;background:${barColor(r.pct)};"></div></div>
+        </div>`;
+      });
+      elCc.innerHTML = ccHtml + `</div>`;
+    }
+
+    const data = d.overview || [];
+    if(!data.length){
+      elOv.innerHTML = '<div class="empty-state"><div class="e-emoji">📋</div><p>ยังไม่มีข้อมูลกิจกรรม</p></div>';
+      return;
+    }
     let html = '';
     data.forEach(evt => {
       const pct = evt.total>0?Math.round(evt.present/evt.total*100):0;
       html += `<div class="card" style="margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
-          <div class="ev-emoji" style="width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,#FCE7F3,#EDE9FE);display:flex;align-items:center;justify-content:center;font-size:1.7rem;">${evt.emoji||'🎉'}</div>
-          <div style="flex:1;"><div style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.05rem;">${evt.name}</div><div style="font-size:.8rem;color:var(--ink-soft);">📅 ${evt.date||'-'}</div></div>
+          <div class="ev-emoji" style="width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,#FCE7F3,#EDE9FE);display:flex;align-items:center;justify-content:center;font-size:1.7rem;">${esc(evt.emoji||'🎉')}</div>
+          <div style="flex:1;"><div style="font-family:'Prompt',sans-serif;font-weight:800;font-size:1.05rem;">${esc(evt.name)}</div><div style="font-size:.8rem;color:var(--ink-soft);">📅 ${esc(evt.date||'-')}</div></div>
         </div>
         <div class="stat-grid" style="margin-bottom:8px;">
           <div class="stat-card"><div class="stat-eyebrow">เข้าร่วม</div><div class="stat-num" style="color:#059669;">${evt.present}</div><span class="stat-badge b-green">✅</span></div>
@@ -1017,49 +1026,11 @@ function loadAdminOverview(){
         <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div>
       </div>`;
     });
-    el.innerHTML = html;
-  }).catch(()=>showToast('❌ โหลดข้อมูลไม่สำเร็จ'));
-}
-
-// ── PATCH 11: กราฟเปรียบเทียบอัตราเข้าร่วมแต่ละห้อง (Admin > ภาพรวม) ──
-function loadAdminClassCompare(){
-  const el = document.getElementById('admin-class-compare-content');
-  el.innerHTML = '<div class="card" style="margin-bottom:20px;text-align:center;padding:28px;"><div class="spinner"></div></div>';
-  callAPI('getClassReport', { className: '' }).then(data => {
-    if(!data || !data.students || !data.students.length || !data.events || !data.events.length){
-      el.innerHTML = '';
-      return;
-    }
-    const totalEvents = data.events.length;
-    const byClass = {};
-    data.students.forEach(s => { if(!byClass[s.class]) byClass[s.class] = []; byClass[s.class].push(s); });
-    const rows = Object.keys(byClass).map(cls => {
-      const stuList     = byClass[cls];
-      const clsPresent  = stuList.reduce((a,s)=>a+s.present,0);
-      const clsPossible = stuList.length * totalEvents;
-      const pct = clsPossible>0 ? Math.round(clsPresent/clsPossible*100) : 0;
-      return { cls, pct, count: stuList.length };
-    }).sort((a,b)=>b.pct-a.pct);
-
-    const barColor = pct => pct>=80 ? 'linear-gradient(90deg,#34D399,#059669)'
-                          : pct>=60 ? 'linear-gradient(90deg,#FBBF24,#F97316)'
-                          : 'linear-gradient(90deg,#FB7185,#E11D48)';
-    const medal = i => i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'';
-
-    let html = `<div class="card" style="margin-bottom:20px;">
-      <div class="section-title" style="margin-bottom:18px;">📊 เปรียบเทียบอัตราเข้าร่วมรายห้อง</div>`;
-    rows.forEach((r,i) => {
-      html += `<div style="margin-bottom:${i===rows.length-1?0:16}px;">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap;">
-          <span style="font-family:'Prompt',sans-serif;font-weight:700;font-size:.9rem;">${medal(i)}🏫 ${r.cls} <span style="font-weight:500;color:var(--ink-soft);font-size:.78rem;">(${r.count} คน)</span></span>
-          <span style="font-family:'Prompt',sans-serif;font-weight:800;font-size:.92rem;color:#6D28D9;">${r.pct}%</span>
-        </div>
-        <div class="progress-bar" style="height:14px;"><div class="progress-fill" style="width:${r.pct}%;background:${barColor(r.pct)};"></div></div>
-      </div>`;
-    });
-    html += `</div>`;
-    el.innerHTML = html;
-  }).catch(()=>{ document.getElementById('admin-class-compare-content').innerHTML = ''; });
+    elOv.innerHTML = html;
+  }).catch(()=>{
+    elOv.innerHTML = '<div class="empty-state"><div class="e-emoji">⚠️</div><p>โหลดข้อมูลไม่สำเร็จ</p></div>';
+    showToast('❌ โหลดข้อมูลไม่สำเร็จ');
+  });
 }
 
 function downloadOverviewDoc(){
@@ -1078,14 +1049,14 @@ function loadAdminEvents(){
     if(!events.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีกิจกรรม</p></div>'; return; }
     el.innerHTML = events.map(e => `
       <div class="event-card">
-        <div class="ev-emoji">${e.emoji||'🎉'}</div>
-        <div class="ev-info"><div class="ev-name">${e.name}</div><div class="ev-date">📅 ${e.date||'-'}</div>${e.note?`<div class="ev-note">📝 ${e.note}</div>`:''}</div>
+        <div class="ev-emoji">${esc(e.emoji||'🎉')}</div>
+        <div class="ev-info"><div class="ev-name">${esc(e.name)}</div><div class="ev-date">📅 ${esc(e.date||'-')}</div>${e.note?`<div class="ev-note">📝 ${esc(e.note)}</div>`:''}</div>
         <div style="display:flex;gap:8px;flex-shrink:0;">
           <button class="pill-btn blue" style="padding:8px 14px;font-size:.82rem;" onclick="openEvtEditModal('${e.id}')">✏️ แก้ไข</button>
-          <button class="pill-btn red" style="padding:8px 14px;font-size:.82rem;" onclick="deleteEvent('${e.id}','${e.name}')">🗑️ ลบ</button>
+          <button class="pill-btn red" style="padding:8px 14px;font-size:.82rem;" onclick="deleteEvent('${e.id}')">🗑️ ลบ</button>
         </div>
       </div>`).join('');
-  });
+  }).catch(()=>showToast('❌ โหลดกิจกรรมไม่สำเร็จ'));
 }
 
 function openEvtEditModal(id){
@@ -1105,7 +1076,7 @@ function saveEditEvent(){
   const note=document.getElementById('edit-evt-note').value.trim();
   if(!name){ showToast('⚠️ กรุณากรอกชื่อกิจกรรม'); return; }
   callAPI('editEvent', { id, data:{name,date,emoji,note} }).then(r => {
-    if(r && r.ok){ showToast('💾 แก้ไขกิจกรรมสำเร็จ'); closeEvtEditModal(); loadAdminEvents(); }
+    if(r && r.ok){ showToast('💾 แก้ไขกิจกรรมสำเร็จ'); invalidateBoot(); closeEvtEditModal(); loadAdminEvents(); }
     else { showToast('❌ ' + ((r && r.msg) || 'แก้ไขไม่สำเร็จ')); }
   }).catch(()=>showToast('❌ แก้ไขไม่สำเร็จ'));
 }
@@ -1117,28 +1088,28 @@ function addEvent(){
   callAPI('addEvent', { data: {name,date,emoji,note} }).then(()=>{
     showToast('✅ เพิ่มกิจกรรมสำเร็จ');
     ['new-evt-name','new-evt-date','new-evt-emoji','new-evt-note'].forEach(id=>document.getElementById(id).value='');
+    invalidateBoot();
     loadAdminEvents();
   }).catch(()=>showToast('❌ เพิ่มไม่สำเร็จ'));
 }
 
-function deleteEvent(id, name){
-  if(!confirm(`ลบกิจกรรม "${name}" ใช่หรือไม่?`)) return;
-  callAPI('deleteEvent', { id }).then(r=>{ if(r.ok){ showToast('🗑️ ลบสำเร็จ'); loadAdminEvents(); } });
+function deleteEvent(id){
+  const evt = allEvents.find(e=>e.id===id);
+  if(!confirm(`ลบกิจกรรม "${evt?evt.name:''}" ใช่หรือไม่?`)) return;
+  callAPI('deleteEvent', { id }).then(r=>{
+    if(r && r.ok){ showToast('🗑️ ลบสำเร็จ'); invalidateBoot(); loadAdminEvents(); }
+    else { showToast('❌ ' + ((r && r.msg) || 'ลบไม่สำเร็จ')); }
+  }).catch(()=>showToast('❌ ลบไม่สำเร็จ'));
 }
 
-function loadAdminStudentsFilter(){
-  callAPI('getClasses').then(classes => {
-    const sel = document.getElementById('admin-class-filter');
-    sel.innerHTML = '<option value="">— ทุกห้อง —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
-    loadAdminStudents();
-  });
-}
+function loadAdminStudentsFilter(){ fillClassSelect('admin-class-filter', true, loadAdminStudents); }
 
 function loadAdminStudents(){
   const cls = document.getElementById('admin-class-filter').value;
   const el  = document.getElementById('admin-student-list');
   el.innerHTML = '<div style="text-align:center;padding:24px;"><div class="spinner"></div></div>';
   callAPI('getStudentsByClass', { className: cls }).then(students => {
+    if(document.getElementById('admin-class-filter').value !== cls) return; // เปลี่ยนตัวกรองไปแล้วก่อนโหลดเสร็จ ทิ้งผลลัพธ์เก่านี้
     if(!students.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">👥</div><p>ยังไม่มีนักเรียน</p></div>'; return; }
     const sorted = sortStudentsByPrefix(students);
     adminStudentsCache = sorted;
@@ -1146,15 +1117,15 @@ function loadAdminStudents(){
       <thead><tr><th>#</th><th>ชื่อ-นามสกุล</th><th>ห้อง</th><th>จัดการ</th></tr></thead>
       <tbody>${sorted.map((s,i)=>`<tr>
         <td>${i+1}</td>
-        <td style="font-weight:600;">${s.name}</td>
-        <td><span class="badge" style="background:#EDE9FE;color:#7C3AED;">${s.class}</span></td>
+        <td style="font-weight:600;">${esc(s.name)}</td>
+        <td><span class="badge" style="background:#EDE9FE;color:#7C3AED;">${esc(s.class)}</span></td>
         <td><div style="display:flex;gap:6px;">
           <button class="pill-btn blue" style="padding:5px 12px;font-size:.78rem;" onclick="openStuEditModal('${s.id}')">✏️</button>
           <button class="pill-btn red" style="padding:5px 12px;font-size:.78rem;" onclick="deleteStudent('${s.id}')">🗑️</button>
         </div></td>
       </tr>`).join('')}</tbody>
     </table></div>`;
-  });
+  }).catch(()=>showToast('❌ โหลดรายชื่อไม่สำเร็จ'));
 }
 
 function openStuEditModal(id){
@@ -1171,7 +1142,7 @@ function saveEditStudent(){
   const cls=document.getElementById('edit-stu-class').value.trim();
   if(!name || !cls){ showToast('⚠️ กรุณากรอกข้อมูลให้ครบ'); return; }
   callAPI('editStudent', { id, data:{name, class: cls} }).then(r => {
-    if(r && r.ok){ showToast('💾 แก้ไขนักเรียนสำเร็จ (ประวัติยังอยู่ครบ)'); closeStuEditModal(); loadAdminStudentsFilter(); }
+    if(r && r.ok){ showToast('💾 แก้ไขนักเรียนสำเร็จ (ประวัติยังอยู่ครบ)'); invalidateBoot(); closeStuEditModal(); loadAdminStudentsFilter(); }
     else { showToast('❌ ' + ((r && r.msg) || 'แก้ไขไม่สำเร็จ')); }
   }).catch(()=>showToast('❌ แก้ไขไม่สำเร็จ'));
 }
@@ -1179,9 +1150,17 @@ function saveEditStudent(){
 function addStudent(){
   const name=document.getElementById('new-stu-name').value.trim(), cls=document.getElementById('new-stu-class').value.trim();
   if(!name||!cls){ showToast('⚠️ กรุณากรอกข้อมูลให้ครบ'); return; }
+  getBoot().then(b=>{
+    const dup = (b.students||[]).some(s=>s.name===name && s.class===cls);
+    if(dup && !confirm(`มีนักเรียนชื่อ "${name}" ในห้อง "${cls}" อยู่แล้ว ต้องการเพิ่มซ้ำหรือไม่?`)) return;
+    doAddStudent(name, cls);
+  }).catch(()=>doAddStudent(name, cls));
+}
+function doAddStudent(name, cls){
   callAPI('addStudent', { data: {name, class: cls} }).then(()=>{
     showToast('✅ เพิ่มนักเรียนสำเร็จ');
     document.getElementById('new-stu-name').value=''; document.getElementById('new-stu-class').value='';
+    invalidateBoot();
     loadAdminStudentsFilter();
   }).catch(()=>showToast('❌ เพิ่มไม่สำเร็จ'));
 }
@@ -1190,18 +1169,13 @@ function deleteStudent(id){
   const s = adminStudentsCache.find(x=>x.id===id);
   const name = s ? s.name : '';
   if(!confirm(`ลบนักเรียน "${name}" ใช่หรือไม่?`)) return;
-  callAPI('deleteStudent', { id }).then(r=>{ if(r.ok){ showToast('🗑️ ลบสำเร็จ'); loadAdminStudentsFilter(); } });
+  callAPI('deleteStudent', { id }).then(r=>{
+    if(r && r.ok){ showToast('🗑️ ลบสำเร็จ'); invalidateBoot(); loadAdminStudentsFilter(); }
+    else { showToast('❌ ' + ((r && r.msg) || 'ลบไม่สำเร็จ')); }
+  }).catch(()=>showToast('❌ ลบไม่สำเร็จ'));
 }
 
-function loadAdminReportFilter(){
-  callAPI('getClasses').then(classes => {
-    const sel = document.getElementById('admin-report-class');
-    const prev = sel.value;
-    sel.innerHTML = '<option value="">— ทุกห้อง —</option>' + classes.map(c=>`<option value="${c}">${c}</option>`).join('');
-    if(prev) sel.value = prev;
-    loadAdminReport();
-  });
-}
+function loadAdminReportFilter(){ fillClassSelect('admin-report-class', true, loadAdminReport); }
 function loadAdminReport(){
   const cls = document.getElementById('admin-report-class').value;
   fetchClassReport(cls, 'admin-report-content');
@@ -1215,13 +1189,13 @@ function runSetup(){
 }
 
 function cleanupDuplicates(){
-  if(!confirm('ระบบจะสแกนหาแถวเช็คชื่อที่ซ้ำกัน (คนเดียวกัน+กิจกรรมเดียวกัน) แล้วลบแถวเก่าทิ้ง เก็บไว้แค่แถวล่าสุด ต้องการดำเนินการต่อใช่หรือไม่?')) return;
+  if(!confirm('ระบบจะสแกนหาแถวเช็คชื่อที่ซ้ำกันหรือเป็นแถวกำพร้า (อ้างถึงนักเรียน/กิจกรรมที่ถูกลบไปแล้ว) แล้วลบทิ้ง ต้องการดำเนินการต่อใช่หรือไม่?')) return;
   const el = document.getElementById('cleanup-result');
   el.innerHTML = '<div class="spinner"></div>';
   callAPI('cleanupDuplicateAttendance').then(r=>{
     if(r && r.ok){
       el.innerHTML = r.removed > 0
-        ? `<div style="color:#059669;font-weight:700;">✅ ลบแถวซ้ำไปทั้งหมด ${r.removed} แถว</div>`
+        ? `<div style="color:#059669;font-weight:700;">✅ ลบแถวซ้ำ/แถวกำพร้าไปทั้งหมด ${r.removed} แถว</div>`
         : `<div style="color:#059669;font-weight:700;">✅ ไม่พบข้อมูลซ้ำ ระบบสะอาดอยู่แล้ว</div>`;
     } else {
       el.innerHTML = `<div style="color:#B91C1C;">❌ ${(r && r.msg) || 'ล้างข้อมูลไม่สำเร็จ'}</div>`;
@@ -1248,6 +1222,9 @@ function showToast(msg){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
 }
+
+// ไม่มีด่านรหัสผ่านหน้าเว็บแล้ว — เข้าหน้านักเรียนได้ทันที
+enterStudent();
 </script>
 </body>
 </html>
