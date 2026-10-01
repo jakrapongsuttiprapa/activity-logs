@@ -442,10 +442,10 @@ body.is-mobile .clock-pill{display:none;}
 
 <script>
 // ย้ายจาก Google Apps Script มาเป็น Supabase Edge Function (อยู่ project เดียวกับระบบสอบปลายภาค คนละ schema)
-const API_URL = 'https://tgekgslgfufrxixckspy.supabase.co/functions/v1/important-days';
+const API_URL = 'https://zjpyusmvwbebpiwzehqb.supabase.co/functions/v1/attendance';
 // anon key ของโปรเจกต์ — เปิดเผยได้ตามปกติ (Supabase ออกแบบมาให้ฝังในโค้ดฝั่งเว็บ) ใช้แค่ผ่านด่าน JWT ของ Edge Function
 // สิทธิ์จริงคุมด้วย token ภายในระบบเอง (ตัวแปร AUTH_TOKEN) ไม่เกี่ยวกับ key นี้
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRnZWtnc2xnZnVmcnhpeGNrc3B5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3Mjk2MzgsImV4cCI6MjEwNjMwNTYzOH0.0PuqC06a6ADimTVP4xITsHIRvjdHrHoYZhHgCTB9Dg8';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqcHl1c212d2JlYnBpd3plaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MzQ0MjAsImV4cCI6MjEwNjQxMDQyMH0.qjxsXVkHML6MVGW_oO1WWXUfUKrmH5HEoqLU7GUPQMA';
 
 let AUTH_TOKEN = null;
 
