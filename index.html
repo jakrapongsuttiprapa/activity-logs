@@ -510,6 +510,65 @@ body.is-mobile .clock-pill{display:none;}
   .tl-item .badge{margin-left:61px;}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+
+/* มือถือ: ข้อความชิดล่าง กล่องสถิติแบบแถบบาง ให้เห็นรูปมากที่สุด */
+@media(max-width:640px){
+  .hero-card:not(.is-preview) .hero-content{padding:0 18px 18px;}
+  .hero-card:not(.is-preview) .hero-title{font-size:1.85rem;margin:10px 0 12px;}
+  .hero-card:not(.is-preview) .hero-stats{margin-top:0;gap:8px;}
+  .hero-card:not(.is-preview) .hero-stats > div{padding:8px 10px;border-radius:14px;display:flex;align-items:baseline;gap:6px;}
+  .hero-card:not(.is-preview) .hero-stats b{font-size:1.25rem;display:inline;}
+  .hero-card:not(.is-preview) .hero-stats span{font-size:.7rem;}
+  .hero-card:not(.is-preview) .eyebrow{font-size:.66rem;padding:5px 11px;}
+  .hero-card:not(.is-preview) .hero-shade{background:linear-gradient(0deg,rgba(10,7,32,calc(var(--mo) * 1.2)) 0%,rgba(10,7,32,var(--mo)) 25%,rgba(10,7,32,0) 55%)!important;}
+}
+.hero-card.pv-mobile .hero-content{padding:0 18px 18px;}
+.hero-card.pv-mobile .hero-title{font-size:1.85rem;margin:10px 0 12px;}
+.hero-card.pv-mobile .hero-stats{margin-top:0;gap:8px;}
+.hero-card.pv-mobile .hero-stats > div{padding:8px 10px;border-radius:14px;display:flex;align-items:baseline;gap:6px;}
+.hero-card.pv-mobile .hero-stats b{font-size:1.25rem;display:inline;}
+.hero-card.pv-mobile .hero-stats span{font-size:.7rem;}
+.hero-card.pv-mobile .eyebrow{font-size:.66rem;padding:5px 11px;}
+.hero-card.pv-mobile .hero-shade{background:linear-gradient(0deg,rgba(10,7,32,calc(var(--mo) * 1.2)) 0%,rgba(10,7,32,var(--mo)) 25%,rgba(10,7,32,0) 55%)!important;}
+
+/* ── Footer ── */
+.site-footer{text-align:center;margin:56px auto 8px;padding:8px 16px 28px;max-width:520px;}
+.sf-rule{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.sf-rule span{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(247,201,72,.65));}
+.sf-rule span:last-child{background:linear-gradient(270deg,transparent,rgba(247,201,72,.65));}
+.sf-rule img{width:46px;height:46px;border-radius:50%;object-fit:cover;background:#fff;padding:3px;
+  box-shadow:0 0 0 2px rgba(247,201,72,.75),0 0 26px rgba(247,201,72,.35);}
+.sf-school{font-family:var(--display);font-weight:600;font-size:.84rem;color:#B9B3D9;letter-spacing:.6px;}
+.sf-title{font-family:var(--display);font-weight:800;font-size:1.3rem;color:#fff;margin:4px 0 2px;}
+.sf-level{font-size:.76rem;color:#8C86AD;letter-spacing:.4px;}
+.sf-by{display:inline-flex;align-items:center;gap:10px;margin-top:18px;padding:8px 8px 8px 16px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(247,201,72,.28);backdrop-filter:blur(6px);}
+.sf-by-lbl{font-size:.7rem;color:#A9A3C9;letter-spacing:.6px;text-transform:uppercase;}
+.sf-sign{font-family:var(--display);font-weight:800;font-size:.9rem;letter-spacing:1.5px;color:#1B1340;
+  padding:5px 14px;border-radius:999px;background:linear-gradient(135deg,#FDE68A,#F7C948 45%,#D99E1E);
+  box-shadow:0 6px 18px -6px rgba(247,201,72,.8);}
+.sf-copy{margin-top:14px;font-size:.66rem;color:#6E6890;letter-spacing:1.4px;}
+
+/* ── Header polish: โลโก้เต็มวง + แถบเมนูแบบ segmented ── */
+.logo-wrap{padding:2.5px;overflow:hidden;position:relative;
+  box-shadow:0 0 0 4px rgba(247,201,72,.12),0 0 22px rgba(247,201,72,.35),0 10px 24px -10px rgba(0,0,0,.6);}
+.logo-wrap img{padding:0;object-fit:cover;background:#fff;transform:scale(1.06);}
+.logo-wrap::after{content:'';position:absolute;inset:2.5px;border-radius:50%;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.45),transparent 42%);mix-blend-mode:soft-light;}
+.app-header-title h1{background:linear-gradient(180deg,#fff 30%,#E9E3FF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+@media(max-width:640px){
+  #app-header{padding:calc(10px + env(safe-area-inset-top,0px)) 14px 12px;gap:10px 12px;}
+  .logo-wrap{width:50px;height:50px;}
+  .app-header-title h1{font-size:1.08rem;line-height:1.25;}
+  .app-header-title .subtitle{font-size:.6rem;letter-spacing:1.4px;margin-top:2px;}
+  .app-header-actions{gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
+  .app-header-actions .nav-btn{border:1px solid transparent;background:transparent;padding:9px 6px;font-size:.8rem;border-radius:999px;color:#C9C3E8;}
+  .app-header-actions .nav-btn:hover{transform:none;background:rgba(255,255,255,.06);}
+  .app-header-actions .nav-btn.is-active{background:var(--gold-grad);color:#2A1A00;font-weight:800;border-color:transparent;
+    box-shadow:0 6px 16px -6px rgba(247,201,72,.75);}
+  .app-header-actions .nav-btn.exit{flex:0 0 auto;padding:9px 14px;}
+}
 </style>
 </head>
 <body>
@@ -598,7 +657,6 @@ body.is-mobile .clock-pill{display:none;}
         <div class="hero-content">
           <span class="eyebrow"><span class="dot"></span>ระดับมัธยมศึกษาตอนปลาย</span>
           <h2 class="hero-title">บันทึกการเข้าร่วม<br/><span class="gold-text">วันสำคัญ</span></h2>
-          <p class="hero-sub">ตรวจสอบสถิติการเข้าร่วมกิจกรรมวันสำคัญของตัวเองได้ทันที เพียงเลือกห้องเรียนและชื่อของคุณด้านล่าง</p>
           <div class="hero-stats">
             <div><b class="gold-text" id="hs-evt">–</b><span>กิจกรรม</span></div>
             <div><b class="gold-text" id="hs-stu">–</b><span>นักเรียน</span></div>
@@ -751,7 +809,6 @@ body.is-mobile .clock-pill{display:none;}
                     <div class="hero-content">
                       <span class="eyebrow"><span class="dot"></span>ระดับมัธยมศึกษาตอนปลาย</span>
                       <div class="hero-title">บันทึกการเข้าร่วม<br/><span class="gold-text">วันสำคัญ</span></div>
-                      <p class="hero-sub">ตรวจสอบสถิติการเข้าร่วมกิจกรรมวันสำคัญของตัวเองได้ทันที เพียงเลือกห้องเรียนและชื่อของคุณด้านล่าง</p>
                       <div class="hero-stats">
                         <div><b class="gold-text">10</b><span>กิจกรรม</span></div>
                         <div><b class="gold-text">280</b><span>นักเรียน</span></div>
@@ -813,7 +870,14 @@ body.is-mobile .clock-pill{display:none;}
         </div>
       </div>
     </section>
-    <div class="footer-note">โรงเรียนธนาคารออมสิน · <b>ระบบเช็กชื่อวันสำคัญ</b> ระดับมัธยมศึกษาตอนปลาย</div>
+    <footer class="site-footer">
+      <div class="sf-rule"><span></span><img src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="" loading="lazy"/><span></span></div>
+      <div class="sf-school">โรงเรียนธนาคารออมสิน</div>
+      <div class="sf-title">ระบบเช็กชื่อ<span class="gold-text">วันสำคัญ</span></div>
+      <div class="sf-level">ระดับมัธยมศึกษาตอนปลาย</div>
+      <div class="sf-by"><span class="sf-by-lbl">Designed &amp; developed by</span><span class="sf-sign">T.OAT</span></div>
+      <div class="sf-copy">© <span id="sf-year">2026</span> · THANAKHAN OOMSIN SCHOOL</div>
+    </footer>
   </main>
 </div>
 
@@ -1908,6 +1972,8 @@ function showToast(msg){
     enterStudent();
   }
 })();
+
+try{document.getElementById('sf-year').textContent=new Date().getFullYear();}catch(_){}
 </script>
 
 </body>
