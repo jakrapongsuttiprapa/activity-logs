@@ -569,6 +569,11 @@ body.is-mobile .clock-pill{display:none;}
     box-shadow:0 6px 16px -6px rgba(247,201,72,.75);}
   .app-header-actions .nav-btn.exit{flex:0 0 auto;padding:9px 14px;}
 }
+
+/* การ์ดค้นหา: กว้างเท่าการ์ด hero */
+#panel-student .picker-card{width:min(1320px,calc(100vw - 28px));margin-left:calc(50% - min(660px,calc(50vw - 14px)));
+  border-radius:34px;padding:30px clamp(20px,3vw,40px);box-sizing:border-box;}
+@media(max-width:640px){#panel-student .picker-card{border-radius:26px;padding:20px;}}
 </style>
 </head>
 <body>
@@ -1606,6 +1611,7 @@ function downloadOverviewDoc(){
   th{background:#EDE9FE;}
   .sign{margin-top:70px;text-align:center;}
   @media print{ body{padding:0;} }
+
 </style></head><body>
 <h1>รายงานสรุปการเข้าร่วมกิจกรรมวันสำคัญ</h1>
 <div class="sub">โรงเรียนธนาคารออมสิน · ระดับมัธยมศึกษาตอนปลาย<br/>พิมพ์เมื่อ ${today}</div>
