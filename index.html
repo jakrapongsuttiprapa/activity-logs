@@ -12,7 +12,7 @@
 <style>
 @property --p{syntax:'<number>';inherits:false;initial-value:0;}
 :root{
-  --bg:#0A0720;--bg2:#150E35;
+  --bg:#0A0720;--bg-top:#2B1868;--bg-bot:#24103F;--o1:124,58,237;--o2:219,39,119;--o3:247,201,72;--o4:6,182,212;--glow:.8;--bgdim:.55;--bgblur:0px;--bgblur-n:0;--bgx:50%;--bgy:50%;--bg2:#150E35;
   --ink:#1A1433;--ink-soft:#6B6788;--line:#ECE8F7;--paper:#FFFFFF;--paper2:#FAF8FF;
   --gold:#F7C948;--gold2:#D99A1E;
   --gold-grad:linear-gradient(135deg,#FFF1B8 0%,#F7C948 38%,#E2A21F 72%,#B9780F 100%);
@@ -35,17 +35,42 @@ button{font-family:inherit;}
 
 /* ───────── ฉากหลัง: ออโรร่า + ลายไทยจางๆ (ใช้ gradient ล้วน ไม่มี blur filter → เบาเครื่อง) ───────── */
 .aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;
-  background:radial-gradient(1400px 900px at 50% -25%,#2B1868 0%,rgba(43,24,104,0) 62%),
-             radial-gradient(900px 600px at 50% 120%,#24103F 0%,rgba(36,16,63,0) 60%),var(--bg);}
+  background:radial-gradient(1400px 900px at 50% -25%,var(--bg-top) 0%,transparent 62%),
+             radial-gradient(900px 600px at 50% 120%,var(--bg-bot) 0%,transparent 60%),var(--bg);transition:background .6s;}
 .aurora i{position:absolute;border-radius:50%;will-change:transform;}
-.aurora .a1{width:75vmax;height:75vmax;left:-25vmax;top:-30vmax;background:radial-gradient(closest-side,rgba(124,58,237,.50),rgba(124,58,237,0));animation:drift1 28s ease-in-out infinite alternate;}
-.aurora .a2{width:65vmax;height:65vmax;right:-25vmax;top:-15vmax;background:radial-gradient(closest-side,rgba(219,39,119,.38),rgba(219,39,119,0));animation:drift2 32s ease-in-out infinite alternate;}
-.aurora .a3{width:70vmax;height:70vmax;left:10vmax;bottom:-45vmax;background:radial-gradient(closest-side,rgba(247,201,72,.22),rgba(247,201,72,0));animation:drift3 36s ease-in-out infinite alternate;}
-.aurora .a4{width:50vmax;height:50vmax;right:-15vmax;bottom:-20vmax;background:radial-gradient(closest-side,rgba(6,182,212,.20),rgba(6,182,212,0));animation:drift1 40s ease-in-out infinite alternate-reverse;}
+.aurora .a1{width:75vmax;height:75vmax;left:-25vmax;top:-30vmax;background:radial-gradient(closest-side,rgba(var(--o1),calc(.62 * var(--glow))),rgba(var(--o1),0));animation:drift1 28s ease-in-out infinite alternate;}
+.aurora .a2{width:65vmax;height:65vmax;right:-25vmax;top:-15vmax;background:radial-gradient(closest-side,rgba(var(--o2),calc(.48 * var(--glow))),rgba(var(--o2),0));animation:drift2 32s ease-in-out infinite alternate;}
+.aurora .a3{width:70vmax;height:70vmax;left:10vmax;bottom:-45vmax;background:radial-gradient(closest-side,rgba(var(--o3),calc(.28 * var(--glow))),rgba(var(--o3),0));animation:drift3 36s ease-in-out infinite alternate;}
+.aurora .a4{width:50vmax;height:50vmax;right:-15vmax;bottom:-20vmax;background:radial-gradient(closest-side,rgba(var(--o4),calc(.25 * var(--glow))),rgba(var(--o4),0));animation:drift1 40s ease-in-out infinite alternate-reverse;}
+/* รูปพื้นหลัง (ตั้งได้จากแอดมิน) */
+.aurora .bg-photo{position:absolute;inset:0;opacity:0;transition:opacity .8s;}
+.aurora .bg-photo.on{opacity:1;}
+.aurora .bg-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--bgx) var(--bgy);
+  filter:blur(var(--bgblur)) saturate(1.1);transform:scale(calc(1 + var(--bgblur-n) * .012));}
+.aurora .bg-dim{position:absolute;inset:0;background:linear-gradient(180deg,var(--bg-top),var(--bg) 70%);opacity:var(--bgdim);}
+/* ลำแสงจากด้านบน */
+.aurora .rays{position:absolute;left:50%;top:-60vmax;width:160vmax;height:160vmax;margin-left:-80vmax;opacity:0;transition:opacity .8s;
+  background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(var(--o3),.0) 0deg 7deg,rgba(var(--o3),.10) 9deg 11deg,rgba(var(--o3),0) 13deg 20deg);
+  -webkit-mask-image:radial-gradient(closest-side,#000 0%,transparent 78%);mask-image:radial-gradient(closest-side,#000 0%,transparent 78%);
+  animation:raySpin 120s linear infinite;}
+.aurora .rays.on{opacity:1;}
+@keyframes raySpin{to{transform:rotate(360deg);}}
+/* เอฟเฟกต์อนุภาค */
+.fx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;}
+.fx span{position:absolute;display:block;will-change:transform,opacity;}
+.fx .sp{border-radius:50%;background:radial-gradient(circle,#FFF6D5 0%,rgba(var(--o3),.9) 40%,rgba(var(--o3),0) 70%);
+  bottom:-20px;animation:fxRise var(--d) linear infinite;animation-delay:var(--dl);}
+@keyframes fxRise{0%{transform:translate(0,0);opacity:0}10%{opacity:1}50%{transform:translate(var(--sx),-55vh);opacity:.9}90%{opacity:.7}100%{transform:translate(0,-112vh);opacity:0}}
+.fx .st{border-radius:50%;background:#fff;box-shadow:0 0 6px 1px rgba(255,255,255,.7);animation:fxTw var(--d) ease-in-out infinite;animation-delay:var(--dl);}
+@keyframes fxTw{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
+.fx .pe{top:-30px;border-radius:150% 0 150% 0;background:linear-gradient(135deg,#FFE4F2,#F9A8D4 55%,#C084FC);opacity:.85;
+  box-shadow:0 2px 8px rgba(236,72,153,.25);animation:fxFall var(--d) linear infinite;animation-delay:var(--dl);}
+@keyframes fxFall{0%{transform:translate(0,0) rotate(0)}25%{transform:translate(var(--sx),28vh) rotate(120deg)}50%{transform:translate(calc(var(--sx) * -.5),56vh) rotate(220deg)}75%{transform:translate(var(--sx),84vh) rotate(300deg)}100%{transform:translate(0,115vh) rotate(400deg)}}
+html.no-motion .aurora i,html.no-motion .aurora .rays,html.no-motion .fx span{animation-play-state:paused!important;}
 @keyframes drift1{to{transform:translate(9vmax,7vmax) scale(1.12);}}
 @keyframes drift2{to{transform:translate(-10vmax,9vmax) scale(1.08);}}
 @keyframes drift3{to{transform:translate(-8vmax,-6vmax) scale(1.15);}}
-.pattern{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.10;
+.pattern{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:var(--pat,.10);transition:opacity .4s;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23F7C948' stroke-width='.8'%3E%3Cpath d='M28 4L52 28 28 52 4 28Z'/%3E%3Cpath d='M28 16L40 28 28 40 16 28Z'/%3E%3C/g%3E%3Ccircle cx='28' cy='28' r='2.2' fill='%23F7C948'/%3E%3Ccircle cx='0' cy='0' r='1.6' fill='%23F7C948'/%3E%3Ccircle cx='56' cy='0' r='1.6' fill='%23F7C948'/%3E%3Ccircle cx='0' cy='56' r='1.6' fill='%23F7C948'/%3E%3Ccircle cx='56' cy='56' r='1.6' fill='%23F7C948'/%3E%3C/svg%3E");
   -webkit-mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 10%,transparent 75%);mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 10%,transparent 75%);}
 
@@ -55,7 +80,7 @@ button{font-family:inherit;}
 #app-header{
   position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
   padding:12px clamp(14px,3vw,34px);
-  background:rgba(10,7,32,.72);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
+  background:rgba(10,7,32,.72);background:color-mix(in srgb,var(--bg) 74%,transparent);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
 }
 #app-header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(247,201,72,.75),transparent);}
 .logo-wrap{width:54px;height:54px;border-radius:50%;padding:3px;background:var(--gold-grad);flex-shrink:0;cursor:pointer;
@@ -574,11 +599,40 @@ body.is-mobile .clock-pill{display:none;}
 #panel-student .picker-card{width:min(1320px,calc(100vw - 28px));margin-left:calc(50% - min(660px,calc(50vw - 14px)));
   border-radius:34px;padding:30px clamp(20px,3vw,40px);box-sizing:border-box;}
 @media(max-width:640px){#panel-student .picker-card{border-radius:26px;padding:20px;}}
+
+/* ── ตัวปรับพื้นหลัง ── */
+.bg-themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px;margin-bottom:18px;}
+.bg-theme{position:relative;border:2px solid transparent;border-radius:18px;padding:0;cursor:pointer;overflow:hidden;height:96px;
+  font-family:var(--display);font-weight:700;color:#fff;text-align:left;transition:transform .18s,box-shadow .18s,border-color .18s;
+  box-shadow:0 10px 22px -14px rgba(20,10,60,.8);}
+.bg-theme:hover{transform:translateY(-3px);}
+.bg-theme.on{border-color:var(--gold);box-shadow:0 0 0 4px rgba(247,201,72,.25),0 14px 28px -12px rgba(20,10,60,.9);}
+.bg-theme b{position:absolute;left:12px;bottom:10px;font-size:.86rem;text-shadow:0 2px 8px rgba(0,0,0,.6);}
+.bg-theme small{display:block;font-weight:500;font-size:.66rem;opacity:.85;}
+.bg-theme.on::after{content:'✓';position:absolute;right:10px;top:8px;width:24px;height:24px;border-radius:50%;background:var(--gold-grad);color:#2A1A00;
+  display:grid;place-items:center;font-size:.8rem;font-weight:900;}
+.bg-fx{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.bg-fx button{border:1.5px solid #E6DEFA;background:#FBF9FF;border-radius:14px;padding:10px 4px;cursor:pointer;font-family:var(--display);font-weight:600;font-size:.76rem;color:var(--ink-soft);transition:.15s;}
+.bg-fx button span{display:block;font-size:1.3rem;margin-bottom:2px;}
+.bg-fx button.on{border-color:#7C3AED;background:#F3EEFF;color:#6D28D9;box-shadow:0 6px 14px -8px rgba(91,33,182,.6);}
+.bg-switch{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:14px;background:#FBF9FF;border:1px solid #EEE8FB;margin-bottom:10px;font-weight:600;font-size:.86rem;color:var(--ink);}
+.bg-switch input{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:999px;background:#DCD3F2;position:relative;cursor:pointer;transition:.2s;flex-shrink:0;}
+.bg-switch input::after{content:'';position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:.2s;}
+.bg-switch input:checked{background:linear-gradient(135deg,#7C3AED,#DB2777);}
+.bg-switch input:checked::after{left:21px;}
+.bg-live{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:700;color:#059669;background:#D1FAE5;padding:4px 10px;border-radius:999px;margin-left:8px;}
+.bg-live::before{content:'';width:7px;height:7px;border-radius:50%;background:#10B981;animation:fxTw 1.6s infinite;}
+.bg-img-row{display:flex;gap:10px;align-items:center;}
+.bg-thumb{width:64px;height:64px;border-radius:14px;background:#EEE8FB center/cover no-repeat;flex-shrink:0;border:1px solid #E6DEFA;display:grid;place-items:center;font-size:1.3rem;color:#B4AFCB;}
+@media(max-width:640px){.bg-themes{grid-template-columns:repeat(2,1fr);}.bg-fx{grid-template-columns:repeat(2,1fr);}}
+.bg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 30px;align-items:start;}
+@media(max-width:860px){.bg-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-<div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i></div>
+<div class="aurora" aria-hidden="true"><div class="bg-photo" id="bg-photo"><img id="bg-photo-img" alt=""/></div><div class="bg-dim" id="bg-dim" style="display:none"></div><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><div class="rays" id="bg-rays"></div></div>
 <div class="pattern" aria-hidden="true"></div>
+<div class="fx" id="bg-fx" aria-hidden="true"></div>
 
 <div class="modal-overlay" id="pw-modal" style="display:none;">
   <div class="modal-box" id="pw-modal-box">
@@ -853,6 +907,48 @@ body.is-mobile .clock-pill{display:none;}
             </div>
           </div>
         </div>
+        <div class="card" style="margin-bottom:22px;">
+          <div class="card-head"><span class="ch-ico">🎨</span>ปรับแต่งพื้นหลังเว็บ<span class="bg-live">ดูผลสดบนหน้านี้</span><small>เปลี่ยนแล้วเห็นทันที กดบันทึกเพื่อใช้จริง</small></div>
+          <div class="he-row"><label>ธีมสี</label></div>
+          <div class="bg-themes" id="bg-themes"></div>
+          <div class="bg-grid">
+            <div>
+              <div class="he-row"><label>รูปพื้นหลัง (ไม่ใส่ก็ได้)</label>
+                <div class="bg-img-row">
+                  <div class="bg-thumb" id="bg-thumb">🖼️</div>
+                  <label class="upload-drop" id="bg-drop" for="bg-file" style="flex:1;margin:0;justify-content:flex-start;"><span style="font-size:1.3rem;">📤</span><span style="text-align:left;">อัปโหลดรูปพื้นหลัง<small>รูปวิว อาคารเรียน หรือบรรยากาศงาน</small></span></label>
+                </div>
+                <input type="file" id="bg-file" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="bgUploadFile(this.files[0])"/>
+                <div class="url-row" style="margin-top:10px;"><input type="url" id="bg-url" placeholder="หรือวางลิงก์รูป https://..."/><button class="pill-btn purple sm" onclick="bgUseUrl()">ใช้ลิงก์</button></div>
+                <button class="pill-btn ghost xs" id="bg-img-del" style="margin-top:8px;display:none;" onclick="bgSet('image','')">✕ เอารูปพื้นหลังออก</button>
+              </div>
+              <div id="bg-img-ctrl">
+                <div class="he-row"><label>ความเบลอของรูป <output id="bg-blur-o"></output></label><input type="range" id="bg-blur" min="0" max="30" step="1" oninput="bgSet('blur',+this.value)"/></div>
+                <div class="he-row"><label>ความมืดทับรูป <output id="bg-dim-o"></output></label><input type="range" id="bg-dimr" min="0" max="0.95" step="0.05" oninput="bgSet('dim',+this.value)"/></div>
+                <div class="he-row"><label>ตำแหน่งรูป แนวนอน <output id="bg-x-o"></output></label><input type="range" id="bg-x" min="0" max="100" step="1" oninput="bgSet('x',+this.value)"/></div>
+                <div class="he-row"><label>ตำแหน่งรูป แนวตั้ง <output id="bg-y-o"></output></label><input type="range" id="bg-y" min="0" max="100" step="1" oninput="bgSet('y',+this.value)"/></div>
+              </div>
+            </div>
+            <div>
+              <div class="he-row"><label>เอฟเฟกต์</label>
+                <div class="bg-fx" id="bg-fxsel">
+                  <button data-v="none" onclick="bgSet('effect','none')"><span>⭕</span>ไม่มี</button>
+                  <button data-v="sparkle" onclick="bgSet('effect','sparkle')"><span>✨</span>ประกายทอง</button>
+                  <button data-v="stars" onclick="bgSet('effect','stars')"><span>🌟</span>ดาวระยิบ</button>
+                  <button data-v="petals" onclick="bgSet('effect','petals')"><span>🌸</span>กลีบดอกไม้</button>
+                </div></div>
+              <label class="bg-switch">☀️ ลำแสงส่องจากด้านบน<input type="checkbox" id="bg-rays-sw" onchange="bgSet('rays',this.checked)"/></label>
+              <label class="bg-switch">🌊 ให้แสงพื้นหลังเคลื่อนไหว<input type="checkbox" id="bg-motion-sw" onchange="bgSet('motion',this.checked)"/></label>
+              <div class="he-row"><label>ความสว่างแสงออโรร่า <output id="bg-glow-o"></output></label><input type="range" id="bg-glow" min="0" max="1.5" step="0.05" oninput="bgSet('glow',+this.value)"/></div>
+              <div class="he-row"><label>ลายไทยจาง ๆ <output id="bg-pat-o"></output></label><input type="range" id="bg-pat" min="0" max="0.3" step="0.01" oninput="bgSet('pattern',+this.value)"/></div>
+              <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
+                <button class="pill-btn gold" style="flex:1;" id="bg-save" onclick="bgSave()">💾 บันทึกพื้นหลัง</button>
+                <button class="pill-btn ghost" onclick="bgCancel()" title="กลับไปใช้ค่าที่บันทึกไว้">↩ ยกเลิก</button>
+                <button class="pill-btn ghost" onclick="bgReset()" title="คืนค่าเริ่มต้น">↺ ค่าเริ่มต้น</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="setup-grid">
           <div class="card">
             <div class="card-head"><span class="ch-ico">🔐</span>เปลี่ยนรหัสผ่าน</div>
@@ -1059,7 +1155,7 @@ function switchRole(role){
   if(currentRole === 'teacher' && role !== 'teacher') resetTeacherCheck();
   currentRole = role; showApp(); window.scrollTo({ top:0 });
 }
-function goHome(){
+function goHome(){ try{ bgDiscard(); }catch(e){}
   if(!confirmLeaveIfDirty()) return;
   switchRole('student');
 }
@@ -1133,7 +1229,7 @@ function initStudentPicker(){
   const clsSel = document.getElementById('stu-class-select');
   clsSel.innerHTML = '<option value="">⏳ กำลังโหลด...</option>';
   getBoot().then(b => {
-    applyHero(b.hero);
+    applyHero(b.hero); if(!bgState) applyBg(b.hero && b.hero.bg);
     stuPickStudents = b.students || [];
     allEvents       = b.events || [];
     currentClasses  = b.classes || [];
@@ -1502,7 +1598,7 @@ function adminTab(tab){
   if(tab==='events')    loadAdminEvents();
   if(tab==='students')  loadAdminStudentsFilter();
   if(tab==='report')    loadAdminReportFilter();
-  if(tab==='setup')     heInit();
+  if(tab==='setup')   { heInit(); bgInit(); } else bgDiscard();
 }
 
 function loadAdminDashboard(){
@@ -1821,7 +1917,7 @@ const heCur = () => heMode === 'mob' ? heState.mobile : heState;
 function heInit(){
   heState = heroMerge(null);
   heRender();
-  getBoot().then(b => { heState = heroMerge(b.hero); heRender(); }).catch(()=>{});
+  getBoot().then(b => { heroSaved = b.hero || null; heState = heroMerge(b.hero); heRender(); }).catch(()=>{});
   heBindPreview();
 }
 function heSetMode(m){ heMode = m; heRender(); }
@@ -1946,8 +2042,8 @@ function heSave(){
   if(!heState) return;
   const btn = document.getElementById('he-save');
   btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...';
-  callAPI('setHero', { hero: heState }).then(r => {
-    if(r && r.ok){ applyHero(r.hero); heState = heroMerge(r.hero); heRender(); invalidateBoot(); showToast('✨ บันทึกแล้ว ทั้งคอมและมือถือ'); }
+  callAPI('setHero', { hero: Object.assign({}, heState, { bg: (bgSaved || (heroSaved && heroSaved.bg) || heState.bg || undefined) }) }).then(r => {
+    if(r && r.ok){ heroSaved = r.hero; applyHero(r.hero); heState = heroMerge(r.hero); heRender(); invalidateBoot(); showToast('✨ บันทึกแล้ว ทั้งคอมและมือถือ'); }
     else showToast('❌ ' + ((r && r.msg) || 'บันทึกไม่สำเร็จ'));
   }).catch(() => showToast('❌ บันทึกไม่สำเร็จ'))
   .finally(() => { btn.disabled = false; btn.textContent = '💾 บันทึกรูปหน้าแรก'; });
@@ -1959,6 +2055,136 @@ function heReset(){
   else { const m = heState.mobile; heState = heroMerge(null); heState.mobile = m; }
   heRender();
 }
+
+// ══════════════ พื้นหลังเว็บ: ธีม + รูป + เอฟเฟกต์ (เก็บใน hero.bg) ══════════════
+const BG_THEMES = {
+  royal:   { name:'ราชวังม่วงทอง', sub:'Royal Violet', bg:'#0A0720', top:'#2B1868', bot:'#24103F', o:['124,58,237','219,39,119','247,201,72','6,182,212'] },
+  midnight:{ name:'ฟ้าราตรี',      sub:'Midnight Blue', bg:'#040B1C', top:'#0E2A5C', bot:'#071A3A', o:['37,99,235','6,182,212','129,140,248','247,201,72'] },
+  sakura:  { name:'ซากุระม่วงชมพู', sub:'Sakura Dream', bg:'#16081F', top:'#4A1D5C', bot:'#2A0F33', o:['236,72,153','192,132,252','251,207,232','247,201,72'] },
+  emerald: { name:'มรกตทอง',      sub:'Emerald Gold', bg:'#03130E', top:'#0B3B2C', bot:'#062319', o:['16,185,129','20,184,166','247,201,72','132,204,22'] },
+  sunset:  { name:'อาทิตย์อัสดง',  sub:'Golden Sunset', bg:'#180812', top:'#5A1A2E', bot:'#2E0B1C', o:['249,115,22','219,39,119','250,204,21','168,85,247'] },
+  noir:    { name:'ดำทองหรูหรา',   sub:'Noir & Gold',   bg:'#070605', top:'#2B2310', bot:'#16120A', o:['247,201,72','180,130,40','255,236,170','120,90,30'] },
+};
+const BG_DEFAULT = { theme:'royal', image:'', blur:6, dim:0.55, x:50, y:50, effect:'sparkle', rays:true, motion:true, glow:0.8, pattern:0.10 };
+function bgMerge(b){
+  const o = Object.assign({}, BG_DEFAULT, b || {});
+  if(!BG_THEMES[o.theme]) o.theme = 'royal';
+  if(o.image && !isHttps(o.image)) o.image = '';
+  if(!['none','sparkle','stars','petals'].includes(o.effect)) o.effect = 'sparkle';
+  return o;
+}
+let _bgFx = '';
+function bgBuildFx(type){
+  const box = document.getElementById('bg-fx'); if(!box) return;
+  if(_bgFx === type) return; _bgFx = type;
+  box.textContent = '';
+  if(type === 'none') return;
+  const small = window.innerWidth < 640, R = (a,b) => a + Math.random()*(b-a);
+  const n = type === 'stars' ? (small ? 45 : 90) : type === 'petals' ? (small ? 14 : 26) : (small ? 22 : 40);
+  const frag = document.createDocumentFragment();
+  for(let i=0;i<n;i++){
+    const s = document.createElement('span'), st = s.style;
+    if(type === 'sparkle'){ s.className='sp'; const z=R(3,8); st.width=st.height=z+'px'; st.left=R(0,100)+'%';
+      st.setProperty('--d',R(14,30)+'s'); st.setProperty('--dl',-R(0,30)+'s'); st.setProperty('--sx',R(-60,60)+'px'); }
+    else if(type === 'stars'){ s.className='st'; const z=R(1,3); st.width=st.height=z+'px'; st.left=R(0,100)+'%'; st.top=R(0,100)+'%';
+      st.setProperty('--d',R(2.5,7)+'s'); st.setProperty('--dl',-R(0,7)+'s'); }
+    else { s.className='pe'; const z=R(9,18); st.width=z+'px'; st.height=(z*.8)+'px'; st.left=R(-5,100)+'%';
+      st.setProperty('--d',R(14,28)+'s'); st.setProperty('--dl',-R(0,28)+'s'); st.setProperty('--sx',R(30,90)*(Math.random()<.5?-1:1)+'px'); }
+    frag.appendChild(s);
+  }
+  box.appendChild(frag);
+}
+function applyBg(b, persist){
+  const c = bgMerge(b), t = BG_THEMES[c.theme], r = document.documentElement.style;
+  r.setProperty('--bg', t.bg); r.setProperty('--bg-top', t.top); r.setProperty('--bg-bot', t.bot);
+  t.o.forEach((v,i) => r.setProperty('--o'+(i+1), v));
+  r.setProperty('--glow', c.glow); r.setProperty('--pat', c.pattern);
+  r.setProperty('--bgblur', c.blur + 'px'); r.setProperty('--bgblur-n', c.blur);
+  r.setProperty('--bgdim', c.dim); r.setProperty('--bgx', c.x + '%'); r.setProperty('--bgy', c.y + '%');
+  const ph = document.getElementById('bg-photo'), img = document.getElementById('bg-photo-img');
+  if(c.image){
+    if(img.getAttribute('src') !== c.image){ ph.classList.remove('on'); img.onload = () => ph.classList.add('on'); img.onerror = () => ph.classList.remove('on'); img.src = c.image; }
+    else ph.classList.add('on');
+  } else { ph.classList.remove('on'); }
+  document.getElementById('bg-dim').style.display = c.image ? '' : 'none';
+  document.getElementById('bg-rays').classList.toggle('on', !!c.rays);
+  document.documentElement.classList.toggle('no-motion', !c.motion);
+  const meta = document.querySelector('meta[name="theme-color"]'); if(meta) meta.setAttribute('content', t.bg);
+  bgBuildFx(c.effect);
+  if(persist !== false){ try{ localStorage.setItem('bgCfg', JSON.stringify(c)); }catch(e){} }
+  return c;
+}
+(function(){ try{ applyBg(JSON.parse(localStorage.getItem('bgCfg')||'null'), false); }catch(e){ applyBg(null, false); } })();
+
+let bgState = null, bgSaved = null, heroSaved = null, bgReady = false;
+function bgInit(){
+  if(!document.getElementById('bg-themes').children.length){
+    document.getElementById('bg-themes').innerHTML = Object.keys(BG_THEMES).map(k => {
+      const t = BG_THEMES[k], o = t.o;
+      const bg = `radial-gradient(circle at 20% 15%,rgba(${o[0]},.9),transparent 55%),radial-gradient(circle at 85% 30%,rgba(${o[1]},.75),transparent 50%),radial-gradient(circle at 50% 110%,rgba(${o[2]},.6),transparent 55%),linear-gradient(160deg,${t.top},${t.bg})`;
+      return `<button class="bg-theme" data-v="${k}" style="background:${bg}" onclick="bgSet('theme','${k}')"><b>${t.name}<small>${t.sub}</small></b></button>`;
+    }).join('');
+  }
+  bgReady = false;
+  getBoot().then(b => { if(!b || b.ok === false) throw new Error(); heroSaved = b.hero || null; bgReady = true; bgSaved = bgMerge(b.hero && b.hero.bg); bgState = Object.assign({}, bgSaved); bgRender(); })
+    .catch(() => { invalidateBoot(); bgSaved = bgMerge(null); bgState = Object.assign({}, bgSaved); bgRender(); showToast('⚠️ โหลดค่าพื้นหลังไม่สำเร็จ ลองเปิดแท็บตั้งค่าใหม่อีกครั้ง'); });
+}
+function bgRender(){
+  if(!bgState) return;
+  applyBg(bgState, false);
+  const c = bgState;
+  const set = (id, v, txt, oid) => { const el = document.getElementById(id); if(el && document.activeElement !== el) el.value = v; const o = document.getElementById(oid || (id+'-o')); if(o) o.textContent = txt; };
+  set('bg-blur', c.blur, c.blur + 'px');
+  set('bg-dimr', c.dim, Math.round(c.dim*100) + '%', 'bg-dim-o');
+  set('bg-x', c.x, c.x + '%'); set('bg-y', c.y, c.y + '%');
+  set('bg-glow', c.glow, Math.round(c.glow*100) + '%');
+  set('bg-pat', c.pattern, Math.round(c.pattern*100) + '%');
+  document.querySelectorAll('#bg-themes .bg-theme').forEach(b => b.classList.toggle('on', b.dataset.v === c.theme));
+  document.querySelectorAll('#bg-fxsel button').forEach(b => b.classList.toggle('on', b.dataset.v === c.effect));
+  document.getElementById('bg-rays-sw').checked = !!c.rays;
+  document.getElementById('bg-motion-sw').checked = !!c.motion;
+  const th = document.getElementById('bg-thumb');
+  if(c.image){ th.style.backgroundImage = 'url("' + c.image.replace(/["\\]/g,'') + '")'; th.textContent = ''; }
+  else { th.style.backgroundImage = ''; th.textContent = '🖼️'; }
+  document.getElementById('bg-img-del').style.display = c.image ? '' : 'none';
+  document.getElementById('bg-img-ctrl').style.opacity = c.image ? '' : '.45';
+  const u = document.getElementById('bg-url'); if(document.activeElement !== u) u.value = c.image || '';
+}
+function bgSet(k, v){ if(!bgState) return; bgState[k] = v; bgRender(); }
+function bgUseUrl(){
+  const u = document.getElementById('bg-url').value.trim();
+  if(!u){ bgSet('image',''); return; }
+  if(!isHttps(u)){ showToast('⚠️ ลิงก์ต้องขึ้นต้นด้วย https://'); return; }
+  bgSet('image', u); showToast('🖼️ ใส่รูปพื้นหลังแล้ว กด "บันทึกพื้นหลัง" เพื่อใช้จริง');
+}
+function bgUploadFile(file){
+  const input = document.getElementById('bg-file');
+  if(!file || !bgState) return;
+  if(!/^image\/(jpeg|png|webp)$/.test(file.type)){ showToast('⚠️ รองรับเฉพาะ JPG, PNG, WEBP'); input.value=''; return; }
+  const drop = document.getElementById('bg-drop'), oldHtml = drop.innerHTML;
+  drop.innerHTML = '<div class="spinner"></div><span>กำลังอัปโหลด...</span>';
+  heResize(file).then(f => { if(f.data.length > 7000000) throw new Error('ไฟล์ใหญ่เกินไป'); return callAPI('uploadHero', f); })
+  .then(r => {
+    if(r && r.ok && r.url){ Object.assign(bgState, { image: r.url, x: 50, y: 50 }); bgRender(); showToast('✅ อัปโหลดแล้ว กด "บันทึกพื้นหลัง" เพื่อใช้จริง'); }
+    else showToast('❌ ' + ((r && r.msg) || 'อัปโหลดไม่สำเร็จ'));
+  }).catch(err => showToast('❌ ' + (err.message || 'อัปโหลดไม่สำเร็จ')))
+  .finally(() => { drop.innerHTML = oldHtml; input.value = ''; });
+}
+function bgSave(){
+  if(!bgState) return;
+  if(!bgReady){ showToast('⚠️ ยังโหลดค่าจากระบบไม่สำเร็จ กรุณาเปิดแท็บตั้งค่าใหม่ก่อนบันทึก'); return; }
+  const btn = document.getElementById('bg-save');
+  btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...';
+  const hero = Object.assign({}, heroMerge(heroSaved), { bg: bgState });
+  callAPI('setHero', { hero }).then(r => {
+    if(r && r.ok){ heroSaved = r.hero; bgSaved = bgMerge(r.hero.bg); bgState = Object.assign({}, bgSaved); applyBg(bgSaved); bgRender(); invalidateBoot(); showToast('✨ บันทึกพื้นหลังแล้ว ทุกเครื่องจะเห็นแบบนี้'); }
+    else showToast('❌ ' + ((r && r.msg) || 'บันทึกไม่สำเร็จ'));
+  }).catch(() => showToast('❌ บันทึกไม่สำเร็จ'))
+  .finally(() => { btn.disabled = false; btn.textContent = '💾 บันทึกพื้นหลัง'; });
+}
+function bgDiscard(){ if(bgSaved && bgState){ bgState = Object.assign({}, bgSaved); applyBg(bgSaved, false); } }
+function bgCancel(){ if(!bgSaved) return; bgState = Object.assign({}, bgSaved); bgRender(); applyBg(bgSaved); showToast('↩ กลับไปใช้พื้นหลังที่บันทึกไว้'); }
+function bgReset(){ if(!bgState) return; bgState = Object.assign({}, BG_DEFAULT); bgRender(); showToast('↺ คืนค่าเริ่มต้นแล้ว กดบันทึกเพื่อใช้จริง'); }
 
 let toastTimer;
 function showToast(msg){
@@ -1974,6 +2200,7 @@ function showToast(msg){
   try{ saved = JSON.parse(sessionStorage.getItem('auth') || 'null'); }catch(e){}
   if(saved && saved.t && (saved.r === 'teacher' || saved.r === 'admin')){
     AUTH_TOKEN = saved.t; authRole = saved.r; currentRole = saved.r; showApp();
+    getBoot().then(b => { if(b && b.ok !== false && !bgState) applyBg(b.hero && b.hero.bg); }).catch(()=>{});
   } else {
     enterStudent();
   }
