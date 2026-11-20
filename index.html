@@ -627,6 +627,39 @@ body.is-mobile .clock-pill{display:none;}
 @media(max-width:640px){.bg-themes{grid-template-columns:repeat(2,1fr);}.bg-fx{grid-template-columns:repeat(2,1fr);}}
 .bg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 30px;align-items:start;}
 @media(max-width:860px){.bg-grid{grid-template-columns:1fr;}}
+
+/* ── กระจกเข้ม: ส่วนที่วางบนพื้นหลังโดยตรง อ่านออกเสมอไม่ว่าพื้นหลังจะสว่างแค่ไหน ── */
+:root{--glass:rgba(14,9,36,.66);--glass-b:rgba(255,255,255,.14);}
+.kpi.dark,.subtab-row,.pill-btn.glass,.empty-state,.evt-date-chip,.site-footer,.evt-tile{
+  background:var(--glass)!important;border:1px solid var(--glass-b);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);}
+.kpi.dark{box-shadow:0 16px 34px -18px rgba(0,0,0,.7);}
+.kpi.dark .k-lbl{color:#D6D0F2;}
+.subtab{color:#E2DCFA;}
+.section-title{width:fit-content;max-width:100%;padding:8px 20px 8px 12px;border-radius:16px;background:var(--glass);border:1px solid var(--glass-b);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);text-shadow:0 2px 10px rgba(0,0,0,.35);}
+.card .section-title{background:none;border:none;padding:0;backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink);text-shadow:none;}
+.site-footer{border-radius:28px;padding:22px 20px 24px;}
+.sf-school{color:#D6D0F2;}.sf-level{color:#B9B3D9;}.sf-copy{color:#9690B8;}
+.empty-state{color:#E2DCFA;}
+.card .empty-state{background:var(--paper2)!important;border-color:var(--line);backdrop-filter:none;-webkit-backdrop-filter:none;color:var(--ink-soft);}
+.evt-tile{background:linear-gradient(160deg,rgba(40,24,96,.78),rgba(14,9,36,.78))!important;}
+.section-sub{width:fit-content;max-width:100%;color:#E2DCFA;padding:5px 14px;border-radius:12px;background:var(--glass);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);margin:-8px 0 18px 0;}
+.check-head{padding:12px 16px;border-radius:22px;background:var(--glass);border:1px solid var(--glass-b);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);}
+
+/* ── ตั้งค่าแบรนด์ ── */
+.br-accents{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.br-accent{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;border:1.5px solid #E6DEFA;background:#FBF9FF;cursor:pointer;font-family:var(--display);font-weight:600;font-size:.78rem;color:var(--ink-soft);transition:.15s;}
+.br-accent i{width:22px;height:22px;border-radius:50%;flex-shrink:0;box-shadow:inset 0 0 0 2px rgba(255,255,255,.6);}
+.br-accent.on{border-color:#7C3AED;background:#F3EEFF;color:#6D28D9;box-shadow:0 6px 14px -8px rgba(91,33,182,.6);}
+.br-logo-thumb{background-color:#fff;background-size:contain;border-radius:50%;}
+[data-bshow].b-hide{display:none!important;}
+@media(max-width:640px){.br-accents{grid-template-columns:repeat(2,1fr);}}
+.class-divider{width:fit-content;max-width:100%;padding:6px 14px;border-radius:12px;background:var(--glass);border:1px solid var(--glass-b);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);}
+.class-divider::after{display:none;}
 </style>
 </head>
 <body>
@@ -693,8 +726,8 @@ body.is-mobile .clock-pill{display:none;}
 
 <div id="app" style="display:none;">
   <header id="app-header">
-    <div class="logo-wrap" onclick="goHome()" title="กลับหน้าหลัก"><img src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียน"/></div>
-    <div class="app-header-title"><h1>ระบบเช็กชื่อวันสำคัญ</h1><div class="subtitle">Thanakhan Oomsin School · <span id="current-role-label">ม.ปลาย</span></div></div>
+    <div class="logo-wrap" onclick="goHome()" title="กลับหน้าหลัก"><img class="brand-logo" src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="โลโก้โรงเรียน"/></div>
+    <div class="app-header-title"><h1 data-b="systemName">ระบบเช็กชื่อวันสำคัญ</h1><div class="subtitle"><span data-b="schoolEn">Thanakhan Oomsin School</span> · <span id="current-role-label">ม.ปลาย</span></div></div>
     <div class="app-header-actions">
       <div class="clock-pill">
         <div class="clock-time"><span id="ch-app">--</span><span class="colon">:</span><span id="cm-app">--</span><span class="colon">:</span><span id="cs-app">--</span></div>
@@ -714,15 +747,15 @@ body.is-mobile .clock-pill{display:none;}
         <div class="hero-media"><picture><source id="hero-src-m" media="(max-width:640px)"/><img id="hero-img" src="https://i.postimg.cc/Xv2wnpxc/94A379B8-CC4E-4F1A-98AD-FA418E5D95B6.png" alt="นักเรียนโรงเรียนธนาคารออมสิน" fetchpriority="high" loading="eager" decoding="async"/></picture></div>
         <div class="hero-shade"></div>
         <div class="hero-content">
-          <span class="eyebrow"><span class="dot"></span>ระดับมัธยมศึกษาตอนปลาย</span>
-          <h2 class="hero-title">บันทึกการเข้าร่วม<br/><span class="gold-text">วันสำคัญ</span></h2>
-          <div class="hero-stats">
+          <span class="eyebrow" data-bshow="showEyebrow"><span class="dot"></span><span data-b="level">ระดับมัธยมศึกษาตอนปลาย</span></span>
+          <h2 class="hero-title"><span data-b="heroLine1">บันทึกการเข้าร่วม</span><br/><span class="gold-text" data-b="heroLine2">วันสำคัญ</span></h2>
+          <div class="hero-stats" data-bshow="showStats">
             <div><b class="gold-text" id="hs-evt">–</b><span>กิจกรรม</span></div>
             <div><b class="gold-text" id="hs-stu">–</b><span>นักเรียน</span></div>
             <div><b class="gold-text" id="hs-cls">–</b><span>ห้องเรียน</span></div>
           </div>
         </div>
-        <div class="hero-badge">🏅 โรงเรียนธนาคารออมสิน<small>THANAKHAN OOMSIN SCHOOL</small></div>
+        <div class="hero-badge" data-bshow="showBadge">🏅 <span data-b="schoolTh">โรงเรียนธนาคารออมสิน</span><small data-b="schoolEn">THANAKHAN OOMSIN SCHOOL</small></div>
       </section>
 
       <div class="card picker-card">
@@ -853,6 +886,42 @@ body.is-mobile .clock-pill{display:none;}
       <div id="admin-panel-setup" style="display:none;">
         <div class="section-title">ตั้งค่าระบบ</div>
         <div class="card" style="margin-bottom:22px;">
+          <div class="card-head"><span class="ch-ico">✏️</span>ข้อความ โลโก้ และสีหลัก<span class="bg-live">ดูผลสดบนหน้านี้</span><small>แก้แล้วเห็นทันที กดบันทึกเพื่อใช้จริง</small></div>
+          <div class="bg-grid">
+            <div>
+              <div class="he-row"><label>โลโก้โรงเรียน</label>
+                <div class="bg-img-row">
+                  <div class="bg-thumb br-logo-thumb" id="br-logo-thumb"></div>
+                  <label class="upload-drop" id="br-drop" for="br-file" style="flex:1;margin:0;justify-content:flex-start;"><span style="font-size:1.3rem;">📤</span><span style="text-align:left;">อัปโหลดโลโก้<small>แนะนำรูปสี่เหลี่ยมจัตุรัส PNG พื้นใส</small></span></label>
+                </div>
+                <input type="file" id="br-file" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="brUploadLogo(this.files[0])"/>
+                <div class="url-row" style="margin-top:10px;"><input type="url" id="br-logo" placeholder="หรือวางลิงก์โลโก้ https://..." oninput="brSet('logo',this.value.trim())"/></div>
+              </div>
+              <div class="form-group"><label>ชื่อระบบ (หัวเว็บ / แท็บเบราว์เซอร์)</label><input type="text" id="br-systemName" maxlength="60" oninput="brSet('systemName',this.value)"/></div>
+              <div class="form-group"><label>ชื่อโรงเรียน (ภาษาไทย)</label><input type="text" id="br-schoolTh" maxlength="80" oninput="brSet('schoolTh',this.value)"/></div>
+              <div class="form-group"><label>ชื่อโรงเรียน (ภาษาอังกฤษ)</label><input type="text" id="br-schoolEn" maxlength="80" oninput="brSet('schoolEn',this.value)"/></div>
+              <div class="form-group"><label>ระดับชั้น / คำโปรย</label><input type="text" id="br-level" maxlength="60" oninput="brSet('level',this.value)"/></div>
+            </div>
+            <div>
+              <div class="form-group"><label>หัวข้อการ์ดหน้าแรก บรรทัด 1 (สีขาว)</label><input type="text" id="br-heroLine1" maxlength="40" oninput="brSet('heroLine1',this.value)"/></div>
+              <div class="form-group"><label>หัวข้อการ์ดหน้าแรก บรรทัด 2 (สีเน้น)</label><input type="text" id="br-heroLine2" maxlength="40" oninput="brSet('heroLine2',this.value)"/></div>
+              <div class="form-group"><label>เครดิตผู้พัฒนา (ส่วนท้ายเว็บ)</label>
+                <div style="display:flex;gap:8px;"><input type="text" id="br-creditLabel" maxlength="40" style="flex:1.4;" oninput="brSet('creditLabel',this.value)"/><input type="text" id="br-credit" maxlength="30" style="flex:1;" oninput="brSet('credit',this.value)"/></div></div>
+              <div class="he-row"><label>สีหลักของเว็บ (ปุ่ม ตัวอักษรเน้น เส้นขอบ)</label></div>
+              <div class="br-accents" id="br-accents"></div>
+              <label class="bg-switch">🏷️ แสดงป้ายระดับชั้นบนการ์ดหน้าแรก<input type="checkbox" id="br-showEyebrow" onchange="brSet('showEyebrow',this.checked)"/></label>
+              <label class="bg-switch">🔢 แสดงตัวเลขสถิติบนการ์ดหน้าแรก<input type="checkbox" id="br-showStats" onchange="brSet('showStats',this.checked)"/></label>
+              <label class="bg-switch">🏅 แสดงป้ายชื่อโรงเรียนบนรูป<input type="checkbox" id="br-showBadge" onchange="brSet('showBadge',this.checked)"/></label>
+              <label class="bg-switch">✍️ แสดงเครดิตผู้พัฒนา<input type="checkbox" id="br-showCredit" onchange="brSet('showCredit',this.checked)"/></label>
+              <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
+                <button class="pill-btn gold" style="flex:1;" id="br-save" onclick="brSave()">💾 บันทึกข้อความและสี</button>
+                <button class="pill-btn ghost" onclick="brCancel()">↩ ยกเลิก</button>
+                <button class="pill-btn ghost" onclick="brReset()">↺ ค่าเริ่มต้น</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:22px;">
           <div class="card-head"><span class="ch-ico">🖼️</span>ปรับแต่งรูปหน้าแรก (Hero)<small>ลากที่รูปเพื่อจัดตำแหน่ง</small></div>
           <div class="seg he-mode" id="he-mode">
             <button data-v="desk" onclick="heSetMode('desk')">💻 คอมพิวเตอร์ / แท็บเล็ต</button>
@@ -866,15 +935,15 @@ body.is-mobile .clock-pill{display:none;}
                     <div class="hero-media"><img id="he-img" alt="ตัวอย่างรูปหน้าแรก"/></div>
                     <div class="hero-shade"></div>
                     <div class="hero-content">
-                      <span class="eyebrow"><span class="dot"></span>ระดับมัธยมศึกษาตอนปลาย</span>
-                      <div class="hero-title">บันทึกการเข้าร่วม<br/><span class="gold-text">วันสำคัญ</span></div>
-                      <div class="hero-stats">
+                      <span class="eyebrow" data-bshow="showEyebrow"><span class="dot"></span><span data-b="level">ระดับมัธยมศึกษาตอนปลาย</span></span>
+                      <div class="hero-title"><span data-b="heroLine1">บันทึกการเข้าร่วม</span><br/><span class="gold-text" data-b="heroLine2">วันสำคัญ</span></div>
+                      <div class="hero-stats" data-bshow="showStats">
                         <div><b class="gold-text">10</b><span>กิจกรรม</span></div>
                         <div><b class="gold-text">280</b><span>นักเรียน</span></div>
                         <div><b class="gold-text">12</b><span>ห้องเรียน</span></div>
                       </div>
                     </div>
-                    <div class="hero-badge">🏅 โรงเรียนธนาคารออมสิน<small>THANAKHAN OOMSIN SCHOOL</small></div>
+                    <div class="hero-badge" data-bshow="showBadge">🏅 <span data-b="schoolTh">โรงเรียนธนาคารออมสิน</span><small data-b="schoolEn">THANAKHAN OOMSIN SCHOOL</small></div>
                     <div class="he-crosshair" id="he-cross"></div>
                   </div>
                 </div>
@@ -972,12 +1041,12 @@ body.is-mobile .clock-pill{display:none;}
       </div>
     </section>
     <footer class="site-footer">
-      <div class="sf-rule"><span></span><img src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="" loading="lazy"/><span></span></div>
-      <div class="sf-school">โรงเรียนธนาคารออมสิน</div>
-      <div class="sf-title">ระบบเช็กชื่อ<span class="gold-text">วันสำคัญ</span></div>
-      <div class="sf-level">ระดับมัธยมศึกษาตอนปลาย</div>
-      <div class="sf-by"><span class="sf-by-lbl">Designed &amp; developed by</span><span class="sf-sign">T.OAT</span></div>
-      <div class="sf-copy">© <span id="sf-year">2026</span> · THANAKHAN OOMSIN SCHOOL</div>
+      <div class="sf-rule"><span></span><img class="brand-logo" src="https://i.postimg.cc/ydtX6mMS/logo.png" alt="" loading="lazy"/><span></span></div>
+      <div class="sf-school" data-b="schoolTh">โรงเรียนธนาคารออมสิน</div>
+      <div class="sf-title" id="sf-title">ระบบเช็กชื่อ<span class="gold-text">วันสำคัญ</span></div>
+      <div class="sf-level" data-b="level">ระดับมัธยมศึกษาตอนปลาย</div>
+      <div class="sf-by" data-bshow="showCredit"><span class="sf-by-lbl" data-b="creditLabel">Designed &amp; developed by</span><span class="sf-sign" data-b="credit">T.OAT</span></div>
+      <div class="sf-copy">© <span id="sf-year">2026</span> · <span data-b="schoolEn">THANAKHAN OOMSIN SCHOOL</span></div>
     </footer>
   </main>
 </div>
@@ -992,6 +1061,7 @@ const API_URL = 'https://zjpyusmvwbebpiwzehqb.supabase.co/functions/v1/attendanc
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqcHl1c212d2JlYnBpd3plaHFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MzQ0MjAsImV4cCI6MjEwNjQxMDQyMH0.qjxsXVkHML6MVGW_oO1WWXUfUKrmH5HEoqLU7GUPQMA';
 
 let AUTH_TOKEN = null, authRole = null;
+const SAFE_RETRY = new Set(['bootstrap','bootstrapTeacher','getStudentAttendance','getAdminDashboard','getClassReport','getEvents','getClasses','getAllStudents','getStudentsByClass','saveAttendance','setHero','editEvent','editStudent','verifyAdmin','verifyTeacher']);
 
 async function callAPI(action, payload = {}, _attempt = 0) {
   const ctrl = new AbortController();
@@ -1019,10 +1089,11 @@ async function callAPI(action, payload = {}, _attempt = 0) {
     }
     return out;
   } catch (err) {
-    if (_attempt < 1 && err.name !== 'AbortError') {
+    if (_attempt < 1 && err.name !== 'AbortError' && SAFE_RETRY.has(action)) {
       await new Promise(r => setTimeout(r, 700));
       return callAPI(action, payload, _attempt + 1);
     }
+    if (err.name === 'AbortError') throw new Error('เซิร์ฟเวอร์ตอบช้าเกินไป ลองใหม่อีกครั้ง');
     throw err;
   } finally {
     clearTimeout(timer);
@@ -1033,7 +1104,9 @@ async function callAPI(action, payload = {}, _attempt = 0) {
 let _bootPromise = null;
 function getBoot(){
   if(!_bootPromise){
-    _bootPromise = callAPI('bootstrap').catch(err => { _bootPromise = null; throw err; });
+    _bootPromise = callAPI('bootstrap')
+      .then(b => { if(!b || b.ok === false || !Array.isArray(b.students)) throw new Error((b && b.msg) || 'โหลดข้อมูลไม่สำเร็จ'); return b; })
+      .catch(err => { _bootPromise = null; throw err; });
   }
   return _bootPromise;
 }
@@ -1155,7 +1228,7 @@ function switchRole(role){
   if(currentRole === 'teacher' && role !== 'teacher') resetTeacherCheck();
   currentRole = role; showApp(); window.scrollTo({ top:0 });
 }
-function goHome(){ try{ bgDiscard(); }catch(e){}
+function goHome(){ try{ bgDiscard(); brDiscard(); }catch(e){}
   if(!confirmLeaveIfDirty()) return;
   switchRole('student');
 }
@@ -1229,7 +1302,7 @@ function initStudentPicker(){
   const clsSel = document.getElementById('stu-class-select');
   clsSel.innerHTML = '<option value="">⏳ กำลังโหลด...</option>';
   getBoot().then(b => {
-    applyHero(b.hero); if(!bgState) applyBg(b.hero && b.hero.bg);
+    applyHero(b.hero); if(!bgState) applyBg(b.hero && b.hero.bg); if(!brState) applyBrand(b.hero && b.hero.brand);
     stuPickStudents = b.students || [];
     allEvents       = b.events || [];
     currentClasses  = b.classes || [];
@@ -1308,7 +1381,7 @@ function renderStudentResults(data){
         <div class="timeline">
           ${stu.records.map(r=>`<div class="tl-item st-${stKey(r.status)}">
             <div class="tl-emoji">${esc(r.eventEmoji||'🎉')}</div>
-            <div class="tl-body"><div class="tl-name">${esc(r.eventName)}</div><div class="tl-date">📅 ${esc(r.eventDate||'-')}</div></div>
+            <div class="tl-body"><div class="tl-name">${esc(r.eventName)}</div><div class="tl-date">📅 ${esc(fmtDate(r.eventDate))}</div></div>
             <span class="badge ${stBadge(r.status)}">${stLabel(r.status)}</span>
           </div>`).join('')}
         </div>
@@ -1525,7 +1598,7 @@ function fetchClassReport(cls, containerId){
 function renderClassReport(containerId, data){
   const el = document.getElementById(containerId);
   if(!data || !data.students || !data.students.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">👥</div><p>ไม่พบนักเรียน</p></div>'; return; }
-  if(!data.events.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีกิจกรรมในระบบ</p></div>'; return; }
+  if(!Array.isArray(data.events) || !data.events.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีกิจกรรมในระบบ</p></div>'; return; }
   const totalEvents = data.events.length;
   const byClass = {};
   data.students.forEach(s => { if(!byClass[s.class]) byClass[s.class]=[]; byClass[s.class].push(s); });
@@ -1560,7 +1633,7 @@ function renderClassReport(containerId, data){
         const st = (s.statuses||{})[evt.id] || 'none';
         return `<div class="det-item">
           <span style="font-size:1.1rem;">${esc(evt.emoji||'🎉')}</span>
-          <span style="flex:1;font-size:.84rem;font-weight:600;line-height:1.3;">${esc(evt.name)}<br/><span style="font-size:.72rem;color:var(--ink-soft);font-weight:500;">${esc(evt.date||'')}</span></span>
+          <span style="flex:1;font-size:.84rem;font-weight:600;line-height:1.3;">${esc(evt.name)}<br/><span style="font-size:.72rem;color:var(--ink-soft);font-weight:500;">${esc(fmtDate(evt.date))}</span></span>
           <span class="badge ${stBadge(st)}">${stLabel(st)}</span>
         </div>`;
       }).join('');
@@ -1598,7 +1671,7 @@ function adminTab(tab){
   if(tab==='events')    loadAdminEvents();
   if(tab==='students')  loadAdminStudentsFilter();
   if(tab==='report')    loadAdminReportFilter();
-  if(tab==='setup')   { heInit(); bgInit(); } else bgDiscard();
+  if(tab==='setup')   { brInit(); heInit(); bgInit(); } else { bgDiscard(); brDiscard(); }
 }
 
 function loadAdminDashboard(){
@@ -1710,7 +1783,7 @@ function downloadOverviewDoc(){
 
 </style></head><body>
 <h1>รายงานสรุปการเข้าร่วมกิจกรรมวันสำคัญ</h1>
-<div class="sub">โรงเรียนธนาคารออมสิน · ระดับมัธยมศึกษาตอนปลาย<br/>พิมพ์เมื่อ ${today}</div>
+<div class="sub">${esc(brandCur().schoolTh)} · ${esc(brandCur().level)}<br/>พิมพ์เมื่อ ${today}</div>
 ${rows.length ? `<table><thead><tr><th>กิจกรรม</th><th>วันที่</th><th>เข้าร่วม</th><th>ขาด</th><th>ลา</th><th>ฟุตบอล</th><th>ยังไม่บันทึก</th><th>อัตรา %</th></tr></thead><tbody>${bodyRows}</tbody></table>` : '<p style="text-align:center;">- ยังไม่มีข้อมูลกิจกรรม -</p>'}
 <div class="sign">ลงชื่อ..........................................................<br/>(ผู้รับผิดชอบกิจกรรม)</div>
 <script>window.onload = () => window.print();<\/script>
@@ -1724,6 +1797,7 @@ function loadAdminEvents(){
   const el = document.getElementById('admin-event-list');
   el.innerHTML = SPIN;
   callAPI('getEvents').then(events => {
+    if(!Array.isArray(events)){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">⚠️</div><p>โหลดกิจกรรมไม่สำเร็จ</p></div>'; return; }
     allEvents = events;
     if(!events.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">📅</div><p>ยังไม่มีกิจกรรม</p></div>'; return; }
     el.innerHTML = events.map((e,i) => `
@@ -1764,7 +1838,8 @@ function addEvent(){
   const name=document.getElementById('new-evt-name').value.trim(), date=document.getElementById('new-evt-date').value;
   const emoji=document.getElementById('new-evt-emoji').value.trim()||'🎉', note=document.getElementById('new-evt-note').value.trim();
   if(!name){ showToast('⚠️ กรุณากรอกชื่อกิจกรรม'); return; }
-  callAPI('addEvent', { data: {name,date,emoji,note} }).then(()=>{
+  callAPI('addEvent', { data: {name,date,emoji,note} }).then(r=>{
+    if(!r || !r.ok){ showToast('❌ ' + ((r && r.msg) || 'เพิ่มไม่สำเร็จ')); return; }
     showToast('✅ เพิ่มกิจกรรมสำเร็จ');
     ['new-evt-name','new-evt-date','new-evt-emoji','new-evt-note'].forEach(id=>document.getElementById(id).value='');
     invalidateBoot();
@@ -1789,6 +1864,7 @@ function loadAdminStudents(){
   el.innerHTML = SPIN;
   callAPI('getStudentsByClass', { className: cls }).then(students => {
     if(document.getElementById('admin-class-filter').value !== cls) return; // เปลี่ยนตัวกรองไปแล้วก่อนโหลดเสร็จ ทิ้งผลลัพธ์เก่านี้
+    if(!Array.isArray(students)){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">⚠️</div><p>โหลดรายชื่อไม่สำเร็จ</p></div>'; return; }
     if(!students.length){ el.innerHTML = '<div class="empty-state"><div class="e-emoji">👥</div><p>ยังไม่มีนักเรียน</p></div>'; return; }
     const sorted = sortStudentsByPrefix(students);
     adminStudentsCache = sorted;
@@ -1836,7 +1912,8 @@ function addStudent(){
   }).catch(()=>doAddStudent(name, cls));
 }
 function doAddStudent(name, cls){
-  callAPI('addStudent', { data: {name, class: cls} }).then(()=>{
+  callAPI('addStudent', { data: {name, class: cls} }).then(r=>{
+    if(!r || !r.ok){ showToast('❌ ' + ((r && r.msg) || 'เพิ่มไม่สำเร็จ')); return; }
     showToast('✅ เพิ่มนักเรียนสำเร็จ');
     document.getElementById('new-stu-name').value=''; document.getElementById('new-stu-class').value='';
     invalidateBoot();
@@ -1868,7 +1945,7 @@ function changePasswords(){
   el.innerHTML = '<div class="spinner"></div>';
   callAPI('changePassword', { currentAdmin: cur, newAdmin: na, newTeacher: nt }).then(r=>{
     if(r && r.ok){ el.innerHTML = '<div style="color:#059669;font-weight:700;">✅ เปลี่ยนรหัสผ่านสำเร็จแล้ว</div>'; ['cp-current','cp-new-admin','cp-new-teacher'].forEach(id=>document.getElementById(id).value=''); }
-    else { el.innerHTML = `<div style="color:#B91C1C;">❌ ${(r && r.msg) || 'เปลี่ยนรหัสไม่สำเร็จ'}</div>`; }
+    else { el.innerHTML = `<div style="color:#B91C1C;">❌ ${esc((r && r.msg) || 'เปลี่ยนรหัสไม่สำเร็จ')}</div>`; }
   }).catch(()=>{ el.innerHTML = '<div style="color:#B91C1C;">❌ เกิดข้อผิดพลาด</div>'; });
 }
 
@@ -1912,12 +1989,13 @@ function applyHero(h){
 // ใช้ค่าล่าสุดที่จำไว้ทันทีตอนเปิดหน้า กันรูปกระพริบสลับจากรูปเริ่มต้น
 (function(){ try{ const c = JSON.parse(localStorage.getItem('heroCfg')||'null'); if(c) applyHero(c); }catch(e){} })();
 
-let heState = null, heMode = 'desk';
+let heState = null, heMode = 'desk', heReady = false;
 const heCur = () => heMode === 'mob' ? heState.mobile : heState;
 function heInit(){
   heState = heroMerge(null);
   heRender();
-  getBoot().then(b => { heroSaved = b.hero || null; heState = heroMerge(b.hero); heRender(); }).catch(()=>{});
+  heReady = false;
+  getBoot().then(b => { heroSaved = b.hero || null; heReady = true; heState = heroMerge(b.hero); heRender(); }).catch(()=>{ invalidateBoot(); });
   heBindPreview();
 }
 function heSetMode(m){ heMode = m; heRender(); }
@@ -2040,9 +2118,10 @@ function heUploadFile(file){
 }
 function heSave(){
   if(!heState) return;
+  if(!heReady){ showToast('⚠️ ยังโหลดค่าจากระบบไม่สำเร็จ กรุณาเปิดแท็บตั้งค่าใหม่ก่อนบันทึก'); return; }
   const btn = document.getElementById('he-save');
   btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...';
-  callAPI('setHero', { hero: Object.assign({}, heState, { bg: (bgSaved || (heroSaved && heroSaved.bg) || heState.bg || undefined) }) }).then(r => {
+  callAPI('setHero', { hero: heroPayload(Object.assign({}, heState, { bg: (heroSaved && heroSaved.bg) || undefined, brand: (heroSaved && heroSaved.brand) || undefined })) }).then(r => {
     if(r && r.ok){ heroSaved = r.hero; applyHero(r.hero); heState = heroMerge(r.hero); heRender(); invalidateBoot(); showToast('✨ บันทึกแล้ว ทั้งคอมและมือถือ'); }
     else showToast('❌ ' + ((r && r.msg) || 'บันทึกไม่สำเร็จ'));
   }).catch(() => showToast('❌ บันทึกไม่สำเร็จ'))
@@ -2175,7 +2254,7 @@ function bgSave(){
   if(!bgReady){ showToast('⚠️ ยังโหลดค่าจากระบบไม่สำเร็จ กรุณาเปิดแท็บตั้งค่าใหม่ก่อนบันทึก'); return; }
   const btn = document.getElementById('bg-save');
   btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...';
-  const hero = Object.assign({}, heroMerge(heroSaved), { bg: bgState });
+  const hero = heroPayload({ bg: bgState });
   callAPI('setHero', { hero }).then(r => {
     if(r && r.ok){ heroSaved = r.hero; bgSaved = bgMerge(r.hero.bg); bgState = Object.assign({}, bgSaved); applyBg(bgSaved); bgRender(); invalidateBoot(); showToast('✨ บันทึกพื้นหลังแล้ว ทุกเครื่องจะเห็นแบบนี้'); }
     else showToast('❌ ' + ((r && r.msg) || 'บันทึกไม่สำเร็จ'));
@@ -2185,6 +2264,116 @@ function bgSave(){
 function bgDiscard(){ if(bgSaved && bgState){ bgState = Object.assign({}, bgSaved); applyBg(bgSaved, false); } }
 function bgCancel(){ if(!bgSaved) return; bgState = Object.assign({}, bgSaved); bgRender(); applyBg(bgSaved); showToast('↩ กลับไปใช้พื้นหลังที่บันทึกไว้'); }
 function bgReset(){ if(!bgState) return; bgState = Object.assign({}, BG_DEFAULT); bgRender(); showToast('↺ คืนค่าเริ่มต้นแล้ว กดบันทึกเพื่อใช้จริง'); }
+
+// ══════════════ แบรนด์: ข้อความ โลโก้ สีหลัก (เก็บใน hero.brand) ══════════════
+const BRAND_ACCENTS = {
+  gold:   { name:'ทองคำ',     c:'#F7C948', g:'linear-gradient(135deg,#FFF1B8 0%,#F7C948 38%,#E2A21F 72%,#B9780F 100%)' },
+  rose:   { name:'โรสโกลด์',  c:'#F4A7B9', g:'linear-gradient(135deg,#FFE4EC 0%,#F4A7B9 38%,#E07A95 72%,#B5536F 100%)' },
+  silver: { name:'เงินประกาย', c:'#D9DEE8', g:'linear-gradient(135deg,#FFFFFF 0%,#D9DEE8 40%,#A7B0C2 75%,#7C8698 100%)' },
+  sky:    { name:'ฟ้าใส',     c:'#7DD3FC', g:'linear-gradient(135deg,#E0F7FF 0%,#7DD3FC 38%,#38BDF8 72%,#0284C7 100%)' },
+  mint:   { name:'เขียวมิ้นต์', c:'#6EE7B7', g:'linear-gradient(135deg,#E6FFF5 0%,#6EE7B7 38%,#34D399 72%,#059669 100%)' },
+  lilac:  { name:'ม่วงลาเวนเดอร์', c:'#C4B5FD', g:'linear-gradient(135deg,#F3EEFF 0%,#C4B5FD 38%,#A78BFA 72%,#7C3AED 100%)' },
+};
+const BRAND_DEFAULT = {
+  logo:'https://i.postimg.cc/ydtX6mMS/logo.png', systemName:'ระบบเช็กชื่อวันสำคัญ', schoolTh:'โรงเรียนธนาคารออมสิน',
+  schoolEn:'THANAKHAN OOMSIN SCHOOL', level:'ระดับมัธยมศึกษาตอนปลาย', heroLine1:'บันทึกการเข้าร่วม', heroLine2:'วันสำคัญ',
+  creditLabel:'Designed & developed by', credit:'T.OAT', accent:'gold',
+  showEyebrow:true, showStats:true, showBadge:true, showCredit:true,
+};
+function brandMerge(b){
+  const o = Object.assign({}, BRAND_DEFAULT, b || {});
+  ['systemName','schoolTh','schoolEn','level','heroLine1','heroLine2','creditLabel','credit'].forEach(k => { o[k] = String(o[k] == null ? '' : o[k]); });
+  if(!o.systemName.trim()) o.systemName = BRAND_DEFAULT.systemName;
+  if(!isHttps(o.logo)) o.logo = BRAND_DEFAULT.logo;
+  if(!BRAND_ACCENTS[o.accent]) o.accent = 'gold';
+  return o;
+}
+let _brandApplied = brandMerge(null);
+const brandCur = () => _brandApplied;
+function applyBrand(b, persist){
+  const c = brandMerge(b); _brandApplied = c;
+  document.querySelectorAll('[data-b]').forEach(el => { const v = c[el.dataset.b]; if(v != null && el.textContent !== v) el.textContent = v; });
+  document.querySelectorAll('[data-bshow]').forEach(el => el.classList.toggle('b-hide', !c[el.dataset.bshow]));
+  document.querySelectorAll('img.brand-logo').forEach(img => {
+    if(img.getAttribute('src') !== c.logo){ img.onerror = () => { if(img.src !== BRAND_DEFAULT.logo) img.src = BRAND_DEFAULT.logo; }; img.src = c.logo; }
+  });
+  // ส่วนท้าย: ถ้าชื่อระบบลงท้ายด้วยหัวข้อบรรทัด 2 ให้ท่อนนั้นเป็นสีเน้น
+  const ft = document.getElementById('sf-title');
+  if(ft){
+    ft.textContent = '';
+    const n = c.systemName, tail = c.heroLine2.trim();
+    if(tail && n.endsWith(tail) && n.length > tail.length){
+      ft.append(n.slice(0, n.length - tail.length));
+      const g = document.createElement('span'); g.className = 'gold-text'; g.textContent = tail; ft.append(g);
+    } else ft.textContent = n;
+  }
+  document.title = c.systemName + (c.schoolTh ? ' | ' + c.schoolTh : '');
+  const a = BRAND_ACCENTS[c.accent], r = document.documentElement.style;
+  r.setProperty('--gold', a.c); r.setProperty('--gold-grad', a.g);
+  if(persist !== false){ try{ localStorage.setItem('brandCfg', JSON.stringify(c)); }catch(e){} }
+  return c;
+}
+(function(){ try{ applyBrand(JSON.parse(localStorage.getItem('brandCfg')||'null'), false); }catch(e){} })();
+
+let brState = null, brSaved = null, brReady = false;
+function brInit(){
+  if(!document.getElementById('br-accents').children.length){
+    document.getElementById('br-accents').innerHTML = Object.keys(BRAND_ACCENTS).map(k =>
+      `<button class="br-accent" data-v="${k}" onclick="brSet('accent','${k}')"><i style="background:${BRAND_ACCENTS[k].g}"></i>${BRAND_ACCENTS[k].name}</button>`).join('');
+  }
+  brReady = false;
+  getBoot().then(b => { if(!b || b.ok === false) throw new Error(); heroSaved = b.hero || null; brReady = true;
+      brSaved = brandMerge(b.hero && b.hero.brand); brState = Object.assign({}, brSaved); brRender(true); })
+    .catch(() => { invalidateBoot(); brSaved = brandMerge(null); brState = Object.assign({}, brSaved); brRender(true); });
+}
+function brRender(fill){
+  if(!brState) return;
+  applyBrand(brState, false);
+  const c = brState;
+  ['systemName','schoolTh','schoolEn','level','heroLine1','heroLine2','creditLabel','credit'].forEach(k => {
+    const el = document.getElementById('br-' + k); if(el && (fill || document.activeElement !== el)) el.value = c[k];
+  });
+  const lg = document.getElementById('br-logo'); if(fill || document.activeElement !== lg) lg.value = c.logo;
+  ['showEyebrow','showStats','showBadge','showCredit'].forEach(k => { document.getElementById('br-' + k).checked = !!c[k]; });
+  document.querySelectorAll('#br-accents .br-accent').forEach(b => b.classList.toggle('on', b.dataset.v === c.accent));
+  document.getElementById('br-logo-thumb').style.backgroundImage = isHttps(c.logo) ? 'url("' + c.logo.replace(/["\\]/g,'') + '")' : '';
+}
+function brSet(k, v){ if(!brState) return; brState[k] = v; brRender(); }
+function brUploadLogo(file){
+  const input = document.getElementById('br-file');
+  if(!file || !brState) return;
+  if(!/^image\/(jpeg|png|webp)$/.test(file.type)){ showToast('⚠️ รองรับเฉพาะ JPG, PNG, WEBP'); input.value=''; return; }
+  const drop = document.getElementById('br-drop'), oldHtml = drop.innerHTML;
+  drop.innerHTML = '<div class="spinner"></div><span>กำลังอัปโหลด...</span>';
+  heResize(file).then(f => callAPI('uploadHero', f)).then(r => {
+    if(r && r.ok && r.url){ brSet('logo', r.url); showToast('✅ อัปโหลดโลโก้แล้ว กด "บันทึกข้อความและสี" เพื่อใช้จริง'); }
+    else showToast('❌ ' + ((r && r.msg) || 'อัปโหลดไม่สำเร็จ'));
+  }).catch(err => showToast('❌ ' + (err.message || 'อัปโหลดไม่สำเร็จ')))
+  .finally(() => { drop.innerHTML = oldHtml; input.value = ''; });
+}
+// รวมค่าที่บันทึกไว้ทุกส่วน (รูป hero + พื้นหลัง + แบรนด์) แล้วเปลี่ยนเฉพาะส่วนที่ต้องการ → ไม่ทับกันเอง
+function heroPayload(part){
+  const base = heroMerge(heroSaved);
+  base.bg = (heroSaved && heroSaved.bg) || undefined;
+  base.brand = (heroSaved && heroSaved.brand) || undefined;
+  return Object.assign(base, part);
+}
+function brSave(){
+  if(!brState) return;
+  if(!brReady){ showToast('⚠️ ยังโหลดค่าจากระบบไม่สำเร็จ กรุณาเปิดแท็บตั้งค่าใหม่ก่อนบันทึก'); return; }
+  if(!brState.systemName.trim()){ showToast('⚠️ กรุณาใส่ชื่อระบบ'); return; }
+  if(!isHttps(brState.logo)){ showToast('⚠️ ลิงก์โลโก้ต้องขึ้นต้นด้วย https://'); return; }
+  const btn = document.getElementById('br-save');
+  btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...';
+  callAPI('setHero', { hero: heroPayload({ brand: brState }) }).then(r => {
+    if(r && r.ok){ heroSaved = r.hero; brSaved = brandMerge(r.hero.brand); brState = Object.assign({}, brSaved); applyBrand(brSaved); brRender(true); invalidateBoot(); showToast('✨ บันทึกข้อความและสีแล้ว'); }
+    else showToast('❌ ' + ((r && r.msg) || 'บันทึกไม่สำเร็จ'));
+  }).catch(() => showToast('❌ บันทึกไม่สำเร็จ'))
+  .finally(() => { btn.disabled = false; btn.textContent = '💾 บันทึกข้อความและสี'; });
+}
+function brDiscard(){ if(brSaved && brState){ brState = Object.assign({}, brSaved); applyBrand(brSaved, false); } }
+function brCancel(){ if(!brSaved) return; brState = Object.assign({}, brSaved); brRender(true); showToast('↩ กลับไปใช้ค่าที่บันทึกไว้'); }
+function brReset(){ if(!brState) return; brState = Object.assign({}, BRAND_DEFAULT); brRender(true); showToast('↺ คืนค่าเริ่มต้นแล้ว กดบันทึกเพื่อใช้จริง'); }
 
 let toastTimer;
 function showToast(msg){
@@ -2200,7 +2389,7 @@ function showToast(msg){
   try{ saved = JSON.parse(sessionStorage.getItem('auth') || 'null'); }catch(e){}
   if(saved && saved.t && (saved.r === 'teacher' || saved.r === 'admin')){
     AUTH_TOKEN = saved.t; authRole = saved.r; currentRole = saved.r; showApp();
-    getBoot().then(b => { if(b && b.ok !== false && !bgState) applyBg(b.hero && b.hero.bg); }).catch(()=>{});
+    getBoot().then(b => { if(b && b.ok !== false){ if(!bgState) applyBg(b.hero && b.hero.bg); if(!brState) applyBrand(b.hero && b.hero.brand); } }).catch(()=>{});
   } else {
     enterStudent();
   }
